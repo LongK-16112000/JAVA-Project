@@ -79,6 +79,7 @@ public class UserCRUD {
     public void closeConnection() throws SQLException {
         if (connection != null) {
             connection.close();
+            System.out.println("Thêm text tại UserCRUD");
         }
     }
 
