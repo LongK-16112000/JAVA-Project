@@ -30,7 +30,7 @@ package kase.aptechsaigon.javaproject;
     public void setUsername(String username) {
         this.username = username;
     }
-
+//update
     // Getter và Setter cho password
     public String getPassword() {
         return password;
