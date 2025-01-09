@@ -34,7 +34,12 @@ package kase.aptechsaigon.javaproject;
     //update2
     // Getter và Setter cho password
     //update lần 3
+    //thử lỗi xung đột
     public String getPassword() {
+        if(true) {
+            System.out.println("Demo 14");
+            System.out.println("Demo 15");
+        }
         return password;
     }
 
