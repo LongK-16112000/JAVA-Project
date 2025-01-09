@@ -30,6 +30,12 @@ package kase.aptechsaigon.javaproject;
     public void setUsername(String username) {
         this.username = username;
     }
+//update
+    //update2
+    // Thuan: Update
+    // Getter và Setter cho password
+    //update lần 3
+    //thử lỗi xung đột
 
     public String getPassword() {
         // Test merge source
@@ -37,6 +43,8 @@ package kase.aptechsaigon.javaproject;
             System.out.println("Demo 12");
             System.out.println("Demo 13");
             System.out.println("Demo 10");
+            System.out.println("Demo 14");
+            System.out.println("Demo 15");
         }
         return password;
     }
