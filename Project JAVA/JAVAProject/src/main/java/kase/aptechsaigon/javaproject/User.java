@@ -32,6 +32,7 @@ package kase.aptechsaigon.javaproject;
     }
 //update
     //update2
+    // Thuan: Update
     // Getter và Setter cho password
     //update lần 3
     //thử lỗi xung đột
