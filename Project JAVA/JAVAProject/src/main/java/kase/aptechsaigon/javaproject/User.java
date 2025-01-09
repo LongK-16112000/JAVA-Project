@@ -34,6 +34,7 @@ package kase.aptechsaigon.javaproject;
     //update2
     // Thuan: Update
     // Getter và Setter cho password
+    //update lần 3
     public String getPassword() {
         return password;
     }
