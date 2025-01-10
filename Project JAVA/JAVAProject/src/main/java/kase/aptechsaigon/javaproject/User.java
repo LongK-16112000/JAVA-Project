@@ -21,7 +21,6 @@ package kase.aptechsaigon.javaproject;
         this.fullName = fullName;
         this.address = address;
     }
-
     // Getter và Setter cho username
     public String getUsername() {
         return username;
@@ -73,6 +72,7 @@ package kase.aptechsaigon.javaproject;
 
     // Override phương thức toString() để in thông tin User
     @Override
+    //Đây nè muahaha
     public String toString() {
         System.out.println("---Thong Tin Nguoi Dung---");
         return "username='" + username + "', password='" + password + "', fullName='" + fullName + "'"
