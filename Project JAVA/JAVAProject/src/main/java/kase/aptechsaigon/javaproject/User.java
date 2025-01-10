@@ -1,79 +1,31 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package kase.aptechsaigon.javaproject;
 
 /**
- *
- * @author Truc
+ * Lớp User để lưu trữ thông tin người dùng.
  */
-   public class User {
-    private String username;
-    private String password;
-    private String fullName;
-    private String address;
+public class User {
+    private String hoTen;     // Tên đầy đủ của người dùng
+    private String matKhau;   // Mật khẩu của người dùng
 
     // Constructor để khởi tạo đối tượng User
-    public User(String username, String password, String fullName) {
-        this.username = username;
-        this.password = password;
-        this.fullName = fullName;
-        this.address = address;
-    }
-    // Getter và Setter cho username
-    public String getUsername() {
-        return username;
+    public User(String hoTen, String matKhau) {
+        this.hoTen = hoTen;
+        this.matKhau = matKhau;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-//update
-    //update2
-    // Thuan: Update
-    // Getter và Setter cho password
-    //update lần 3
-    //thử lỗi xung đột
-
-    public String getPassword() {
-        // Test merge source
-        if(true) {
-            System.out.println("Demo 12");
-            System.out.println("Demo 13");
-        }
-        return password;
+    // Getter để lấy tên đầy đủ
+    public String getHoTen() {
+        return hoTen;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    // Getter để lấy mật khẩu
+    public String getMatKhau() {
+        return matKhau;
     }
 
-    // Getter và Setter cho fullName
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-    
-     // Getter và Setter cho addRess
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String fullName) {
-        this.address = address;
-    }
-
-    // Override phương thức toString() để in thông tin User
+    // Phương thức toString để hiển thị thông tin người dùng
     @Override
     public String toString() {
-        System.out.println("---Thong Tin Nguoi Dung---");
-        return "username='" + username + "', password='" + password + "', fullName='" + fullName + "'"
-                + "address='" + address;
+        return "HoTen: " + hoTen + ", MatKhau: " + matKhau;
     }
-
-
 }
