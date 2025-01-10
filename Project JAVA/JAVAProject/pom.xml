@@ -24,5 +24,10 @@
             <artifactId>ojdbc10</artifactId>
             <version>19.13.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.netbeans.external</groupId>
+            <artifactId>AbsoluteLayout</artifactId>
+            <version>RELEASE230</version>
+        </dependency>
     </dependencies>
 </project>
