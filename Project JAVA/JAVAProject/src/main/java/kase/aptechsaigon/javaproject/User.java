@@ -41,9 +41,6 @@ package kase.aptechsaigon.javaproject;
         if(true) {
             System.out.println("Demo 12");
             System.out.println("Demo 13");
-            System.out.println("Demo 10");
-            System.out.println("Demo 14");
-            System.out.println("Demo 15");
         }
         return password;
     }
@@ -72,7 +69,6 @@ package kase.aptechsaigon.javaproject;
 
     // Override phương thức toString() để in thông tin User
     @Override
-    //Đây nè muahaha
     public String toString() {
         System.out.println("---Thong Tin Nguoi Dung---");
         return "username='" + username + "', password='" + password + "', fullName='" + fullName + "'"
