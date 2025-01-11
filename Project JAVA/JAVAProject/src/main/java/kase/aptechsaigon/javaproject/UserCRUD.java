@@ -1,87 +1,43 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package kase.aptechsaigon.javaproject;
 
-
-/**
- *
- * @author Truc
- */
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class UserCRUD {
-    private static final String URL = "jdbc:mysql://localhost:3307/my_database"; // Co so du lieu my_database
-    private static final String USER = "root";  // Thay ten nguoi dung MySQL
-    private static final String PASSWORD = "123456";  // Thay mat khau MySQL
+   // Thông tin kết nối cơ sở dữ liệu
+    private static final String URL = "jdbc:mysql://localhost:3307/quanlynhanvien";  // Thay đổi theo cơ sở dữ liệu của bạn
+    private static final String USER = "root";  // Thay đổi tên người dùng nếu cần
+    private static final String PASSWORD = "123456";  // Thay đổi mật khẩu nếu cần
 
-    private Connection connection;
-
-    public UserCRUD() throws SQLException {
+    // Phương thức lấy kết nối
+    public static Connection getConnection() throws SQLException {
         try {
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            // Tải driver JDBC
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            // Trả về kết nối
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Không thể kết nối tới cơ sở dữ liệu", e);
+        }
+    }
+    // Kiểm tra thông tin người dùng
+     // Chuyển checkUserCredentials thành phương thức tĩnh
+    public static boolean checkUserCredentials(String hoTen, String matKhau) {
+        String query = "SELECT * FROM nhanvien WHERE HoTen = ? AND MatKhau = ?";
+
+        try (Connection conn = UserCRUD.getConnection();  // Đảm bảo bạn đã import DatabaseUtils
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            
+            ps.setString(1, hoTen);
+            ps.setString(2, matKhau);
+
+            ResultSet rs = ps.executeQuery();
+            return rs.next();  // Nếu có kết quả trả về, người dùng hợp lệ
         } catch (SQLException e) {
-            throw new SQLException("Khong the ket noi den co so du lieu", e);
+            e.printStackTrace();
+            return false;
         }
     }
 
-    // Create - Them nguoi dung moi
-    public void createUser(User user) throws SQLException {
-        String sql = "INSERT INTO user (username, password, fullName) VALUES (?, ?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, user.getUsername());
-            statement.setString(2, user.getPassword());
-            statement.setString(3, user.getFullName());
-            statement.executeUpdate();
-        }
-    }
-
-    // Read - Lay tat ca nguoi dung
-    public List<User> getAllUsers() throws SQLException {
-        List<User> user = new ArrayList<>();
-        String sql = "SELECT * FROM user";
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)) {
-            while (resultSet.next()) {
-                String username = resultSet.getString("username");
-                String password = resultSet.getString("password");
-                String fullName = resultSet.getString("fullName");
-                user.add(new User(username, password, fullName));
-            }
-        }
-        return user;
-    }
-
-    // Update - Cap nhat thong tin nguoi dung
-    public void updateUser(User user) throws SQLException {
-        String sql = "UPDATE user SET password = ?, fullName = ? WHERE username = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, user.getPassword());
-            statement.setString(2, user.getFullName());
-            statement.setString(3, user.getUsername());
-            statement.executeUpdate();
-        }
-    }
-
-    // Delete - Xoa nguoi dung
-    public void deleteUser(String username) throws SQLException {
-        String sql = "DELETE FROM user WHERE username = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, username);
-            statement.executeUpdate();
-        }
-    }
-
-    // Dong ket noi
-    public void closeConnection() throws SQLException {
-        if (connection != null) {
-            connection.close();
-            System.out.println("Thêm text tại UserCRUD");
-        }
-    }
-
-    
 }
