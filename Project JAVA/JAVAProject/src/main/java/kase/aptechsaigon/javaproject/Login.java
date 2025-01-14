@@ -5,6 +5,7 @@
 package kase.aptechsaigon.javaproject;
 
 import java.awt.Toolkit;
+import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 
@@ -14,17 +15,16 @@ import javax.swing.JOptionPane;
  */
 public class Login extends javax.swing.JFrame {
 
-    private HomePage hp;
+  
 
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     }
-     public void setHomePage(HomePage homePage) {
-        this.hp = homePage;
-    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -180,13 +180,20 @@ public class Login extends javax.swing.JFrame {
 
     if (isValidUser) {
         JOptionPane.showMessageDialog(this, "Đăng nhập thành công!!!");
-         
-            // Ẩn cửa sổ Login
-            this.setVisible(false);
-
+       // Ẩn cửa sổ đăng nhập và hiển thị HomePage
+        this.setVisible(false);  // Ẩn Login
+        
+        // Thiết lập quyền truy cập cho HomePage
+        HomePage.hp.SetPermission(true); 
+         txtusername.setText("");  // Xóa tên đăng nhập
+         pass.setText("");// Hiển thị menu
+        
+     
     } else {
         JOptionPane.showMessageDialog(this, "Tên đăng nhập hoặc mật khẩu không đúng", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
+        txtusername.setText("");  // Xóa tên đăng nhập
+        pass.setText("");
+    }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void passActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passActionPerformed
@@ -221,15 +228,11 @@ public class Login extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-    Login login = new Login();
-    HomePage hp =new HomePage();
-    login.hp = hp;
-    login.setVisible(true);
+    
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Login().setVisible(true);
-                hp.show();
             }
         });
     }
@@ -245,7 +248,5 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JTextField txtusername;
     // End of variables declaration//GEN-END:variables
 
-    void setModal(boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+ 
 }

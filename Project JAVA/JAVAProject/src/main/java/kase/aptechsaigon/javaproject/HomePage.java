@@ -4,29 +4,53 @@
  */
 package kase.aptechsaigon.javaproject;
 
+import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 
 import java.awt.MenuItem;
 
-import javax.swing.ImageIcon;
+
+
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 /**
  *
  * @author Truc
  */
 public class HomePage extends javax.swing.JFrame {
-
+     private static boolean isLogin= false; // Biến này dùng để kiểm tra đăng nhập
+    private static final Login lg = new Login();  // Cửa sổ đăng nhập
+    public static final HomePage hp = new HomePage();  // Đối tượng của HomePage
+    private boolean isLoggedIn;
 
     public HomePage() {
         initComponents();
+        
         // Ẩn tất cả các panel
         hideAllPanels();
 
-        // Hiển thị jp3
+        // Hiển thị jp2 (có thể là panel cho nội dung đăng nhập)
         jp2.setVisible(true);
+        
+        // Ẩn menu mặc định khi chưa đăng nhập
+        jMenuBar1.setVisible(false);
+        
+        // Lắng nghe sự kiện cửa sổ đăng nhập
+        lg.addWindowListener(getWindowAdapter());
     }
+    
+    public void SetPermission(boolean isLogin) {
+        this.isLogin = isLogin;
+        jMenuBar1.setVisible(isLogin);  // Hiển thị hoặc ẩn menu dựa trên trạng thái đăng nhập
+    }
+
+    // Phương thức thiết lập quyền truy cập dựa trên trạng thái đăng nhập
     
 
     /**
@@ -544,6 +568,7 @@ public class HomePage extends javax.swing.JFrame {
 
     // Chỉ mở jp3
     jp3.setVisible(true);
+    
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -555,12 +580,14 @@ public class HomePage extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        Login lg = new Login();
-        lg.setVisible(true);
+        SetPermission(false);
+        hideAllPanels();
+        jp2.setVisible(true);
+        lg.show();
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-  hideAllPanels();
+    hideAllPanels();
 
     // Chỉ mở jp3
     jp7.setVisible(true);
@@ -643,45 +670,37 @@ jp8.setVisible(true);
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-      
+        // Tạo JMenuBar và thiết lập màu nền
+      UIManager.put("MenuBar.background", Color.DARK_GRAY);
+     hp.setExtendedState(JFrame.MAXIMIZED_BOTH);
+     hp.toFront();
         
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(HomePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(HomePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(HomePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(HomePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        HomePage hp = new HomePage();
-        Login lq = new Login();
-//        var screen = Toolkit.getDefaultToolkit().getScreenSize();
-//        hp.setSize((int)(screen.getWidth()),(int)(screen.getHeight()));
-          hp.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 hp.setVisible(true);
-                lq.show();
                 
+                if (!isLogin) {
+                    lg.setVisible(true); // Hiển thị cửa sổ đăng nhập nếu chưa đăng nhập
+                }
             }
         });
+    
+    }
+     private void showChild(JFrame child) {
+        child.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        var childContent = child.getContentPane();
+        this.setContentPane(childContent);
     }
     
+    private WindowAdapter getWindowAdapter() {
+        return new WindowAdapter() {
+          @Override
+          public void windowIconified(WindowEvent we) {
+            SetPermission(true);
+          }
+        };
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -718,6 +737,16 @@ jp8.setVisible(true);
     private javax.swing.JPanel jp8;
     private javax.swing.JPanel jp9;
     // End of variables declaration//GEN-END:variables
+
+    void setPermission(boolean b) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+   
+
+    
+
+    
 
     
     
