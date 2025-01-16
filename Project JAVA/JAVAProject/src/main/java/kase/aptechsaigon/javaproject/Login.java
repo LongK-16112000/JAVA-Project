@@ -23,6 +23,7 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        
     }
     
     /**
@@ -143,7 +144,7 @@ public class Login extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 40, 510, 420));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Truc\\Pictures\\Ảnh Java\\img123.jpg")); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/img123.png"))); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 630, 530));
 
         setSize(new java.awt.Dimension(640, 542));

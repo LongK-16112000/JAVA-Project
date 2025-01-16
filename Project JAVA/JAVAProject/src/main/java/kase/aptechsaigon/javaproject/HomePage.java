@@ -734,7 +734,7 @@ public class HomePage extends javax.swing.JFrame {
 
         getContentPane().add(jPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1510, 750));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Truc\\Pictures\\Ảnh Java\\img123.jpg")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/img123.png"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -40, 2570, 1120));
 
         jMenu1.setText("Tài Khoản");
