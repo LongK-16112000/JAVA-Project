@@ -2,42 +2,46 @@ package kase.aptechsaigon.javaproject;
 
 import java.sql.*;
 
-
 public class UserCRUD {
-   // Thông tin kết nối cơ sở dữ liệu
-    private static final String URL = "jdbc:mysql://localhost:3307/quanlynhanvien";  // Thay đổi theo cơ sở dữ liệu của bạn
-    private static final String USER = "root";  // Thay đổi tên người dùng nếu cần
-    private static final String PASSWORD = "123456";  // Thay đổi mật khẩu nếu cần
+    
+    // Lưu trữ kết nối cơ sở dữ liệu (sử dụng instance thay vì static connection)
+    private Connection conn;
 
-    // Phương thức lấy kết nối
-    public static Connection getConnection() throws SQLException {
+    // Constructor mở kết nối tới cơ sở dữ liệu
+    public UserCRUD() {
         try {
-            // Tải driver JDBC
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            // Trả về kết nối
-            return DriverManager.getConnection(URL, USER, PASSWORD);
-        } catch (ClassNotFoundException | SQLException e) {
+            this.conn = DatabaseConnection.connect();  // Đảm bảo rằng bạn có lớp DatabaseConnection để mở kết nối
+        } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLException("Không thể kết nối tới cơ sở dữ liệu", e);
         }
     }
+
+    // Lấy kết nối từ DatabaseConnection (phương thức tĩnh)
+    public static Connection getConnection() throws SQLException {
+        return DatabaseConnection.connect();  // Sử dụng DatabaseConnection để kết nối
+    }
+
     // Kiểm tra thông tin người dùng
-     // Chuyển checkUserCredentials thành phương thức tĩnh
     public static boolean checkUserCredentials(String hoTen, String matKhau) {
         String query = "SELECT * FROM nhanvien WHERE HoTen = ? AND MatKhau = ?";
-
-        try (Connection conn = UserCRUD.getConnection();  // Đảm bảo bạn đã import DatabaseUtils
+        
+        try (Connection conn = UserCRUD.getConnection();  // Lấy kết nối từ phương thức getConnection
              PreparedStatement ps = conn.prepareStatement(query)) {
             
+            // Thiết lập các tham số trong câu lệnh SQL
             ps.setString(1, hoTen);
             ps.setString(2, matKhau);
 
+            // Thực thi câu lệnh truy vấn
             ResultSet rs = ps.executeQuery();
-            return rs.next();  // Nếu có kết quả trả về, người dùng hợp lệ
+            
+            // Nếu có kết quả trả về, tức là người dùng hợp lệ
+            return rs.next();  
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
 
+    // Các phương thức CRUD khác cho các bảng khác sẽ tương tự với cách này
 }

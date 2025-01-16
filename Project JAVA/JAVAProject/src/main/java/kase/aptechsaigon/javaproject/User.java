@@ -1,7 +1,7 @@
 package kase.aptechsaigon.javaproject;
 
 /**
- * Lớp User để lưu trữ thông tin người dùng.
+
  */
 public class User {
     private String hoTen;     // Tên đầy đủ của người dùng
