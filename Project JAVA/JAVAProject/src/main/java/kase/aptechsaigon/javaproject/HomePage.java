@@ -262,11 +262,14 @@ public class HomePage extends javax.swing.JFrame {
 //        jp5.setVisible(true);  
 
     }//GEN-LAST:event_jMenuItem5ActionPerformed
-
+    private boolean isPanelNVisible = false;
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
 //         // Giả sử bạn có 14 JPanel từ jp1 đến jp14
 //        hideAllPanels();
-//
+    if (!isPanelNVisible) {
+        showPanel(new PanelNV());
+        isPanelNVisible = true;
+    }
 //        // Chỉ mở jp3
 //        jp6.setVisible(true);  
 
