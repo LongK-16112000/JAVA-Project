@@ -110,7 +110,7 @@ public class PanelCTH extends javax.swing.JPanel {
         jLabel2.setBackground(new java.awt.Color(255, 255, 255,0));
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 0, 36)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Thông tin Chương Trình");
+        jLabel2.setText("Thông tin Chương Trình Học");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

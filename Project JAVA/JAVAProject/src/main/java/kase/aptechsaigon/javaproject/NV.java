@@ -4,6 +4,8 @@
  */
 package kase.aptechsaigon.javaproject;
 
+import java.sql.Date;
+
 /**
  *
  * @author Admin
@@ -11,10 +13,10 @@ package kase.aptechsaigon.javaproject;
 public class NV {
     private int maNhanVien;  // Mã chương trình học
     private String tenNhanVien; // Tên chương trình học
-    private int ngaySinh; // Thời gian hoàn thành (tháng hoặc năm)
+    private Date ngaySinh; // Thời gian hoàn thành (tháng hoặc năm)
 
     // Constructor
-    public NV(int maNhanVien, String tenNhanVien, int ngaySinh) {
+    public NV(int maNhanVien, String tenNhanVien, Date ngaySinh) {
         this.maNhanVien = maNhanVien;
         this.tenNhanVien = tenNhanVien;
         this.ngaySinh = ngaySinh;
@@ -37,11 +39,11 @@ public class NV {
         this.tenNhanVien = tenNhanVien;
     }
 
-    public int getThoiGianHoanThanh() {
+    public Date getThoiGianHoanThanh() {
         return ngaySinh;
     }
 
-    public void setThoiGianHoanThanh(int ngaySinh) {
+    public void setThoiGianHoanThanh(Date ngaySinh) {
         this.ngaySinh = ngaySinh;
     }
 

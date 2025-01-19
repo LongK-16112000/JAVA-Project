@@ -5,6 +5,7 @@
 package kase.aptechsaigon.javaproject;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,14 +17,14 @@ import java.sql.SQLException;
 public class NhanVienCRUD {
     // Thêm Nhân viên
      private Connection conn;
-    public static void addNhanVien(String tenNhanVien, String ngaySinh) {
+    public static void addNhanVien(String tenNhanVien, Date ngaySinh) {
         String sql = "INSERT INTO NhanVien (HoTen, NgaySinh) VALUES (?, ?)";
 
         try (Connection conn = DatabaseConnection.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, tenNhanVien);
-            ps.setString(2, ngaySinh);
+            ps.setDate(2, ngaySinh);
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
@@ -45,7 +46,7 @@ public class NhanVienCRUD {
             while (rs.next()) {
                 int maNhanVien = rs.getInt("MaNhanVien");
                 String tenNhanVien = rs.getString("HoTen");
-                String ngaySinh = rs.getString("NgaySinh");
+                Date ngaySinh = rs.getDate("NgaySinh");
 
                 System.out.println("Mã nhân viên: " + maNhanVien);
                 System.out.println("Tên nhân viên: " + tenNhanVien);
@@ -58,14 +59,14 @@ public class NhanVienCRUD {
     }
 
     // Cập nhật chương trình học
-    public static void updateNhanVien(int maNhanVien, String tenNhanVien, String ngaySinh) {
+    public static void updateNhanVien(int maNhanVien, String tenNhanVien, Date ngaySinh) {
         String sql = "UPDATE NhanVien SET HoTen = ?, NgaySinh = ? WHERE MaNhanVien = ?";
 
         try (Connection conn = DatabaseConnection.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, tenNhanVien);
-            ps.setString(2, ngaySinh);
+            ps.setDate(2, ngaySinh);
             ps.setInt(3, maNhanVien);
 
             int rowsAffected = ps.executeUpdate();

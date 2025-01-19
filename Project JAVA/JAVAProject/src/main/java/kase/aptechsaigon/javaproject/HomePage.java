@@ -32,6 +32,7 @@ public class HomePage extends javax.swing.JFrame {
     public static final HomePage hp = new HomePage();  // Đối tượng của HomePage
     private boolean isLoggedIn;
      private PanelCTH panelCth;
+     private PanelNV panelNV;
      private JPanel cth = new JPanel();
 
     public HomePage() {
