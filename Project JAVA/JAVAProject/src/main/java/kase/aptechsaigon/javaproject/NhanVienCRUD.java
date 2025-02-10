@@ -17,14 +17,19 @@ import java.sql.SQLException;
 public class NhanVienCRUD {
     // Thêm Nhân viên
      private Connection conn;
-    public static void addNhanVien(String tenNhanVien, Date ngaySinh) {
-        String sql = "INSERT INTO NhanVien (HoTen, NgaySinh) VALUES (?, ?)";
+    public static void addNhanVien(String tenNhanVien, Date ngaySinh, int soCMT, String diaChi, String Email, int dienThoai, Date ngayVaoLam) {
+        String sql = "INSERT INTO NhanVien (HoTen, NgaySinh, SoCMT, DiaChi, Email, DienThoai, NgayVaoLam, MatKhau, MaPhucVu, MaPhongBan) VALUES (?, ?)";
 
         try (Connection conn = DatabaseConnection.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, tenNhanVien);
             ps.setDate(2, ngaySinh);
+            ps.setInt(3, soCMT);
+            ps.setString(4, diaChi);
+            ps.setString(5, Email);
+            ps.setInt(6, dienThoai);
+            ps.setDate(7, ngayVaoLam);
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
@@ -35,7 +40,7 @@ public class NhanVienCRUD {
         }
     }
 
-    // Lấy tất cả chương trình học
+    // Lấy tất cả nhân viên
     public static void getAllNhanVien() {
         String sql = "SELECT * FROM NhanVien";
         
@@ -47,10 +52,20 @@ public class NhanVienCRUD {
                 int maNhanVien = rs.getInt("MaNhanVien");
                 String tenNhanVien = rs.getString("HoTen");
                 Date ngaySinh = rs.getDate("NgaySinh");
+                int soCMT = rs.getInt("SoCMT");
+                String diaChi = rs.getString("DiaChi");
+                String Email = rs.getString("Email");
+                int dienThoai = rs.getInt("DienThoai");
+                Date ngayVaoLam = rs.getDate("NgayVaoLam");
 
                 System.out.println("Mã nhân viên: " + maNhanVien);
                 System.out.println("Tên nhân viên: " + tenNhanVien);
-                System.out.println("Thời gian hoàn thành: " + ngaySinh + " tháng");
+                System.out.println("Ngày sinh: " + ngaySinh);
+                System.out.println("Số CMT: " + soCMT);
+                System.out.println("Địa chỉ: " + diaChi);
+                System.out.println("Email: " + Email);
+                System.out.println("Số điện thoại: " + dienThoai);
+                System.out.println("Ngày vào làm: " + ngayVaoLam);
                 System.out.println("------------------------------");
             }
         } catch (SQLException e) {
