@@ -11,22 +11,22 @@ import java.sql.Date;
  * @author Admin
  */
 public class NV {
-    private int maNhanVien;  // Mã chương trình học
-    private String tenNhanVien; // Tên chương trình học
-    private Date ngaySinh; // Thời gian hoàn thành (tháng hoặc năm)
-    private int soCMT;
+    private int maNhanVien;  
+    private String hoTen; 
+    private Date ngaySinh; 
+    private String soCMT;
     private String diaChi;
     private String Email;
-    private int dienThoai;
+    private String dienThoai;
     private Date ngayVaoLam;
     private String matKhau;
     private int maChucVu;
     private int maPhongBan;
 
     // Constructor
-    public NV(int maNhanVien, String tenNhanVien, Date ngaySinh, int soCMT, String diaChi, String Email, int dienThoai, Date ngayVaoLam, String matKhau, int maChucVu, int maPhongBan) {
+    public NV(int maNhanVien, String hoTen, Date ngaySinh, String soCMT, String diaChi, String Email, String dienThoai, Date ngayVaoLam, String matKhau, int maChucVu, int maPhongBan) {
         this.maNhanVien = maNhanVien;
-        this.tenNhanVien = tenNhanVien;
+        this.hoTen = hoTen;
         this.ngaySinh = ngaySinh;
         this.soCMT = soCMT;
         this.diaChi = diaChi;
@@ -47,12 +47,12 @@ public class NV {
         this.maNhanVien = maNhanVien;
     }
 
-    public String getTenNhanVien() {
-        return tenNhanVien;
+    public String getHoTen() {
+        return hoTen;
     }
 
-    public void setTenNhanVien(String tenNhanVien) {
-        this.tenNhanVien = tenNhanVien;
+    public void setHoten(String hoTen) {
+        this.hoTen = hoTen;
     }
 
     public Date getNgaySinh() {
@@ -63,11 +63,11 @@ public class NV {
         this.ngaySinh = ngaySinh;
     }
     
-    public int getsoCMT() {
+    public String getsoCMT() {
         return soCMT;
     }
     
-    public void setsoCMT(int soCMT) {
+    public void setsoCMT(String soCMT) {
         this.soCMT = soCMT;
     }
     
@@ -87,12 +87,12 @@ public class NV {
         this.Email = Email;
     }
     
-    public int getdienThoai() {
+    public String getdienThoai() {
         return dienThoai;
     }
     
     public void setdienThoai(String dienThoai) {
-        this.diaChi = diaChi;
+        this.dienThoai = dienThoai;
     }
     
     public Date getngayVaoLam() {
@@ -130,6 +130,6 @@ public class NV {
     // Phương thức toString để hiển thị thông tin đối tượng
     @Override
     public String toString() {
-        return "MaNhanVien: " + maNhanVien + ", TenNhanVien: " + tenNhanVien + ", ngaySinh: " + ngaySinh + ", soCMT: " + soCMT + ", diaChi: " + diaChi + ", Email: " + Email + ", dienThoai: " + dienThoai + ", ngayVaoLam: " + ngayVaoLam + ", matKhau: " + matKhau + ", maChucVu: " + maChucVu + ", maPhongBan: " + maPhongBan;
+        return "MaNhanVien: " + maNhanVien + ", HoTen: " + hoTen + ", ngaySinh: " + ngaySinh + ", soCMT: " + soCMT + ", diaChi: " + diaChi + ", Email: " + Email + ", dienThoai: " + dienThoai + ", ngayVaoLam: " + ngayVaoLam + ", matKhau: " + matKhau + ", maChucVu: " + maChucVu + ", maPhongBan: " + maPhongBan;
     }
 }
