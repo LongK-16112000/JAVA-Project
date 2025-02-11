@@ -31,8 +31,16 @@ public class HomePage extends javax.swing.JFrame {
     private static final Login lg = new Login();  // Cửa sổ đăng nhập
     public static final HomePage hp = new HomePage();  // Đối tượng của HomePage
     private boolean isLoggedIn;
-     private PanelCTH panelCth;
-     private JPanel cth = new JPanel();
+    private PanelCTH panelCth;
+    private JPanel cth = new JPanel();
+    private PanelMH panelMh;
+    private JPanel mh = new JPanel();
+    private PanelHK panelHk;
+    private JPanel hk = new JPanel();
+    private boolean isPanelCTHVisible = false;
+    private boolean isPanelMHVisible = false;
+    private boolean isPanelHKVisible = false;
+     
 
     public HomePage() {
         initComponents();
@@ -41,8 +49,8 @@ public class HomePage extends javax.swing.JFrame {
        
       
        
-        // Ẩn menu mặc định khi chưa đăng nhập
-//        jMenuBar1.setVisible(false);
+//         Ẩn menu mặc định khi chưa đăng nhập
+        jMenuBar1.setVisible(false);
         
           // Lắng nghe sự kiện cửa sổ đăng nhập
         lg.addWindowListener(getWindowAdapter());
@@ -50,10 +58,21 @@ public class HomePage extends javax.swing.JFrame {
 //      
     }
     private void showPanel(JPanel panel) {
-      cth.removeAll();  // Xóa tất cả các component trong cth
+     // Xóa tất cả các component trong cth
+    jPanel.removeAll(); 
+    jPanel.add(cth);    // Thêm panel mới vào cth
+    cth.revalidate();  // Cập nhật lại giao diện
+    cth.repaint();     // Vẽ lại giao diện
+   
+    jPanel.removeAll(); 
     jPanel.add(panel);    // Thêm panel mới vào cth
-    jPanel.revalidate();  // Cập nhật lại giao diện
-    jPanel.repaint();     // Vẽ lại giao diện
+    mh.revalidate();  // Cập nhật lại giao diện
+    mh.repaint();     // Vẽ lại giao diện
+    
+    jPanel.removeAll(); 
+    jPanel.add(panel);    // Thêm panel mới vào cth
+    hk.revalidate();  // Cập nhật lại giao diện
+    hk.repaint();
     }
     
     
@@ -99,7 +118,7 @@ public class HomePage extends javax.swing.JFrame {
         ));
         jPanel.setPreferredSize(new java.awt.Dimension(1485, 820));
         jPanel.setLayout(new java.awt.BorderLayout());
-        getContentPane().add(jPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 1510, 730));
+        getContentPane().add(jPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 1540, 730));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/img123.png"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -40, 2570, 1120));
@@ -166,6 +185,7 @@ public class HomePage extends javax.swing.JFrame {
         jMenuBar1.add(jMenu2);
 
         jMenu4.setText("Chương Trình Học");
+        jMenu4.setDelay(0);
 
         jMenuItem7.setText("Thông tin chương trình học");
         jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
@@ -183,7 +203,7 @@ public class HomePage extends javax.swing.JFrame {
         });
         jMenu4.add(jMenuItem8);
 
-        jMenuItem9.setText("Chứng chỉ");
+        jMenuItem9.setText("Học Kỳ");
         jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem9ActionPerformed(evt);
@@ -301,29 +321,62 @@ public class HomePage extends javax.swing.JFrame {
 //        
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
-    private boolean isPanelCTHVisible = false;
+  
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-     if (!isPanelCTHVisible) {
+        // Kiểm tra nếu PanelCTH chưa hiển thị
+    if (!isPanelCTHVisible) {
+        // Ẩn tất cả các panel đang hiển thị
+        mh.setVisible(false);
+        hk.setVisible(false);
+        isPanelMHVisible = isPanelHKVisible = false;
+
+        // Hiển thị PanelCTH
         showPanel(new PanelCTH());
         isPanelCTHVisible = true;
+    } else {
+        // Nếu PanelCTH đã hiển thị, ẩn nó khi nhấn lần nữa
+        cth.setVisible(false);
+        isPanelCTHVisible = false;
     }
+
     }//GEN-LAST:event_jMenuItem7ActionPerformed
    
-  
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-//       // Giả sử bạn có 14 JPanel từ jp1 đến jp14
-//        hideAllPanels();
-//
-//        // Chỉ mở jp3
-//        jp11.setVisible(true);  
+    // Kiểm tra nếu PanelCTH chưa hiển thị
+    if (!isPanelMHVisible) {
+        // Ẩn tất cả các panel đang hiển thị
+        cth.setVisible(false);
+        hk.setVisible(false);
+        isPanelCTHVisible = isPanelHKVisible = false;
+
+        // Hiển thị PanelCTH
+        showPanel(new PanelMH());
+        isPanelMHVisible = true;
+    } else {
+        // Nếu PanelCTH đã hiển thị, ẩn nó khi nhấn lần nữa
+        mh.setVisible(false);
+        isPanelMHVisible = false;
+    }
+
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
-//         // Giả sử bạn có 14 JPanel từ jp1 đến jp14
-//        hideAllPanels();
-//
-//        // Chỉ mở jp3
-//        jp12.setVisible(true);  
+    // Kiểm tra nếu PanelCTH chưa hiển thị
+    if (!isPanelHKVisible) {
+        // Ẩn tất cả các panel đang hiển thị
+        mh.setVisible(false);
+        cth.setVisible(false);
+        isPanelMHVisible = isPanelCTHVisible = false;
+
+        // Hiển thị PanelCTH
+        showPanel(new PanelHK());
+        isPanelHKVisible = true;
+    } else {
+        // Nếu PanelCTH đã hiển thị, ẩn nó khi nhấn lần nữa
+        hk.setVisible(false);
+        isPanelHKVisible = false;
+    }
+
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
@@ -352,7 +405,7 @@ public class HomePage extends javax.swing.JFrame {
                 hp.setVisible(true);
                 
                 if (!isLogin) {
-//                    lg.setVisible(true); // Hiển thị cửa sổ đăng nhập nếu chưa đăng nhập
+                    lg.setVisible(true); // Hiển thị cửa sổ đăng nhập nếu chưa đăng nhập
                 }
             }
         });

@@ -8,13 +8,13 @@ package kase.aptechsaigon.javaproject;
  *
  * @author Truc
  */
-public class Cth {
+public class ChuongTrinhhoc {
     private int maChuongTrinhHoc;  // Mã chương trình học
     private String tenChuongTrinh; // Tên chương trình học
     private int thoiGianHoanThanh; // Thời gian hoàn thành (tháng hoặc năm)
 
     // Constructor
-    public Cth(int maChuongTrinhHoc, String tenChuongTrinh, int thoiGianHoanThanh) {
+    public ChuongTrinhhoc(int maChuongTrinhHoc, String tenChuongTrinh, int thoiGianHoanThanh) {
         this.maChuongTrinhHoc = maChuongTrinhHoc;
         this.tenChuongTrinh = tenChuongTrinh;
         this.thoiGianHoanThanh = thoiGianHoanThanh;
