@@ -18,13 +18,13 @@ public class DatabaseConnection {
             String url = "jdbc:mysql://localhost:3307/quanlynhanvien";  // Đổi với thông tin CSDL thực tế của bạn
             String user = "root"; // Tên người dùng
             String password = "123456";  // Mật khẩu
-
+            
+            System.out.println("Connecting database ...");
             // Kết nối đến CSDL
             Connection conn = DriverManager.getConnection(url, user, password);
             return conn;
         } catch (SQLException e) {
-            System.out.println("Không thể kết nối đến cơ sở dữ liệu");
-            throw e;
+            throw new IllegalStateException("Cannot connect the database!", e);
         }
     }
 }

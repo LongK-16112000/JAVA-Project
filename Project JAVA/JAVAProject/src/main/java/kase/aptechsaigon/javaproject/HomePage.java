@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -274,22 +275,22 @@ public class HomePage extends javax.swing.JFrame {
     
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
+    private boolean isPanelPBisible = false;
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
 //         // Giả sử bạn có 14 JPanel từ jp1 đến jp14
 //        hideAllPanels();
-//
 //        // Chỉ mở jp3
 //        jp5.setVisible(true);  
 
     }//GEN-LAST:event_jMenuItem5ActionPerformed
-
+    
+    private boolean isPanelNVVisible = false;
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-//         // Giả sử bạn có 14 JPanel từ jp1 đến jp14
-//        hideAllPanels();
-//
-//        // Chỉ mở jp3
-//        jp6.setVisible(true);  
-
+        if(!isPanelNVVisible) {
+            showPanel(new PanelNV());
+            isPanelNVVisible = true;
+            isPanelCTHVisible = false;
+        }
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
@@ -312,10 +313,11 @@ public class HomePage extends javax.swing.JFrame {
     
     }//GEN-LAST:event_jMenuItem1ComponentShown
 
+    private boolean isPanelLuongVisible = false;
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
 //      // Giả sử bạn có 14 JPanel từ jp1 đến jp14
 //        hideAllPanels();
-//
+
 //        // Chỉ mở jp3
 //        jp10.setVisible(true);  
 //        
@@ -392,14 +394,9 @@ public class HomePage extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         // Tạo JMenuBar và thiết lập màu nền
-      UIManager.put("MenuBar.background", Color.DARK_GRAY);
-     hp.setExtendedState(JFrame.MAXIMIZED_BOTH);
-     hp.toFront();
-
-     
-       
-    
-        
+        UIManager.put("MenuBar.background", Color.DARK_GRAY);
+        hp.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        hp.toFront();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 hp.setVisible(true);
