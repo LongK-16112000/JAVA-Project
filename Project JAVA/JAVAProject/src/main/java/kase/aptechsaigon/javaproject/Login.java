@@ -180,17 +180,19 @@ public class Login extends javax.swing.JFrame {
     boolean isValidUser = UserCRUD.checkUserCredentials(username, password);
 
     if (isValidUser) {
-        JOptionPane.showMessageDialog(this, "Đăng nhập thành công!!!");
-       // Ẩn cửa sổ đăng nhập và hiển thị HomePage
+            // Ẩn cửa sổ đăng nhập và hiển thị HomePage
         this.setVisible(false);  // Ẩn Login
-        
+
         // Thiết lập quyền truy cập cho HomePage
-        HomePage.hp.SetPermission(true); 
-         txtusername.setText("");  // Xóa tên đăng nhập
-         pass.setText("");// Hiển thị menu
-        
-     
-    } else {
+        HomePage.hp.SetPermission(true);
+
+        // Xóa tên đăng nhập và mật khẩu
+        txtusername.setText("");  
+        pass.setText("");  
+
+        // Hiển thị menu hoặc thực hiện hành động khác để vào HomePage
+        HomePage.hp.setVisible(true); // Nếu bạn cần hiển thị HomePage
+        } else {
         JOptionPane.showMessageDialog(this, "Tên đăng nhập hoặc mật khẩu không đúng", "Lỗi", JOptionPane.ERROR_MESSAGE);
         txtusername.setText("");  // Xóa tên đăng nhập
         pass.setText("");
