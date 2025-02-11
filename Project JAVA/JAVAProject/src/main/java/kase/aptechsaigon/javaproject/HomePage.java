@@ -38,6 +38,9 @@ public class HomePage extends javax.swing.JFrame {
     private JPanel mh = new JPanel();
     private PanelHK panelHk;
     private JPanel hk = new JPanel();
+    private PanelNV panelnv;
+    private JPanel nv = new JPanel();
+    private boolean isPanelNVVisible = false;
     private boolean isPanelCTHVisible = false;
     private boolean isPanelMHVisible = false;
     private boolean isPanelHKVisible = false;
@@ -74,6 +77,11 @@ public class HomePage extends javax.swing.JFrame {
     jPanel.add(panel);    // Thêm panel mới vào cth
     hk.revalidate();  // Cập nhật lại giao diện
     hk.repaint();
+    
+    jPanel.removeAll(); 
+    jPanel.add(panel);    // Thêm panel mới vào cth
+    nv.revalidate();  // Cập nhật lại giao diện
+    nv.repaint();
     }
     
     
@@ -284,13 +292,24 @@ public class HomePage extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jMenuItem5ActionPerformed
     
-    private boolean isPanelNVVisible = false;
+  
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-        if(!isPanelNVVisible) {
-            showPanel(new PanelNV());
-            isPanelNVVisible = true;
-            isPanelCTHVisible = false;
-        }
+         // Kiểm tra nếu PanelCTH chưa hiển thị
+    if (!isPanelNVVisible) {
+        // Ẩn tất cả các panel đang hiển thị
+        mh.setVisible(false);
+        cth.setVisible(false);
+        hk.setVisible(false);
+        isPanelMHVisible = isPanelHKVisible = false;
+
+        // Hiển thị PanelCTH
+        showPanel(new PanelNV());
+        isPanelNVVisible = true;
+    } else {
+        // Nếu PanelCTH đã hiển thị, ẩn nó khi nhấn lần nữa
+        cth.setVisible(false);
+        isPanelNVVisible = false;
+    }
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed

@@ -11,20 +11,20 @@ import java.sql.Date;
  * @author Admin
  */
 public class NV {
-    private int maNhanVien;  // Mã chương trình học
-    private String tenNhanVien; // Tên chương trình học
-    private Date ngaySinh; // Thời gian hoàn thành (tháng hoặc năm)
-    private int soCMT;
+    private int maNhanVien;  
+    private String tenNhanVien; 
+    private Date ngaySinh; 
+    private String soCMT;
     private String diaChi;
     private String Email;
-    private int dienThoai;
+    private String dienThoai;
     private Date ngayVaoLam;
     private String matKhau;
     private int maChucVu;
     private int maPhongBan;
 
     // Constructor
-    public NV(int maNhanVien, String tenNhanVien, Date ngaySinh, int soCMT, String diaChi, String Email, int dienThoai, Date ngayVaoLam, String matKhau, int maChucVu, int maPhongBan) {
+    public NV(int maNhanVien, String tenNhanVien, Date ngaySinh, String soCMT, String diaChi, String Email, String dienThoai, Date ngayVaoLam, String matKhau, int maChucVu, int maPhongBan) {
         this.maNhanVien = maNhanVien;
         this.tenNhanVien = tenNhanVien;
         this.ngaySinh = ngaySinh;
@@ -63,11 +63,11 @@ public class NV {
         this.ngaySinh = ngaySinh;
     }
     
-    public int getsoCMT() {
+    public String getsoCMT() {
         return soCMT;
     }
     
-    public void setsoCMT(int soCMT) {
+    public void setsoCMT(String soCMT) {
         this.soCMT = soCMT;
     }
     
@@ -87,7 +87,7 @@ public class NV {
         this.Email = Email;
     }
     
-    public int getdienThoai() {
+    public String getdienThoai() {
         return dienThoai;
     }
     
