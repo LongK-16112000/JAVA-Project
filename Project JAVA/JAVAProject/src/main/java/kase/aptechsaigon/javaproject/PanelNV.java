@@ -632,6 +632,9 @@ private void displayNhanVien() {
             
             model.addRow(new Object[]{maNhanVien, hoTen, ngaySinh, soCMT, diaChi, email, dienThoai, ngayVaoLam, matKhau, maChucVu, maPhongBan});
         }
+        if(jTable1.getRowCount()>0){
+            jTable1.setRowSelectionInterval(0, 0);
+        }
     } catch (SQLException e) {
         e.printStackTrace();
     }

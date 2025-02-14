@@ -40,10 +40,16 @@ public class HomePage extends javax.swing.JFrame {
     private JPanel hk = new JPanel();
     private PanelNV panelnv;
     private JPanel nv = new JPanel();
+    private PanelPB panelpb;
+    private JPanel pb = new JPanel();
+    private PanelPB panelbl;
+    private JPanel bl = new JPanel();
     private boolean isPanelNVVisible = false;
     private boolean isPanelCTHVisible = false;
     private boolean isPanelMHVisible = false;
     private boolean isPanelHKVisible = false;
+    private boolean isPanelPBVisible = false;
+    private boolean isPanelBLVisible = false;
      
 
     public HomePage() {
@@ -82,6 +88,21 @@ public class HomePage extends javax.swing.JFrame {
     jPanel.add(panel);    // Thêm panel mới vào cth
     nv.revalidate();  // Cập nhật lại giao diện
     nv.repaint();
+    
+    jPanel.removeAll(); 
+    jPanel.add(panel);    // Thêm panel mới vào cth
+    pb.revalidate();  // Cập nhật lại giao diện
+    pb.repaint();
+    
+    jPanel.removeAll(); 
+    jPanel.add(panel);    // Thêm panel mới vào cth
+    pb.revalidate();  // Cập nhật lại giao diện
+    pb.repaint();
+    
+    jPanel.removeAll(); 
+    jPanel.add(panel);    // Thêm panel mới vào cth
+    bl.revalidate();  // Cập nhật lại giao diện
+    bl.repaint();
     }
     
     
@@ -285,10 +306,25 @@ public class HomePage extends javax.swing.JFrame {
 
     private boolean isPanelPBisible = false;
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-//         // Giả sử bạn có 14 JPanel từ jp1 đến jp14
-//        hideAllPanels();
-//        // Chỉ mở jp3
-//        jp5.setVisible(true);  
+        
+         // Kiểm tra nếu PanelCTH chưa hiển thị
+    if (!isPanelPBVisible) {
+        // Ẩn tất cả các panel đang hiển thị
+        mh.setVisible(false);
+        cth.setVisible(false);
+        hk.setVisible(false);
+        nv.setVisible(false);
+        bl.setVisible(false);
+        
+
+        // Hiển thị PanelCTH
+        showPanel(new PanelPB());
+        isPanelPBVisible = true;
+    } else {
+        // Nếu PanelCTH đã hiển thị, ẩn nó khi nhấn lần nữa
+        cth.setVisible(false);
+        isPanelPBVisible = false;
+    }
 
     }//GEN-LAST:event_jMenuItem5ActionPerformed
     
@@ -300,6 +336,8 @@ public class HomePage extends javax.swing.JFrame {
         mh.setVisible(false);
         cth.setVisible(false);
         hk.setVisible(false);
+        pb.setVisible(false);
+        bl.setVisible(false);
         
 
         // Hiển thị PanelCTH
@@ -332,14 +370,24 @@ public class HomePage extends javax.swing.JFrame {
     
     }//GEN-LAST:event_jMenuItem1ComponentShown
 
-    private boolean isPanelLuongVisible = false;
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-//      // Giả sử bạn có 14 JPanel từ jp1 đến jp14
-//        hideAllPanels();
+    if (!isPanelBLVisible) {
+            // Ẩn tất cả các panel đang hiển thị
+            mh.setVisible(false);
+            cth.setVisible(false);
+            hk.setVisible(false);
+            pb.setVisible(false);
+            nv.setVisible(false);
 
-//        // Chỉ mở jp3
-//        jp10.setVisible(true);  
-//        
+
+            // Hiển thị PanelCTH
+            showPanel(new PanelBL());
+            isPanelBLVisible = true;
+        } else {
+            // Nếu PanelCTH đã hiển thị, ẩn nó khi nhấn lần nữa
+            bl.setVisible(false);
+            isPanelBLVisible = false;
+        }    
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
   
@@ -350,6 +398,9 @@ public class HomePage extends javax.swing.JFrame {
         mh.setVisible(false);
         hk.setVisible(false);
         isPanelMHVisible = isPanelHKVisible = false;
+        nv.setVisible(false);
+        pb.setVisible(false);
+        bl.setVisible(false);
 
         // Hiển thị PanelCTH
         showPanel(new PanelCTH());
@@ -368,6 +419,9 @@ public class HomePage extends javax.swing.JFrame {
         // Ẩn tất cả các panel đang hiển thị
         cth.setVisible(false);
         hk.setVisible(false);
+        nv.setVisible(false);
+        pb.setVisible(false);
+        bl.setVisible(false);
     
 
         // Hiển thị PanelCTH
@@ -387,6 +441,9 @@ public class HomePage extends javax.swing.JFrame {
         // Ẩn tất cả các panel đang hiển thị
         mh.setVisible(false);
         cth.setVisible(false);
+        pb.setVisible(false);
+        nv.setVisible(false);
+        bl.setVisible(false);
         
 
         // Hiển thị PanelCTH
