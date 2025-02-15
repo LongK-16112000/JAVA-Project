@@ -439,6 +439,9 @@ public class PanelCTH extends JPanel {
 
                 model.addRow(new Object[]{maChuongTrinhHoc, tenChuongTrinh, thoiGianHoanThanh});
             }
+            if(jTable1.getRowCount()>0){
+                jTable1.setRowSelectionInterval(0, 0);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
