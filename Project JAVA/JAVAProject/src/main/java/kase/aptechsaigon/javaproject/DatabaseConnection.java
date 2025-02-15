@@ -15,7 +15,7 @@ import java.sql.SQLException;
 public class DatabaseConnection {
     public static Connection connect() throws SQLException {
         try {
-            String url = "jdbc:mysql://localhost:3306/quanlynhanvien";  // Đổi với thông tin CSDL thực tế của bạn
+            String url = "jdbc:mysql://localhost:3307/quanlynhanvien";  // Đổi với thông tin CSDL thực tế của bạn
             String user = "root"; // Tên người dùng
             String password = "123456";  // Mật khẩu
             
