@@ -21,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Admin
  */
 public class PanelBL extends javax.swing.JPanel {
+    private boolean isEdit = false;
 
     /**
      * Creates new form PanelBL
@@ -84,47 +85,13 @@ displayBangLuong();
     } catch (SQLException e) {
         e.printStackTrace();
     }
+        SetEdit(false);
 }
 
     private void addBangLuong() {
-    String maChucVuText = txtMaChucVu.getText();
-    String mucLuongText = txtMucLuong.getText();
-
-    if (maChucVuText.isEmpty() || mucLuongText.isEmpty()) {
-        JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
-        return;
-    }
-
-    int maChucVu;
-    double mucLuong;
-    try {
-        maChucVu = Integer.parseInt(maChucVuText);
-        mucLuong = Double.parseDouble(mucLuongText);
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
-        return;
-    }
-
-    int maLuongMoi = getNextMaLuong();
-
-    String sql = "INSERT INTO Luong (MaLuong, MaChucVu, MucLuong) VALUES (?, ?, ?)";
-    try (Connection conn = DatabaseConnection.connect();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
-
-        ps.setInt(1, maLuongMoi);
-        ps.setInt(2, maChucVu);
-        ps.setDouble(3, mucLuong);
-
-        int rowsAffected = ps.executeUpdate();
-        if (rowsAffected > 0) {
-            JOptionPane.showMessageDialog(null, "Bảng lương đã được thêm thành công!");
-            clearBangLuongFields();
-            displayBangLuong(); // Update table after adding
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm bảng lương.");
-    }
+        clearBangLuongFields();
+        SetEdit(true);
+        isEdit = false;
 }
 
 // Method to get the next MaLuong
@@ -146,47 +113,52 @@ private int getNextMaLuong() {
 }
 
 private void updateBangLuong() {
-    int selectedRow = jTableBangLuong.getSelectedRow();
-    if (selectedRow >= 0) {
-        int maLuong = (int) jTableBangLuong.getValueAt(selectedRow, 0);
-        String maChucVuText = txtMaChucVu.getText();
-        String mucLuongText = txtMucLuong.getText();
-
-        if (maChucVuText.isEmpty() || mucLuongText.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
-            return;
-        }
-
-        int maChucVu;
-        double mucLuong;
-        try {
-            maChucVu = Integer.parseInt(maChucVuText);
-            mucLuong = Double.parseDouble(mucLuongText);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
-            return;
-        }
-
-        String sql = "UPDATE Luong SET MaChucVu = ?, MucLuong = ? WHERE MaLuong = ?";
-        try (Connection conn = DatabaseConnection.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, maChucVu);
-            ps.setDouble(2, mucLuong);
-            ps.setInt(3, maLuong);
-
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Bảng lương đã được cập nhật thành công!");
-                displayBangLuong(); // Update table after updating
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật bảng lương.");
-        }
-    } else {
-        JOptionPane.showMessageDialog(null, "Vui lòng chọn bảng lương để cập nhật.");
-    }
+//    int selectedRow = jTableBangLuong.getSelectedRow();
+//    if (selectedRow >= 0) {
+//        int maLuong = (int) jTableBangLuong.getValueAt(selectedRow, 0);
+//        String maChucVuText = txtMaChucVu.getText();
+//        String mucLuongText = txtMucLuong.getText();
+//
+//
+//        if (maChucVuText.isEmpty() || mucLuongText.isEmpty()) {
+//            JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
+//            return;
+//        }
+//
+//        int maChucVu;
+//        double mucLuong;
+//        try {
+//            maChucVu = Integer.parseInt(maChucVuText);
+//            mucLuong = Double.parseDouble(mucLuongText);
+//        } catch (NumberFormatException e) {
+//            JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
+//            return;
+//        }
+//
+//        String sql = "UPDATE Luong SET MaChucVu = ?, MucLuong = ? WHERE MaLuong = ?";
+//        try (Connection conn = DatabaseConnection.connect();
+//            PreparedStatement ps = conn.prepareStatement(sql)) {
+//
+//            ps.setInt(1, maChucVu);
+//            ps.setDouble(2, mucLuong);
+//            ps.setInt(3, maLuong);
+//
+//            int rowsAffected = ps.executeUpdate();
+//            if (rowsAffected > 0) {
+//                JOptionPane.showMessageDialog(null, "Bảng lương đã được cập nhật thành công!");
+//                displayBangLuong(); // Update table after updating
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật bảng lương.");
+//        }
+//    } else {
+//        JOptionPane.showMessageDialog(null, "Vui lòng chọn bảng lương để cập nhật.");
+//    }
+    SetEdit(true);
+    isEdit = true;
+    txtMaChucVu.setEnabled(false);
+    txtMaLuong.setEnabled(false);
 }
 
 private void deleteBangLuong() {
@@ -236,13 +208,15 @@ private void deleteBangLuong() {
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         txtMaChucVu = new javax.swing.JTextField();
-        btnAddBangLuong = new javax.swing.JButton();
         btnUpdateBangLuong = new javax.swing.JButton();
         btnDeleteBangLuong = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtMucLuong = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtMaLuong = new javax.swing.JTextField();
+        btnAddBangLuong = new javax.swing.JButton();
+        btnCancleBangLuong = new javax.swing.JButton();
+        btnSaveBangLuong = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableBangLuong = new javax.swing.JTable();
@@ -314,16 +288,6 @@ private void deleteBangLuong() {
             }
         });
 
-        btnAddBangLuong.setBackground(new java.awt.Color(0, 51, 153));
-        btnAddBangLuong.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        btnAddBangLuong.setForeground(new java.awt.Color(255, 255, 255));
-        btnAddBangLuong.setText("Thêm");
-        btnAddBangLuong.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddBangLuongActionPerformed(evt);
-            }
-        });
-
         btnUpdateBangLuong.setBackground(new java.awt.Color(0, 51, 153));
         btnUpdateBangLuong.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
         btnUpdateBangLuong.setForeground(new java.awt.Color(255, 255, 255));
@@ -361,41 +325,85 @@ private void deleteBangLuong() {
             }
         });
 
+        btnAddBangLuong.setBackground(new java.awt.Color(0, 51, 153));
+        btnAddBangLuong.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnAddBangLuong.setForeground(new java.awt.Color(255, 255, 255));
+        btnAddBangLuong.setText("Thêm");
+        btnAddBangLuong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddBangLuongActionPerformed(evt);
+            }
+        });
+
+        btnCancleBangLuong.setBackground(new java.awt.Color(0, 51, 153));
+        btnCancleBangLuong.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnCancleBangLuong.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancleBangLuong.setText("Hủy");
+        btnCancleBangLuong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancleBangLuongActionPerformed(evt);
+            }
+        });
+
+        btnSaveBangLuong.setBackground(new java.awt.Color(0, 51, 153));
+        btnSaveBangLuong.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnSaveBangLuong.setForeground(new java.awt.Color(255, 255, 255));
+        btnSaveBangLuong.setText("Lưu");
+        btnSaveBangLuong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveBangLuongActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(82, 82, 82))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(31, 31, 31))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)))))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtMaChucVu)
-                    .addComponent(txtMucLuong)
-                    .addComponent(txtMaLuong)
+                                .addContainerGap()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(31, 31, 31))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(40, 40, 40)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(82, 82, 82)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtMaChucVu, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
+                            .addComponent(txtMucLuong)
+                            .addComponent(txtMaLuong)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnAddBangLuong)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                        .addComponent(btnUpdateBangLuong)
-                        .addGap(38, 38, 38)
-                        .addComponent(btnDeleteBangLuong)))
+                        .addGap(0, 319, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnSaveBangLuong)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnCancleBangLuong))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnAddBangLuong)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnUpdateBangLuong)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnDeleteBangLuong)))))
                 .addGap(40, 40, 40))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(53, 53, 53)
+                .addGap(44, 44, 44)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnUpdateBangLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDeleteBangLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAddBangLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtMaLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -407,12 +415,11 @@ private void deleteBangLuong() {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtMucLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(101, 101, 101)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAddBangLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUpdateBangLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDeleteBangLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(67, Short.MAX_VALUE))
+                    .addComponent(btnCancleBangLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSaveBangLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(108, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255,40));
@@ -521,12 +528,8 @@ private void deleteBangLuong() {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMaChucVuActionPerformed
 
-    private void btnAddBangLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBangLuongActionPerformed
-
-    }//GEN-LAST:event_btnAddBangLuongActionPerformed
-
     private void btnUpdateBangLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateBangLuongActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnUpdateBangLuongActionPerformed
 
     private void btnDeleteBangLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteBangLuongActionPerformed
@@ -541,10 +544,62 @@ private void deleteBangLuong() {
         // TODO add your handling code here:
     }//GEN-LAST:event_jp9AncestorAdded
 
+    private void btnAddBangLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBangLuongActionPerformed
+        
+    }//GEN-LAST:event_btnAddBangLuongActionPerformed
+
+    private void btnCancleBangLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancleBangLuongActionPerformed
+        clearBangLuongFields();
+        SetEdit(false);
+    }//GEN-LAST:event_btnCancleBangLuongActionPerformed
+
+    private void btnSaveBangLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveBangLuongActionPerformed
+        String maChucVuText = txtMaChucVu.getText();
+        String mucLuongText = txtMucLuong.getText();
+
+        if (maChucVuText.isEmpty() || mucLuongText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
+            return;
+        }
+
+        int maChucVu;
+        double mucLuong;
+        try {
+            maChucVu = Integer.parseInt(maChucVuText);
+            mucLuong = Double.parseDouble(mucLuongText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
+            return;
+        }
+
+        int maLuongMoi = getNextMaLuong();
+
+        String sql = "INSERT INTO Luong (MaLuong, MaChucVu, MucLuong) VALUES (?, ?, ?)";
+        try (Connection conn = DatabaseConnection.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, maLuongMoi);
+            ps.setInt(2, maChucVu);
+            ps.setDouble(3, mucLuong);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Bảng lương đã được thêm thành công!");
+                clearBangLuongFields();
+                displayBangLuong(); // Update table after adding
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm bảng lương.");
+        }
+    }//GEN-LAST:event_btnSaveBangLuongActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddBangLuong;
+    private javax.swing.JButton btnCancleBangLuong;
     private javax.swing.JButton btnDeleteBangLuong;
+    private javax.swing.JButton btnSaveBangLuong;
     private javax.swing.JButton btnUpdateBangLuong;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -566,6 +621,19 @@ private void deleteBangLuong() {
     // End of variables declaration//GEN-END:variables
 
     private void clearBangLuongFields() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        txtMaLuong.setText("");
+        txtMaChucVu.setText("");    
+        txtMucLuong.setText("");
+    }
+
+    private void SetEdit(boolean edit) {
+        txtMaLuong.setEditable(edit);
+        txtMaChucVu.setEditable(edit);
+        txtMucLuong.setEditable(edit);
+        btnAddBangLuong.setEnabled(!edit);
+        btnUpdateBangLuong.setEnabled(!edit);
+        btnDeleteBangLuong.setEnabled(!edit);
+        btnSaveBangLuong.setEnabled(edit);
+        btnCancleBangLuong.setEnabled(edit);
     }
 }
