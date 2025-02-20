@@ -33,17 +33,17 @@ public class PanelCTH extends JPanel {
 //        btnUpdate.addActionListener(e -> updateChuongTrinhHoc());
 //        btnDelete.addActionListener(e -> deleteChuongTrinhHoc());
         // Thêm ListSelectionListener để tự động điền dữ liệu khi chọn dòng trong JTable
-        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        tableData.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 // Kiểm tra xem có dòng nào được chọn hay không
-                int selectedRow = jTable1.getSelectedRow();
+                int selectedRow = tableData.getSelectedRow();
 
                 // Nếu có dòng được chọn, điền dữ liệu vào các TextField
                 if (selectedRow >= 0) {
-                    int maChuongTrinh = (int) jTable1.getValueAt(selectedRow, 0); 
-                    String tenChuongTrinh = (String) jTable1.getValueAt(selectedRow, 1);  // Cột 1 là Tên Chương Trình
-                    int thoiGianHoanThanh = (int) jTable1.getValueAt(selectedRow, 2);  // Cột 2 là Thời Gian Hoàn Thành
+                    int maChuongTrinh = (int) tableData.getValueAt(selectedRow, 0); 
+                    String tenChuongTrinh = (String) tableData.getValueAt(selectedRow, 1);  // Cột 1 là Tên Chương Trình
+                    int thoiGianHoanThanh = (int) tableData.getValueAt(selectedRow, 2);  // Cột 2 là Thời Gian Hoàn Thành
 
                     // Cập nhật nội dung cho các JTextField
                      // Hiển thị mã chương trình học
@@ -85,7 +85,7 @@ public class PanelCTH extends JPanel {
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableData = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -156,8 +156,8 @@ public class PanelCTH extends JPanel {
         jPanel4.setBackground(new java.awt.Color(255, 255, 255,40));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
 
-        jTable1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableData.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tableData.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -211,7 +211,7 @@ public class PanelCTH extends JPanel {
                 "Mã", "Tên Chương Trình", "Thời Gian Chương Trình"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tableData);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -434,12 +434,12 @@ public class PanelCTH extends JPanel {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-    int selectedRow = jTable1.getSelectedRow();  // Kiểm tra xem có dòng nào được chọn trong bảng không
+    int selectedRow = tableData.getSelectedRow();  // Kiểm tra xem có dòng nào được chọn trong bảng không
     if (selectedRow >= 0) {
         // Lấy dữ liệu từ dòng đã chọn trong bảng
-        String maChuongTrinhHoc = jTable1.getValueAt(selectedRow, 0).toString();  // Mã chương trình học
-        String tenChuongTrinh = jTable1.getValueAt(selectedRow, 1).toString();     // Tên chương trình học
-        String thoiGianHoanThanh = jTable1.getValueAt(selectedRow, 2).toString();  // Thời gian hoàn thành
+        String maChuongTrinhHoc = tableData.getValueAt(selectedRow, 0).toString();  // Mã chương trình học
+        String tenChuongTrinh = tableData.getValueAt(selectedRow, 1).toString();     // Tên chương trình học
+        String thoiGianHoanThanh = tableData.getValueAt(selectedRow, 2).toString();  // Thời gian hoàn thành
 
         // Điền dữ liệu vào các TextField
         txtMaChuongTrinh.setText(maChuongTrinhHoc);  // Điền mã chương trình học vào TextField
@@ -457,11 +457,11 @@ public class PanelCTH extends JPanel {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
 
     // Kiểm tra xem người dùng có chọn dòng trong bảng không
-    int selectedRow = jTable1.getSelectedRow();
+    int selectedRow = tableData.getSelectedRow();
     
     if (selectedRow >= 0) {
         // Lấy Mã Chương Trình Học từ cột đầu tiên của dòng đã chọn
-        int maChuongTrinhHoc = (int) jTable1.getValueAt(selectedRow, 0);
+        int maChuongTrinhHoc = (int) tableData.getValueAt(selectedRow, 0);
 
         // Câu lệnh SQL để xóa chương trình học khỏi cơ sở dữ liệu
         String sqlDelete = "DELETE FROM ChuongTrinhHoc WHERE MaChuongTrinhHoc = ?";
@@ -510,11 +510,6 @@ public class PanelCTH extends JPanel {
     }//GEN-LAST:event_txtThoiGianHoanThanhActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        // TODO add your handling code here:// Đặt lại các trường nhập liệu về giá trị cũ
-        txtMaChuongTrinh.setText("");
-        txtTenChuongTrinh.setText("");
-        txtThoiGianHoanThanh.setText("");
-
         // Trở về trạng thái không chỉnh sửa
         setEditStatus(false);
     }//GEN-LAST:event_btnCancelActionPerformed
@@ -550,7 +545,7 @@ public class PanelCTH extends JPanel {
 
     }//GEN-LAST:event_btnSaveActionPerformed
   private void displayChuongTrinhHoc() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableData.getModel();
         model.setRowCount(0);  // Xóa dữ liệu cũ trong bảng
          String sql = "SELECT * FROM ChuongTrinhHoc";
 
@@ -565,8 +560,8 @@ public class PanelCTH extends JPanel {
 
                 model.addRow(new Object[]{maChuongTrinhHoc, tenChuongTrinh, thoiGianHoanThanh});
             }
-            if(jTable1.getRowCount()>0){
-                jTable1.setRowSelectionInterval(0, 0);
+            if(tableData.getRowCount()>0){
+                tableData.setRowSelectionInterval(0, 0);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -633,8 +628,27 @@ public class PanelCTH extends JPanel {
         btnAdd.setEnabled(!editable);
         btnUpdate.setEnabled(!editable);
         btnDelete.setEnabled(!editable);
+        tableData.setEnabled(!editable);
+        
+        java.awt.Color enableColor = new java.awt.Color(0, 51, 153);
+        java.awt.Color disableColor = new java.awt.Color(128, 128, 128);
 
-                
+        if(editable) {
+            btnAdd.setBackground(disableColor);
+            btnUpdate.setBackground(disableColor);
+            btnDelete.setBackground(disableColor);
+            
+            btnSave.setBackground(enableColor);
+            btnCancel.setBackground(enableColor);
+        }
+        else {
+            btnAdd.setBackground(enableColor);
+            btnUpdate.setBackground(enableColor);
+            btnDelete.setBackground(enableColor);
+            
+            btnSave.setBackground(disableColor);
+            btnCancel.setBackground(disableColor);
+        }
     }
 
   
@@ -660,8 +674,8 @@ public class PanelCTH extends JPanel {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JPanel jp9;
+    private javax.swing.JTable tableData;
     private javax.swing.JTextField txtMaChuongTrinh;
     private javax.swing.JTextField txtTenChuongTrinh;
     private javax.swing.JTextField txtThoiGianHoanThanh;

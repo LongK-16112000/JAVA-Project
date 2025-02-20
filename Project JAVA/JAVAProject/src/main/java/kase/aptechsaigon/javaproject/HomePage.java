@@ -21,7 +21,7 @@ public class HomePage extends javax.swing.JFrame {
     private static final Login lg = new Login();  // Cửa sổ đăng nhập
     public static final HomePage hp = new HomePage();  // Đối tượng của HomePage
     private boolean isLoggedIn;
-    private PanelCTH panelCth;
+    /*private PanelCTH panelCth;
     private JPanel cth = new JPanel();
     private PanelTĐMK panelTĐMK;
     private JPanel tđmk = new JPanel();
@@ -41,7 +41,7 @@ public class HomePage extends javax.swing.JFrame {
     private boolean isPanelHKVisible = false;
     private boolean isPanelPBVisible = false;
     private boolean isPanelBLVisible = false;
-    private boolean isPanelTĐMKVisible = false;
+    private boolean isPanelTĐMKVisible = false;*/
     
     public HomePage() {
         initComponents();
@@ -52,14 +52,16 @@ public class HomePage extends javax.swing.JFrame {
     }
     
     private void showPanel(JPanel panel) {
+       jPanel.setVisible(isLogin);
+        
         // Ẩn tất cả các panel hiện tại trước khi hiển thị panel mới
-       mh.setVisible(false);
+       /*mh.setVisible(false);
        cth.setVisible(false);
        hk.setVisible(false);
        nv.setVisible(false);
        pb.setVisible(false);
        bl.setVisible(false);
-       tđmk.setVisible(false);
+       tđmk.setVisible(false);*/
 
        // Thêm panel mới vào jPanel và hiển thị
        jPanel.removeAll();
@@ -71,6 +73,7 @@ public class HomePage extends javax.swing.JFrame {
     public void SetPermission(boolean isLogin) {
         this.isLogin = isLogin;
         jMenuBar1.setVisible(isLogin);  // Hiển thị hoặc ẩn menu dựa trên trạng thái đăng nhập
+        jPanel.setVisible(false);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -242,7 +245,7 @@ public class HomePage extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // Kiểm tra nếu PanelCTH chưa hiển thị
-        if (!isPanelTĐMKVisible) {
+        /*if (!isPanelTĐMKVisible) {
             // Ẩn tất cả các panel đang hiển thị
             mh.setVisible(false);
             cth.setVisible(false);
@@ -251,15 +254,17 @@ public class HomePage extends javax.swing.JFrame {
             bl.setVisible(false);
             nv.setVisible(false);
         
-            // Hiển thị PanelCTH
-            showPanel(new PanelTĐMK());
+            
             isPanelTĐMKVisible = true;
         }
         else {
             // Nếu PanelCTH đã hiển thị, ẩn nó khi nhấn lần nữa
             tđmk.setVisible(false);
             isPanelTĐMKVisible = false;
-        }
+        }*/
+        
+        // Hiển thị PanelCTH
+        showPanel(new PanelTĐMK());
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -267,11 +272,12 @@ public class HomePage extends javax.swing.JFrame {
         jMenuBar1.setVisible(false);
 
         // Hiển thị lại màn hình login
+        SetPermission(false);
         lg.setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
          // Kiểm tra nếu PanelCTH chưa hiển thị
-        if (!isPanelPBVisible) {
+        /*if (!isPanelPBVisible) {
             // Ẩn tất cả các panel đang hiển thị
             mh.setVisible(false);
             cth.setVisible(false);
@@ -281,21 +287,22 @@ public class HomePage extends javax.swing.JFrame {
             tđmk.setVisible(false);
 
 
-            // Hiển thị PanelCTH
-            showPanel(new PanelPB());
+            
             isPanelPBVisible = true;
         }
         else {
             // Nếu PanelCTH đã hiển thị, ẩn nó khi nhấn lần nữa
             cth.setVisible(false);
             isPanelPBVisible = false;
-        }
+        }*/
+        // Hiển thị PanelCTH
+        showPanel(new PanelPB());
     }//GEN-LAST:event_jMenuItem5ActionPerformed
     
   
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
          // Kiểm tra nếu PanelCTH chưa hiển thị
-        if (!isPanelNVVisible) {
+        /*if (!isPanelNVVisible) {
             // Ẩn tất cả các panel đang hiển thị
             mh.setVisible(false);
             cth.setVisible(false);
@@ -304,15 +311,16 @@ public class HomePage extends javax.swing.JFrame {
             bl.setVisible(false);
             tđmk.setVisible(false);
 
-            // Hiển thị PanelCTH
-            showPanel(new PanelNV());
+            
             isPanelNVVisible = true;
         }
         else {
             // Nếu PanelCTH đã hiển thị, ẩn nó khi nhấn lần nữa
             cth.setVisible(false);
             isPanelNVVisible = false;
-        }
+        }*/
+        // Hiển thị PanelCTH
+        showPanel(new PanelNV());
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
@@ -328,7 +336,7 @@ public class HomePage extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ComponentShown
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-    if (!isPanelBLVisible) {
+        /*if (!isPanelBLVisible) {
             // Ẩn tất cả các panel đang hiển thị
             mh.setVisible(false);
             cth.setVisible(false);
@@ -337,20 +345,21 @@ public class HomePage extends javax.swing.JFrame {
             nv.setVisible(false);
             tđmk.setVisible(false);
 
-            // Hiển thị PanelCTH
-            showPanel(new PanelBL());
+            
             isPanelBLVisible = true;
         } else {
             // Nếu PanelCTH đã hiển thị, ẩn nó khi nhấn lần nữa
             bl.setVisible(false);
             isPanelBLVisible = false;
-        }    
+        }    */
+        // Hiển thị PanelCTH
+        showPanel(new PanelBL());
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
   
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         // Kiểm tra nếu PanelCTH chưa hiển thị
-        if (!isPanelCTHVisible) {
+        /*if (!isPanelCTHVisible) {
             // Ẩn tất cả các panel đang hiển thị
             mh.setVisible(false);
             hk.setVisible(false);
@@ -359,20 +368,21 @@ public class HomePage extends javax.swing.JFrame {
             pb.setVisible(false);
             bl.setVisible(false);
             tđmk.setVisible(false);
-            // Hiển thị PanelCTH
-            showPanel(new PanelCTH());
+            
             isPanelCTHVisible = true;
         }
         else {
             // Nếu PanelCTH đã hiển thị, ẩn nó khi nhấn lần nữa
             cth.setVisible(false);
             isPanelCTHVisible = false;
-        }
+        }*/
+        // Hiển thị PanelCTH
+        showPanel(new PanelCTH());
     }//GEN-LAST:event_jMenuItem7ActionPerformed
    
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         // Kiểm tra nếu PanelCTH chưa hiển thị
-        if (!isPanelMHVisible) {
+        /*if (!isPanelMHVisible) {
             // Ẩn tất cả các panel đang hiển thị
             cth.setVisible(false);
             hk.setVisible(false);
@@ -381,37 +391,39 @@ public class HomePage extends javax.swing.JFrame {
             bl.setVisible(false);
             tđmk.setVisible(false);
 
-            // Hiển thị PanelCTH
-            showPanel(new PanelMH());
+            x
             isPanelMHVisible = true;
         }
         else {
             // Nếu PanelCTH đã hiển thị, ẩn nó khi nhấn lần nữa
             mh.setVisible(false);
             isPanelMHVisible = false;
-        }
+        }*/
+        // Hiển thị PanelCTH
+        showPanel(new PanelMH());
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
-    // Kiểm tra nếu PanelCTH chưa hiển thị
-    if (!isPanelHKVisible) {
-        // Ẩn tất cả các panel đang hiển thị
-        mh.setVisible(false);
-        cth.setVisible(false);
-        pb.setVisible(false);
-        nv.setVisible(false);
-        bl.setVisible(false);
-        tđmk.setVisible(false);
+        // Kiểm tra nếu PanelCTH chưa hiển thị
+        /*if (!isPanelHKVisible) {
+            // Ẩn tất cả các panel đang hiển thị
+            mh.setVisible(false);
+            cth.setVisible(false);
+            pb.setVisible(false);
+            nv.setVisible(false);
+            bl.setVisible(false);
+            tđmk.setVisible(false);
 
+            // Hiển thị PanelCTH
+            showPanel(new PanelHK());
+            isPanelHKVisible = true;
+        } else {
+            // Nếu PanelCTH đã hiển thị, ẩn nó khi nhấn lần nữa
+            hk.setVisible(false);
+            isPanelHKVisible = false;
+        }*/
         // Hiển thị PanelCTH
         showPanel(new PanelHK());
-        isPanelHKVisible = true;
-    } else {
-        // Nếu PanelCTH đã hiển thị, ẩn nó khi nhấn lần nữa
-        hk.setVisible(false);
-        isPanelHKVisible = false;
-    }
-
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
