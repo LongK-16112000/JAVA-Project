@@ -91,7 +91,10 @@ public class PanelPB extends javax.swing.JPanel {
 }
     
     private void addPhongBan() {
-        clearPhongBanFields();
+        txtMaPhongBan.setText("");
+        txtTenPhongBan.setText("");
+        txtMaTruongPhong.setText("");
+        txtMaPhoPhong.setText("");
         SetEdit(true);
         isEdit = false;
 }
@@ -653,10 +656,9 @@ private void deletePhongBan() {
     // End of variables declaration//GEN-END:variables
 
     private void clearPhongBanFields() {
-        txtMaPhongBan.setText("");
-        txtTenPhongBan.setText("");
-        txtMaTruongPhong.setText("");
-        txtMaPhoPhong.setText("");
+        if (jTablePhongBan.getRowCount() > 0) {
+            jTablePhongBan.setRowSelectionInterval(0, 0);
+        }
     }
     
     private void SetEdit(boolean edit) {

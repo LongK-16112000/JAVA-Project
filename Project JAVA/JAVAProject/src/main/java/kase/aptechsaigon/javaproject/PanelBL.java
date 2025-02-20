@@ -89,7 +89,9 @@ displayBangLuong();
 }
 
     private void addBangLuong() {
-        clearBangLuongFields();
+        txtMaLuong.setText("");
+        txtMaChucVu.setText("");
+        txtMucLuong.setText("");
         SetEdit(true);
         isEdit = false;
 }
@@ -621,12 +623,14 @@ private void deleteBangLuong() {
     // End of variables declaration//GEN-END:variables
 
     private void clearBangLuongFields() {
-        txtMaLuong.setText("");
-        txtMaChucVu.setText("");    
-        txtMucLuong.setText("");
+        if (jTableBangLuong.getRowCount() > 0) {
+            jTableBangLuong.setRowSelectionInterval(0, 0);
+        }
     }
 
     private void SetEdit(boolean edit) {
+        isEdit = edit;  
+        
         txtMaLuong.setEditable(edit);
         txtMaChucVu.setEditable(edit);
         txtMucLuong.setEditable(edit);

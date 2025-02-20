@@ -710,7 +710,17 @@ private void displayNhanVien() {
 
 
     private void addNhanVien() {
-        clearNhanVienFields();
+        txtMaNhanVien.setText("");
+        txtHoTen.setText("");
+        txtNgaySinh.setText("");
+        txtSoCMT.setText("");
+        txtDiaChi.setText("");
+        txtEmail.setText("");
+        txtDienThoai.setText("");
+        txtNgayVaoLam.setText("");
+        txtMatKhau.setText("");
+        txtMaChucVu.setText("");    
+        txtMaPhongBan.setText("");
         SetEdit(true);
         isEdit = false;
     }
@@ -757,17 +767,9 @@ private void displayNhanVien() {
     }
     
     private void clearNhanVienFields() {
-        txtMaNhanVien.setText("");
-        txtHoTen.setText("");
-        txtNgaySinh.setText("");
-        txtSoCMT.setText("");
-        txtDiaChi.setText("");
-        txtEmail.setText("");
-        txtDienThoai.setText("");
-        txtNgayVaoLam.setText("");
-        txtMatKhau.setText("");
-        txtMaChucVu.setText("");    
-        txtMaPhongBan.setText("");
+        if(jTable1.getRowCount()>0){
+            jTable1.setRowSelectionInterval(0, 0);
+        }
     }
     
     private void SetEdit(boolean edit) {
