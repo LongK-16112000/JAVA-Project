@@ -22,16 +22,12 @@ import javax.swing.table.DefaultTableModel;
  * @author Truc
  */
 public class PanelMH extends JPanel {
-   
+    private boolean isEditMode = false;
     /**
      * Creates new form PanelCC
      */
     public PanelMH() {
         initComponents();  
-        btnAdd.addActionListener(e -> addMonHoc());
-        btnUpdate.addActionListener(e -> updateMonHoc());
-        btnDelete.addActionListener(e -> deleteMonHoc());
-
 // Thêm ListSelectionListener để tự động điền dữ liệu khi chọn dòng trong JTable
     jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
     @Override
@@ -87,16 +83,18 @@ public class PanelMH extends JPanel {
         jLabel4 = new javax.swing.JLabel();
         txtTenMonHoc = new javax.swing.JTextField();
         txtSoGioHocMoiBuoi = new javax.swing.JTextField();
-        btnAdd = new javax.swing.JButton();
-        btnUpdate = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtSoBuoiHoc = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtMaMonHoc = new javax.swing.JTextField();
+        btnCancel = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        btnAdd = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
 
         setLayout(new java.awt.BorderLayout());
@@ -176,36 +174,6 @@ public class PanelMH extends JPanel {
             }
         });
 
-        btnAdd.setBackground(new java.awt.Color(0, 51, 153));
-        btnAdd.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
-        btnAdd.setText("Thêm");
-        btnAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddActionPerformed(evt);
-            }
-        });
-
-        btnUpdate.setBackground(new java.awt.Color(0, 51, 153));
-        btnUpdate.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
-        btnUpdate.setText("Sửa");
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
-            }
-        });
-
-        btnDelete.setBackground(new java.awt.Color(0, 51, 153));
-        btnDelete.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
-        btnDelete.setText("Xóa");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
-
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Số Buổi Học :");
@@ -223,46 +191,56 @@ public class PanelMH extends JPanel {
             }
         });
 
+        btnCancel.setBackground(new java.awt.Color(0, 51, 153));
+        btnCancel.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnCancel.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancel.setText("Hủy");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+
+        btnSave.setBackground(new java.awt.Color(0, 51, 153));
+        btnSave.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnSave.setForeground(new java.awt.Color(255, 255, 255));
+        btnSave.setText("Lưu");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(82, 82, 82))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnSave)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCancel))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(31, 31, 31))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18))))))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtTenMonHoc)
-                    .addComponent(txtSoGioHocMoiBuoi)
-                    .addComponent(txtSoBuoiHoc)
-                    .addComponent(txtMaMonHoc)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnAdd)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                        .addComponent(btnUpdate)
-                        .addGap(38, 38, 38)
-                        .addComponent(btnDelete)))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(31, 36, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtTenMonHoc, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
+                            .addComponent(txtSoGioHocMoiBuoi)
+                            .addComponent(txtSoBuoiHoc)
+                            .addComponent(txtMaMonHoc))))
                 .addGap(40, 40, 40))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(53, 53, 53)
+                .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtMaMonHoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -278,11 +256,10 @@ public class PanelMH extends JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtSoGioHocMoiBuoi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(38, 38, 38)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -320,28 +297,71 @@ public class PanelMH extends JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
+
+        btnAdd.setBackground(new java.awt.Color(0, 51, 153));
+        btnAdd.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
+        btnAdd.setText("Thêm");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setBackground(new java.awt.Color(0, 51, 153));
+        btnUpdate.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdate.setText("Sửa");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(0, 51, 153));
+        btnDelete.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("Xóa");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 134, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(btnAdd)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnUpdate)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDelete))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(48, 48, 48)
+                .addGap(9, 9, 9)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(52, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(89, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jp9Layout = new javax.swing.GroupLayout(jp9);
@@ -362,11 +382,11 @@ public class PanelMH extends JPanel {
             jp9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jp9Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(44, 44, 44)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(146, Short.MAX_VALUE))
+                .addContainerGap(191, Short.MAX_VALUE))
         );
 
         add(jp9, java.awt.BorderLayout.CENTER);
@@ -377,15 +397,85 @@ public class PanelMH extends JPanel {
     }//GEN-LAST:event_jp9AncestorAdded
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
+     // Kiểm tra xem người dùng có chọn dòng trong bảng không
+int selectedRow = jTable1.getSelectedRow();
+
+if (selectedRow >= 0) {
+    // Lấy Mã Môn Học từ cột đầu tiên của dòng đã chọn
+    int maMonHoc = (int) jTable1.getValueAt(selectedRow, 0);
+
+    // Câu lệnh SQL để xóa môn học khỏi cơ sở dữ liệu
+    String sqlDelete = "DELETE FROM MonHoc WHERE MaMonHoc = ?";
+
+    // Hiển thị thông báo xác nhận xóa
+    int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa môn học này?", 
+                                                 "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+    if (confirm == JOptionPane.YES_OPTION) {
+        try (Connection conn = DatabaseConnection.connect();
+             PreparedStatement psDelete = conn.prepareStatement(sqlDelete)) {
+
+            // Đặt mã môn học vào câu lệnh SQL
+            psDelete.setInt(1, maMonHoc);
+
+            // Thực thi câu lệnh SQL xóa
+            int rowsAffected = psDelete.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Môn học đã được xóa thành công!");
+                
+                // Cập nhật lại bảng sau khi xóa
+                displayMonHoc();
+            } else {
+                JOptionPane.showMessageDialog(null, "Không tìm thấy môn học để xóa.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi xóa môn học.");
+        }
+    }
+} else {
+    JOptionPane.showMessageDialog(null, "Vui lòng chọn môn học để xóa.");
+}
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
+
+    int selectedRow = jTable1.getSelectedRow();  // Kiểm tra xem có dòng nào được chọn trong bảng không
+    if (selectedRow >= 0) {
+        // Lấy dữ liệu từ dòng đã chọn trong bảng
+        int maMonHoc = (int) jTable1.getValueAt(selectedRow, 0);  // Mã môn học
+        String tenMonHoc = jTable1.getValueAt(selectedRow, 1).toString();  // Tên môn học
+        String soBuoiHoc = jTable1.getValueAt(selectedRow, 2).toString();  // Số buổi học
+        String soGioHocMoiBuoi = jTable1.getValueAt(selectedRow, 3).toString();  // Số giờ học mỗi buổi
+
+        // Điền dữ liệu vào các TextField
+        txtMaMonHoc.setText(String.valueOf(maMonHoc));  // Điền mã môn học vào TextField
+        txtTenMonHoc.setText(tenMonHoc);  // Điền tên môn học vào TextField
+        txtSoBuoiHoc.setText(soBuoiHoc);  // Điền số buổi học vào TextField
+        txtSoGioHocMoiBuoi.setText(soGioHocMoiBuoi);  // Điền số giờ học mỗi buổi vào TextField
+
+        // Kích hoạt chế độ chỉnh sửa
+        setEditStatus(true);  // Bật chế độ chỉnh sửa
+
+        isEditMode = true;  // Đặt chế độ chỉnh sửa thành true
+    } else {
+        JOptionPane.showMessageDialog(null, "Vui lòng chọn môn học để sửa!");
+    }
+
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+                               
+    // Đặt các TextField về trạng thái trống để nhập dữ liệu mới
+    txtMaMonHoc.setText("");  // Đặt mã chương trình học trống
+    txtTenMonHoc.setText("");
+    txtSoBuoiHoc.setText("");  // Đặt tên chương trình học trống
+    txtSoGioHocMoiBuoi.setText("");  // Đặt thời gian hoàn thành trống
 
+    // Kích hoạt chế độ chỉnh sửa (setEditStatus true)
+    setEditStatus(true);
+
+    // Đặt cờ isEditMode là false, vì đây là chế độ thêm mới
+    isEditMode = false;
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void txtSoGioHocMoiBuoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSoGioHocMoiBuoiActionPerformed
@@ -399,6 +489,53 @@ public class PanelMH extends JPanel {
     private void txtMaMonHocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaMonHocActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMaMonHocActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        // Đặt các TextField về trạng thái trống để nhập dữ liệu mới
+    txtMaMonHoc.setText("");  // Đặt mã chương trình học trống
+    txtTenMonHoc.setText("");
+    txtSoBuoiHoc.setText("");  // Đặt tên chương trình học trống
+    txtSoGioHocMoiBuoi.setText("");  // Đặt thời gian hoàn thành trống
+
+    // Kích hoạt chế độ chỉnh sửa (setEditStatus true)
+    setEditStatus(false);
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+                                     
+    // Lấy các giá trị từ các TextField
+    String tenMonHoc = txtTenMonHoc.getText();
+    String soBuoiHocText = txtSoBuoiHoc.getText();
+    String soGioHocMoiBuoiText = txtSoGioHocMoiBuoi.getText();
+
+    // Kiểm tra nếu các TextField không trống
+    if (tenMonHoc.isEmpty() || soBuoiHocText.isEmpty() || soGioHocMoiBuoiText.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
+        return;
+    }
+
+    int soBuoiHoc, soGioHocMoiBuoi;
+    try {
+        // Chuyển đổi các giá trị đầu vào thành số
+        soBuoiHoc = Integer.parseInt(soBuoiHocText);
+        soGioHocMoiBuoi = Integer.parseInt(soGioHocMoiBuoiText);
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Số buổi học và số giờ học mỗi buổi phải là các số hợp lệ!");
+        return;
+    }
+
+    if (isEditMode) {
+        // Nếu chế độ sửa, gọi hàm cập nhật
+        updateMonHoc(Integer.parseInt(txtMaMonHoc.getText()), tenMonHoc, soBuoiHoc, soGioHocMoiBuoi);
+    } else {
+        // Nếu chế độ thêm mới, gọi hàm thêm mới
+        addMonHoc(tenMonHoc, soBuoiHoc, soGioHocMoiBuoi);
+    }
+
+    // Sau khi lưu (thêm hoặc sửa) thành công, quay lại chế độ xem
+    setEditStatus(false);
+
+    }//GEN-LAST:event_btnSaveActionPerformed
      // Hiển thị dữ liệu môn học lên JTable
     private void displayMonHoc() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -423,52 +560,38 @@ public class PanelMH extends JPanel {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        setEditStatus(false);
     }
 
-    // Thêm môn học
-    private void addMonHoc() {
-        String tenMonHoc = txtTenMonHoc.getText();
-        String soBuoiHocText = txtSoBuoiHoc.getText();
-        String soGioHocMoiBuoiText = txtSoGioHocMoiBuoi.getText();
+    private void addMonHoc(String tenMonHoc, int soBuoiHoc, int soGioHocMoiBuoi) {
+    // Lấy mã môn học tiếp theo
+    int maMonHocMoi = getNextMaMonHoc();
 
-        if (tenMonHoc.isEmpty() || soBuoiHocText.isEmpty() || soGioHocMoiBuoiText.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
-            return;
+    // Câu lệnh SQL để thêm môn học vào cơ sở dữ liệu
+    String sql = "INSERT INTO MonHoc (MaMonHoc, TenMonHoc, SoBuoiHoc, SoGioHocMoiBuoi) VALUES (?, ?, ?, ?)";
+
+    try (Connection conn = DatabaseConnection.connect();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, maMonHocMoi);           // Mã môn học
+        ps.setString(2, tenMonHoc);           // Tên môn học
+        ps.setInt(3, soBuoiHoc);              // Số buổi học
+        ps.setInt(4, soGioHocMoiBuoi);        // Số giờ học mỗi buổi
+
+        int rowsAffected = ps.executeUpdate();
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(null, "Môn học đã được thêm thành công!");
+            // Reset lại các trường nhập liệu
+            txtTenMonHoc.setText("");
+            txtSoBuoiHoc.setText("");
+            txtSoGioHocMoiBuoi.setText("");
+            displayMonHoc(); // Cập nhật lại bảng sau khi thêm
         }
-
-        int soBuoiHoc, soGioHocMoiBuoi;
-        try {
-            soBuoiHoc = Integer.parseInt(soBuoiHocText);
-            soGioHocMoiBuoi = Integer.parseInt(soGioHocMoiBuoiText);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Số buổi học và số giờ học mỗi buổi phải là các số hợp lệ!");
-            return;
-        }
-
-        int maMonHocMoi = getNextMaMonHoc();
-
-        String sql = "INSERT INTO MonHoc (MaMonHoc, TenMonHoc, SoBuoiHoc, SoGioHocMoiBuoi) VALUES (?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, maMonHocMoi);
-            ps.setString(2, tenMonHoc);
-            ps.setInt(3, soBuoiHoc);
-            ps.setInt(4, soGioHocMoiBuoi);
-
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Môn học đã được thêm thành công!");
-                txtTenMonHoc.setText("");
-                txtSoBuoiHoc.setText("");
-                txtSoGioHocMoiBuoi.setText("");
-                displayMonHoc(); // Cập nhật lại bảng sau khi thêm
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm môn học.");
-        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm môn học.");
     }
+}
+
 
     // Hàm để lấy mã môn học tiếp theo
     private int getNextMaMonHoc() {
@@ -488,82 +611,53 @@ public class PanelMH extends JPanel {
         return 1; // Nếu không có dữ liệu trong bảng, bắt đầu từ 1
     }
 
-    // Cập nhật môn học
-    private void updateMonHoc() {
-        int selectedRow = jTable1.getSelectedRow();
-        if (selectedRow >= 0) {
-            int maMonHoc = (int) jTable1.getValueAt(selectedRow, 0);
-            String tenMonHoc = txtTenMonHoc.getText();
-            String soBuoiHocText = txtSoBuoiHoc.getText();
-            String soGioHocMoiBuoiText = txtSoGioHocMoiBuoi.getText();
+   private void updateMonHoc(int maMonHoc, String tenMonHoc, int soBuoiHoc, int soGioHocMoiBuoi) {
+    String sql = "UPDATE MonHoc SET TenMonHoc = ?, SoBuoiHoc = ?, SoGioHocMoiBuoi = ? WHERE MaMonHoc = ?";
 
-            if (tenMonHoc.isEmpty() || soBuoiHocText.isEmpty() || soGioHocMoiBuoiText.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
-                return;
-            }
+    try (Connection conn = DatabaseConnection.connect();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, tenMonHoc);            // Tên môn học
+        ps.setInt(2, soBuoiHoc);               // Số buổi học
+        ps.setInt(3, soGioHocMoiBuoi);         // Số giờ học mỗi buổi
+        ps.setInt(4, maMonHoc);                // Mã môn học
 
-            int soBuoiHoc, soGioHocMoiBuoi;
-            try {
-                soBuoiHoc = Integer.parseInt(soBuoiHocText);
-                soGioHocMoiBuoi = Integer.parseInt(soGioHocMoiBuoiText);
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Số buổi học và số giờ học mỗi buổi phải là các số hợp lệ!");
-                return;
-            }
-
-            String sql = "UPDATE MonHoc SET TenMonHoc = ?, SoBuoiHoc = ?, SoGioHocMoiBuoi = ? WHERE MaMonHoc = ?";
-            try (Connection conn = DatabaseConnection.connect();
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
-
-                ps.setString(1, tenMonHoc);
-                ps.setInt(2, soBuoiHoc);
-                ps.setInt(3, soGioHocMoiBuoi);
-                ps.setInt(4, maMonHoc);
-
-                int rowsAffected = ps.executeUpdate();
-                if (rowsAffected > 0) {
-                    JOptionPane.showMessageDialog(null, "Môn học đã được cập nhật thành công!");
-                    displayMonHoc();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật môn học.");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Vui lòng chọn môn học để cập nhật.");
+        int rowsAffected = ps.executeUpdate();
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(null, "Môn học đã được cập nhật thành công!");
+            displayMonHoc(); // Cập nhật lại bảng sau khi sửa
         }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật môn học.");
+    }
+}
+
+
+    
+    public void setEditStatus(boolean editable) {
+         isEditMode = editable;
+        
+        txtMaMonHoc.setEnabled(editable);
+        txtSoBuoiHoc.setEnabled(editable);
+        txtSoGioHocMoiBuoi.setEnabled(editable);
+        txtTenMonHoc.setEnabled(editable);
+       
+        btnSave.setEnabled(editable);
+        btnCancel.setEnabled(editable);
+        
+        btnAdd.setEnabled(!editable);
+        btnUpdate.setEnabled(!editable);
+        btnDelete.setEnabled(!editable);
+
+                
     }
 
-    // Xóa môn học
-    private void deleteMonHoc() {
-        int selectedRow = jTable1.getSelectedRow();
-        if (selectedRow >= 0) {
-            int maMonHoc = (int) jTable1.getValueAt(selectedRow, 0);
-            String sqlDelete = "DELETE FROM MonHoc WHERE MaMonHoc = ?";
-
-            try (Connection conn = DatabaseConnection.connect();
-                 PreparedStatement psDelete = conn.prepareStatement(sqlDelete)) {
-
-                psDelete.setInt(1, maMonHoc);
-                int rowsAffected = psDelete.executeUpdate();
-                if (rowsAffected > 0) {
-                    JOptionPane.showMessageDialog(null, "Môn học đã được xóa thành công!");
-                    displayMonHoc();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Không tìm thấy môn học để xóa.");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi xóa môn học.");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Vui lòng chọn môn học để xóa.");
-        }
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

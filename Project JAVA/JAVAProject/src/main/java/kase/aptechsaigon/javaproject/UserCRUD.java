@@ -3,7 +3,28 @@ package kase.aptechsaigon.javaproject;
 import java.sql.*;
 
 public class UserCRUD {
-    
+
+    static boolean updatePassword(String username, String newPassword) {
+        String query = "UPDATE nhanvien SET MatKhau = ? WHERE HoTen = ?";
+        
+        try (Connection conn = UserCRUD.getConnection();  // Lấy kết nối từ phương thức getConnection
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            
+            // Thiết lập các tham số trong câu lệnh SQL
+            ps.setString(1, newPassword);  // Mật khẩu mới
+            ps.setString(2, username);  // Tên đăng nhập (HoTen)
+
+            // Thực thi câu lệnh cập nhật
+            int rowsUpdated = ps.executeUpdate();
+            
+            // Nếu có bản ghi được cập nhật, trả về true
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;  // Trả về false nếu có lỗi
+        }
+    }
+
     // Lưu trữ kết nối cơ sở dữ liệu (sử dụng instance thay vì static connection)
     private Connection conn;
 

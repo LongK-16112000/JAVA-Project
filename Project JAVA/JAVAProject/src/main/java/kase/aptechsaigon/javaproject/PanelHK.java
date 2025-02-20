@@ -19,15 +19,12 @@ import javax.swing.table.DefaultTableModel;
  * @author Truc
  */
 public class PanelHK extends javax.swing.JPanel {
-
+ private boolean isEditMode = false;
     /**
      * Creates new form PanelHk
      */
     public PanelHK() {
         initComponents();
-        btnAdd.addActionListener(e -> addHocKy());
-        btnUpdate.addActionListener(e -> updateHocKy());
-        btnDelete.addActionListener(e -> deleteHocKy());
         // Thêm ListSelectionListener để tự động điền dữ liệu khi chọn dòng trong JTable cho Học kỳ
         jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
         @Override
@@ -44,8 +41,8 @@ public class PanelHK extends javax.swing.JPanel {
             String tenHocKy = (String) jTable1.getValueAt(selectedRow, 2);  // Cột 2 là Tên Học Kỳ
             int soMonHoc = (int) jTable1.getValueAt(selectedRow, 3);  // Cột 3 là Số Môn Học
             String tenChungChi = (String) jTable1.getValueAt(selectedRow, 4);  // Cột 4 là Tên Chứng Chỉ
-            int thoiGianHoanThanh = (int) jTable1.getValueAt(selectedRow, 5);  // Cột 5 là Thời Gian Hoàn Thành
-            int soThuTuChungChi = (int) jTable1.getValueAt(selectedRow, 6);  // Cột 6 là Số Thứ Tự Chứng Chỉ
+            int thoiGianHoanThanh = (int) jTable1.getValueAt(selectedRow, 6);  // Cột 5 là Thời Gian Hoàn Thành
+            int soThuTuChungChi = (int) jTable1.getValueAt(selectedRow, 5);  // Cột 6 là Số Thứ Tự Chứng Chỉ
 
             // Cập nhật nội dung cho các JTextField
             txtMaChungChi.setText(String.valueOf(maChungChi));
@@ -97,9 +94,6 @@ public class PanelHK extends javax.swing.JPanel {
         txtTenChungChi = new javax.swing.JTextField();
         txtThoiGianHoanThanh = new javax.swing.JTextField();
         txtSoThuTuChungChi = new javax.swing.JTextField();
-        btnUpdate = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
-        btnAdd = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -107,6 +101,11 @@ public class PanelHK extends javax.swing.JPanel {
         jLabel8 = new javax.swing.JLabel();
         txtMaChungChi = new javax.swing.JTextField();
         txtMaChuongtrinh = new javax.swing.JTextField();
+        btnCancel = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
 
         setLayout(new java.awt.BorderLayout());
@@ -192,7 +191,7 @@ public class PanelHK extends javax.swing.JPanel {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
+                .addGap(37, 37, 37)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(30, Short.MAX_VALUE))
         );
@@ -233,36 +232,6 @@ public class PanelHK extends javax.swing.JPanel {
 
         txtSoThuTuChungChi.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
 
-        btnUpdate.setBackground(new java.awt.Color(0, 51, 153));
-        btnUpdate.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
-        btnUpdate.setText("Sửa");
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
-            }
-        });
-
-        btnDelete.setBackground(new java.awt.Color(0, 51, 153));
-        btnDelete.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
-        btnDelete.setText("Xóa");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
-
-        btnAdd.setBackground(new java.awt.Color(0, 51, 153));
-        btnAdd.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
-        btnAdd.setText("Thêm");
-        btnAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddActionPerformed(evt);
-            }
-        });
-
         jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Tên Chứng chỉ :");
@@ -287,62 +256,76 @@ public class PanelHK extends javax.swing.JPanel {
 
         txtMaChuongtrinh.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
 
+        btnCancel.setBackground(new java.awt.Color(0, 51, 153));
+        btnCancel.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnCancel.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancel.setText("Hủy");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+
+        btnSave.setBackground(new java.awt.Color(0, 51, 153));
+        btnSave.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnSave.setForeground(new java.awt.Color(255, 255, 255));
+        btnSave.setText("Lưu");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtMaChungChi)
-                                .addComponent(txtMaChuongtrinh, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE))
-                            .addComponent(txtTenHocKy, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(21, 21, 21))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtThoiGianHoanThanh, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(txtMaChuongtrinh, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtSoThuTuChungChi)
+                                    .addComponent(txtSoMonHoc)
+                                    .addComponent(txtTenChungChi)
+                                    .addComponent(txtMaChungChi, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtTenHocKy, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(btnSave)
+                                    .addGap(31, 31, 31)
+                                    .addComponent(btnCancel))
+                                .addComponent(txtThoiGianHoanThanh, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(21, 21, 21))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(txtSoThuTuChungChi, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
-                                .addComponent(txtSoMonHoc)
-                                .addComponent(txtTenChungChi))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnAdd)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnUpdate)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
-                                .addComponent(btnDelete)
-                                .addGap(19, 19, 19)))))
-                .addGap(21, 21, 21))
+                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(57, 57, 57)
+                .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtMaChungChi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txtMaChuongtrinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(txtMaChuongtrinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -365,31 +348,73 @@ public class PanelHK extends javax.swing.JPanel {
                     .addComponent(txtThoiGianHoanThanh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31))
+                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27))
         );
+
+        btnAdd.setBackground(new java.awt.Color(0, 51, 153));
+        btnAdd.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
+        btnAdd.setText("Thêm");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setBackground(new java.awt.Color(0, 51, 153));
+        btnUpdate.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdate.setText("Sửa");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(0, 51, 153));
+        btnDelete.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("Xóa");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(28, 28, 28)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(72, 72, 72)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(108, 108, 108))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addComponent(btnAdd)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnUpdate)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDelete)))
+                .addGap(20, 20, 20))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(62, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jp9Layout = new javax.swing.GroupLayout(jp9);
@@ -429,15 +454,95 @@ public class PanelHK extends javax.swing.JPanel {
     }//GEN-LAST:event_txtSoMonHocActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // Nếu không có dòng nào được chọn, làm trống các TextField
+            txtMaChungChi.setText("");
+            txtMaChuongtrinh.setText("");
+            txtTenHocKy.setText("");
+            txtSoMonHoc.setText("");
+            txtTenChungChi.setText("");
+            txtThoiGianHoanThanh.setText("");
+            txtSoThuTuChungChi.setText("");
+                        // Kích hoạt chế độ chỉnh sửa (setEditStatus true)
+               setEditStatus(true);
 
+               // Đặt cờ isEditMode là false, vì đây là chế độ thêm mới
+               isEditMode = false;
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
+
+    // Kiểm tra xem người dùng có chọn dòng nào trong bảng không
+    int selectedRow = jTable1.getSelectedRow();
+    
+    if (selectedRow >= 0) {
+        // Lấy dữ liệu từ dòng đã chọn trong bảng
+        int maHocKy = (int) jTable1.getValueAt(selectedRow, 0);  // Mã học kỳ
+        int maChuongTrinhHoc = (int) jTable1.getValueAt(selectedRow, 1);  // Mã chương trình học
+        String tenHocKy = jTable1.getValueAt(selectedRow, 2).toString();  // Tên học kỳ
+        String soMonHoc = jTable1.getValueAt(selectedRow, 3).toString();  // Số môn học
+        String tenChungChi = jTable1.getValueAt(selectedRow, 4).toString();  // Tên chứng chỉ
+        String thoiGianHoanThanh = jTable1.getValueAt(selectedRow, 6).toString();  // Thời gian hoàn thành
+        String soThuTuChungChi = jTable1.getValueAt(selectedRow, 5).toString();  // Số thứ tự chứng chỉ
+
+        // Điền dữ liệu vào các TextField
+        txtMaChuongtrinh.setText(String.valueOf(maChuongTrinhHoc));
+        txtTenHocKy.setText(tenHocKy);
+        txtSoMonHoc.setText(soMonHoc);
+        txtTenChungChi.setText(tenChungChi);
+        txtThoiGianHoanThanh.setText(thoiGianHoanThanh);
+        txtSoThuTuChungChi.setText(soThuTuChungChi);
+
+        // Kích hoạt chế độ chỉnh sửa (enable các TextField và nút Save, Cancel)
+        setEditStatus(true);
+
+        // Đặt cờ isEditMode là true, vì đây là chế độ sửa
+        isEditMode = true;
+    } else {
+        JOptionPane.showMessageDialog(null, "Vui lòng chọn học kỳ để sửa!");
+    }
+
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
+
+    // Kiểm tra xem người dùng có chọn dòng nào trong bảng không
+    int selectedRow = jTable1.getSelectedRow();
+    
+    if (selectedRow >= 0) {
+        // Lấy mã học kỳ từ dòng được chọn
+        int maHocKy = (int) jTable1.getValueAt(selectedRow, 0);
+        
+        // Xác nhận việc xóa
+        int confirm = JOptionPane.showConfirmDialog(null, 
+                "Bạn có chắc chắn muốn xóa học kỳ này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+        
+        if (confirm == JOptionPane.YES_OPTION) {
+            // Câu lệnh SQL để xóa học kỳ theo MaHocKy
+            String sql = "DELETE FROM HocKy WHERE MaHocKy = ?";
+            
+            try (Connection conn = DatabaseConnection.connect();
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
+                
+                ps.setInt(1, maHocKy);  // Gán MaHocKy cho câu lệnh SQL
+                
+                // Thực thi câu lệnh DELETE
+                int rowsAffected = ps.executeUpdate();
+                
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(null, "Học kỳ đã được xóa thành công!");
+                    displayHocKy();  // Cập nhật lại bảng sau khi xóa
+                } else {
+                    JOptionPane.showMessageDialog(null, "Không thể xóa học kỳ này.");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi xóa học kỳ.");
+            }
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Vui lòng chọn học kỳ để xóa.");
+    }
+
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void jp9AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jp9AncestorAdded
@@ -447,6 +552,59 @@ public class PanelHK extends javax.swing.JPanel {
     private void txtTenChungChiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenChungChiActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTenChungChiActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        txtMaChungChi.setText("");
+        txtMaChuongtrinh.setText("");
+        txtTenHocKy.setText("");
+        txtSoMonHoc.setText("");
+        txtTenChungChi.setText("");
+        txtThoiGianHoanThanh.setText("");
+        txtSoThuTuChungChi.setText("");
+        setEditStatus(false);
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+ 
+    // Lấy dữ liệu từ các TextField
+    int maHocKy = Integer.parseInt(txtMaChungChi.getText());
+    int maChuongTrinhHoc = Integer.parseInt(txtMaChuongtrinh.getText());
+    String tenHocKy = txtTenHocKy.getText();
+    String soMonHocText = txtSoMonHoc.getText();
+    String tenChungChi = txtTenChungChi.getText();
+    String soThuTuChungChiText = txtSoThuTuChungChi.getText();
+    String thoiGianHoanThanhText = txtThoiGianHoanThanh.getText();
+
+    // Kiểm tra nếu các TextField không trống
+    if (tenHocKy.isEmpty() || soMonHocText.isEmpty() || tenChungChi.isEmpty()|| soThuTuChungChiText.isEmpty() || 
+        thoiGianHoanThanhText.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
+        return;
+    }
+
+    int soMonHoc, thoiGianHoanThanh, soThuTuChungChi;
+    try {
+        soMonHoc = Integer.parseInt(soMonHocText);
+        
+        soThuTuChungChi = Integer.parseInt(soThuTuChungChiText);
+        thoiGianHoanThanh = Integer.parseInt(thoiGianHoanThanhText);
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
+        return;
+    }
+
+    // Kiểm tra xem là chế độ sửa hay thêm mới
+    if (isEditMode) {
+        // Nếu là chế độ sửa, gọi hàm cập nhật
+        updateHocKy(maHocKy, maChuongTrinhHoc, tenHocKy, soMonHoc, tenChungChi, soThuTuChungChi, thoiGianHoanThanh);
+    } else {
+        // Nếu là chế độ thêm mới, gọi hàm thêm mới
+        addHocKy(maHocKy, maChuongTrinhHoc, tenHocKy, soMonHoc, tenChungChi, soThuTuChungChi, thoiGianHoanThanh);
+    }
+
+
+
+    }//GEN-LAST:event_btnSaveActionPerformed
 // Hiển thị dữ liệu học kỳ lên JTable
 private void displayHocKy() {
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -463,63 +621,72 @@ private void displayHocKy() {
             String tenHocKy = rs.getString("TenHocKy");
             int soMonHoc = rs.getInt("SoMonHoc");
             String tenChungChi = rs.getString("TenChungChi");
-            int thoiGianHoanThanh = rs.getInt("ThoiGianHoanThanh");
             int soThuTuChungChi = rs.getInt("SoThuTuChungChi");
+            int thoiGianHoanThanh = rs.getInt("ThoiGianHoanThanh");
 
-            model.addRow(new Object[]{maHocKy, maChuongTrinhHoc, tenHocKy, soMonHoc, tenChungChi, thoiGianHoanThanh, soThuTuChungChi});
+            model.addRow(new Object[]{maHocKy, maChuongTrinhHoc, tenHocKy, soMonHoc, tenChungChi, soThuTuChungChi, thoiGianHoanThanh});
         }
         if(jTable1.getRowCount()>0){
                 jTable1.setRowSelectionInterval(0, 0);
             }
+       
     } catch (SQLException e) {
         e.printStackTrace();
     }
+    setEditStatus(false);
 }
 
-// Thêm học kỳ
-private void addHocKy() {
-    String tenHocKy = txtTenHocKy.getText();
-    String soMonHocText = txtSoMonHoc.getText();
-    String tenChungChi = txtTenChungChi.getText();
-    String thoiGianHoanThanhText = txtThoiGianHoanThanh.getText();
-    String soThuTuChungChiText = txtSoThuTuChungChi.getText();
 
-    if (tenHocKy.isEmpty() || soMonHocText.isEmpty() || 
-        tenChungChi.isEmpty() || thoiGianHoanThanhText.isEmpty() || soThuTuChungChiText.isEmpty()) {
-        JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
-        return;
-    }
-
-    int  soMonHoc, thoiGianHoanThanh, soThuTuChungChi;
-    try {
-       
-        soMonHoc = Integer.parseInt(soMonHocText);
-        thoiGianHoanThanh = Integer.parseInt(thoiGianHoanThanhText);
-        soThuTuChungChi = Integer.parseInt(soThuTuChungChiText);
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
-        return;
-    }
-
-    int maHocKyMoi = getNextMaHocKy();
-
-    String sql = "INSERT INTO HocKy (MaHocKy, TenHocKy, SoMonHoc, TenChungChi, ThoiGianHoanThanh, SoThuTuChungChi) VALUES (?, ?, ?, ?, ?, ?, ?)";
+private void updateHocKy(int maHocKy, int maChuongTrinhHoc, String tenHocKy, int soMonHoc, String tenChungChi
+        , int soThuTuChungChi,  int thoiGianHoanThanh) {
+    String sql = "UPDATE HocKy SET TenHocKy = ?, MaChuongTrinhHoc = ?, SoMonHoc = ?, TenChungChi = ?, " +
+                 "SoThuTuChungChi = ?, ThoiGianHoanThanh = ? WHERE MaHocKy = ?";
     try (Connection conn = DatabaseConnection.connect();
          PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        ps.setInt(1, maHocKyMoi);
-     
-        ps.setString(2, tenHocKy);
+        ps.setString(1, tenHocKy);
+        ps.setInt(2, maChuongTrinhHoc);  // Mã chương trình học
         ps.setInt(3, soMonHoc);
         ps.setString(4, tenChungChi);
-        ps.setInt(5, thoiGianHoanThanh);
-        ps.setInt(6, soThuTuChungChi);
+        ps.setInt(5, soThuTuChungChi);
+        ps.setInt(6, thoiGianHoanThanh);
+        ps.setInt(7, maHocKy);  // Mã học kỳ
 
         int rowsAffected = ps.executeUpdate();
         if (rowsAffected > 0) {
-            JOptionPane.showMessageDialog(null, "Học kỳ đã được thêm thành công!");
-            clearHocKyFields();
-            displayHocKy(); // Cập nhật lại bảng sau khi thêm
+            JOptionPane.showMessageDialog(null, "Học kỳ đã được cập nhật thành công!");
+            displayHocKy();  // Cập nhật lại bảng sau khi sửa
+        } else {
+            JOptionPane.showMessageDialog(null, "Cập nhật không thành công!");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật học kỳ.");
+    }
+}
+
+private void addHocKy(int maHocKy, int maChuongTrinhHoc, String tenHocKy, int soMonHoc, String tenChungChi, 
+                     int soThuTuChungChi, int thoiGianHoanThanh ) {
+    // Hàm thêm mới học kỳ
+    String sql = "INSERT INTO HocKy (MaHocKy, MaChuongTrinhHoc, TenHocKy, SoMonHoc, TenChungChi, SoThuTuChungChi, ThoiGianHoanThanh) " +
+                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    try (Connection conn = DatabaseConnection.connect();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, maHocKy);
+        ps.setInt(2, maChuongTrinhHoc);  // Mã chương trình học
+        ps.setString(3, tenHocKy);
+        ps.setInt(4, soMonHoc);
+        ps.setString(5, tenChungChi);
+        ps.setInt(6, soThuTuChungChi);
+        ps.setInt(7, thoiGianHoanThanh);
+
+        int rowsAffected = ps.executeUpdate();
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(null, "Học kỳ đã được thêm mới thành công!");
+            displayHocKy();  // Cập nhật lại bảng sau khi thêm mới
+        } else {
+            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm học kỳ.");
         }
     } catch (SQLException e) {
         e.printStackTrace();
@@ -527,107 +694,33 @@ private void addHocKy() {
     }
 }
 
-// Hàm để lấy mã học kỳ tiếp theo
-private int getNextMaHocKy() {
-    String sql = "SELECT MAX(MaHocKy) FROM HocKy";
+public void setEditStatus(boolean editable) {
+         isEditMode = editable;
+        
+        txtMaChungChi.setEnabled(editable);
+        txtMaChuongtrinh.setEnabled(editable);
+        txtSoMonHoc.setEnabled(editable);
+        txtSoThuTuChungChi.setEnabled(editable);
+        txtTenChungChi.setEnabled(editable);
+        txtTenHocKy.setEnabled(editable);
+        txtThoiGianHoanThanh.setEnabled(editable);
+       
+        btnSave.setEnabled(editable);
+        btnCancel.setEnabled(editable);
+        
+        btnAdd.setEnabled(!editable);
+        btnUpdate.setEnabled(!editable);
+        btnDelete.setEnabled(!editable);
 
-    try (Connection conn = DatabaseConnection.connect();
-         Statement stmt = conn.createStatement();
-         ResultSet rs = stmt.executeQuery(sql)) {
-
-        if (rs.next()) {
-            return rs.getInt(1) + 1;
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
+                
     }
-
-    return 1; // Nếu không có dữ liệu trong bảng, bắt đầu từ 1
-}
-
-// Cập nhật học kỳ
-private void updateHocKy() {
-    int selectedRow = jTable1.getSelectedRow();
-    if (selectedRow >= 0) {
-        int maHocKy = (int) jTable1.getValueAt(selectedRow, 0);
-        String tenHocKy = txtTenHocKy.getText();
-        String soMonHocText = txtSoMonHoc.getText();
-        String tenChungChi = txtTenChungChi.getText();
-        String thoiGianHoanThanhText = txtThoiGianHoanThanh.getText();
-        String soThuTuChungChiText = txtSoThuTuChungChi.getText();
-
-        if (tenHocKy.isEmpty() || soMonHocText.isEmpty() || 
-            tenChungChi.isEmpty() || thoiGianHoanThanhText.isEmpty() || soThuTuChungChiText.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
-            return;
-        }
-
-        int maChuongTrinhHoc, soMonHoc, thoiGianHoanThanh, soThuTuChungChi;
-        try {
-            soMonHoc = Integer.parseInt(soMonHocText);
-            thoiGianHoanThanh = Integer.parseInt(thoiGianHoanThanhText);
-            soThuTuChungChi = Integer.parseInt(soThuTuChungChiText);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
-            return;
-        }
-
-        String sql = "UPDATE HocKy SET TenHocKy = ?, MaChuongTrinhHoc = ?, SoMonHoc = ?, TenChungChi = ?, ThoiGianHoanThanh = ?, SoThuTuChungChi = ? WHERE MaHocKy = ?";
-        try (Connection conn = DatabaseConnection.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, tenHocKy);
-            ps.setInt(2, soMonHoc);
-            ps.setString(3, tenChungChi);
-            ps.setInt(4, thoiGianHoanThanh);
-            ps.setInt(5, soThuTuChungChi);
-            ps.setInt(6, maHocKy);
-
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Học kỳ đã được cập nhật thành công!");
-                displayHocKy();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật học kỳ.");
-        }
-    } else {
-        JOptionPane.showMessageDialog(null, "Vui lòng chọn học kỳ để cập nhật.");
-    }
-}
-
-// Xóa học kỳ
-private void deleteHocKy() {
-    int selectedRow = jTable1.getSelectedRow();
-    if (selectedRow >= 0) {
-        int maHocKy = (int) jTable1.getValueAt(selectedRow, 0);
-        String sqlDelete = "DELETE FROM HocKy WHERE MaHocKy = ?";
-
-        try (Connection conn = DatabaseConnection.connect();
-             PreparedStatement psDelete = conn.prepareStatement(sqlDelete)) {
-
-            psDelete.setInt(1, maHocKy);
-            int rowsAffected = psDelete.executeUpdate();
-            if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Học kỳ đã được xóa thành công!");
-                displayHocKy();
-            } else {
-                JOptionPane.showMessageDialog(null, "Không tìm thấy học kỳ để xóa.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi xóa học kỳ.");
-        }
-    } else {
-        JOptionPane.showMessageDialog(null, "Vui lòng chọn học kỳ để xóa.");
-    }
-}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
