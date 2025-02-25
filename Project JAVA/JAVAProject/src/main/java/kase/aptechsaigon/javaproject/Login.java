@@ -5,6 +5,7 @@
 package kase.aptechsaigon.javaproject;
 
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
@@ -14,7 +15,6 @@ import javax.swing.JOptionPane;
  * @author Truc
  */
 public class Login extends javax.swing.JFrame {
-
   
 
     /**
@@ -23,7 +23,6 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        
     }
     
     /**
@@ -185,6 +184,7 @@ public class Login extends javax.swing.JFrame {
 
         // Thiết lập quyền truy cập cho HomePage
         HomePage.hp.SetPermission(true);
+        HomePage.hp.setCurrentUser(username); // Lưu tên đăng nhập
 
         // Xóa tên đăng nhập và mật khẩu
         txtusername.setText("");  
@@ -250,6 +250,5 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPasswordField pass;
     private javax.swing.JTextField txtusername;
     // End of variables declaration//GEN-END:variables
-
  
 }

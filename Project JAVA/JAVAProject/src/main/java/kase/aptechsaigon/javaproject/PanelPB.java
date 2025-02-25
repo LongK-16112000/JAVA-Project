@@ -27,8 +27,8 @@ public class PanelPB extends javax.swing.JPanel {
     public PanelPB() {
         initComponents();
 //        PHÒNG BAN  
-        btnCanclePhongBan.addActionListener(e -> addPhongBan());
-        btnUpdatePhongBan.addActionListener(e -> updatePhongBan());
+//        btnCanclePhongBan.addActionListener(e -> addPhongBan());
+//        btnUpdatePhongBan.addActionListener(e -> updatePhongBan());
         btnDeletePhongBan.addActionListener(e -> deletePhongBan());
 
         // Thêm ListSelectionListener để tự động điền dữ liệu khi chọn dòng trong JTable
@@ -90,14 +90,45 @@ public class PanelPB extends javax.swing.JPanel {
         SetEdit(false);
 }
     
-    private void addPhongBan() {
-        txtMaPhongBan.setText("");
-        txtTenPhongBan.setText("");
-        txtMaTruongPhong.setText("");
-        txtMaPhoPhong.setText("");
-        SetEdit(true);
-        isEdit = false;
-}
+    private void addPhongBan(int maPhongBan, String tenPhongBan, int maTruongPhong, int maPhoPhong) {
+        String maTruongPhongText = txtMaTruongPhong.getText();
+        String maPhoPhongText = txtMaPhoPhong.getText();
+
+        if (tenPhongBan.isEmpty() || maTruongPhongText.isEmpty() || maPhoPhongText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
+            return;
+        }
+
+        try {
+            maTruongPhong = Integer.parseInt(maTruongPhongText);
+            maPhoPhong = Integer.parseInt(maPhoPhongText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
+            return;
+        }
+
+        int maPhongBanMoi = getNextMaPhongBan();
+
+        String sql = "INSERT INTO PhongBan (MaPhongBan, TenPhongBan, MaTruongPhong, MaPhoPhong) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DatabaseConnection.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, maPhongBanMoi);
+            ps.setString(2, tenPhongBan);
+            ps.setInt(3, maTruongPhong);
+            ps.setInt(4, maPhoPhong);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Phòng ban đã được thêm thành công!");
+                clearPhongBanFields();
+                displayPhongBan(); // Update table after adding
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm phòng ban.");
+        }
+    }
 
 // Method to get the next PhongBan ID
 private int getNextMaPhongBan() {
@@ -117,54 +148,46 @@ private int getNextMaPhongBan() {
     return 1; // If there's no data in the table, start from 1
 }
 
-private void updatePhongBan() {
-//    int selectedRow = jTablePhongBan.getSelectedRow();
-//    if (selectedRow >= 0) {
-//        int maPhongBan = (int) jTablePhongBan.getValueAt(selectedRow, 0);
-//        String tenPhongBan = txtTenPhongBan.getText();
-//        String maTruongPhongText = txtMaTruongPhong.getText();
-//        String maPhoPhongText = txtMaPhoPhong.getText();
-//
-//        if (tenPhongBan.isEmpty() || maTruongPhongText.isEmpty() || maPhoPhongText.isEmpty()) {
-//            JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
-//            return;
-//        }
-//
-//        int maTruongPhong, maPhoPhong;
-//        try {
-//            maTruongPhong = Integer.parseInt(maTruongPhongText);
-//            maPhoPhong = Integer.parseInt(maPhoPhongText);
-//        } catch (NumberFormatException e) {
-//            JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
-//            return;
-//        }
-//
-//        String sql = "UPDATE PhongBan SET TenPhongBan = ?, MaTruongPhong = ?, MaPhoPhong = ? WHERE MaPhongBan = ?";
-//        try (Connection conn = DatabaseConnection.connect();
-//             PreparedStatement ps = conn.prepareStatement(sql)) {
-//
-//            ps.setString(1, tenPhongBan);
-//            ps.setInt(2, maTruongPhong);
-//            ps.setInt(3, maPhoPhong);
-//            ps.setInt(4, maPhongBan);
-//
-//            int rowsAffected = ps.executeUpdate();
-//            if (rowsAffected > 0) {
-//                JOptionPane.showMessageDialog(null, "Phòng ban đã được cập nhật thành công!");
-//                displayPhongBan(); // Update table after updating
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật phòng ban.");
-//        }
-//    } else {
-//        JOptionPane.showMessageDialog(null, "Vui lòng chọn phòng ban để cập nhật.");
-//    }
-    SetEdit(true);
-    isEdit = true;
-    txtMaPhongBan.setEnabled(false);
-    txtMaPhoPhong.setEnabled(false);
-    txtMaTruongPhong.setEnabled(false);
+private void updatePhongBan(int maPhongBan, String tenPhongBan, int maTruongPhong, int maPhoPhong) {
+    int selectedRow = jTablePhongBan.getSelectedRow();
+    if (selectedRow >= 0) {
+        String maTruongPhongText = txtMaTruongPhong.getText();
+        String maPhoPhongText = txtMaPhoPhong.getText();
+
+        if (tenPhongBan.isEmpty() || maTruongPhongText.isEmpty() || maPhoPhongText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
+            return;
+        }
+
+        try {
+            maTruongPhong = Integer.parseInt(maTruongPhongText);
+            maPhoPhong = Integer.parseInt(maPhoPhongText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
+            return;
+        }
+
+        String sql = "UPDATE PhongBan SET TenPhongBan = ?, MaTruongPhong = ?, MaPhoPhong = ? WHERE MaPhongBan = ?";
+        try (Connection conn = DatabaseConnection.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, tenPhongBan);
+            ps.setInt(2, maTruongPhong);
+            ps.setInt(3, maPhoPhong);
+            ps.setInt(4, maPhongBan);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Phòng ban đã được cập nhật thành công!");
+                displayPhongBan(); // Update table after updating
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật phòng ban.");
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Vui lòng chọn phòng ban để cập nhật.");
+    }
 }
 
 private void deletePhongBan() {
@@ -172,21 +195,27 @@ private void deletePhongBan() {
     if (selectedRow >= 0) {
         int maPhongBan = (int) jTablePhongBan.getValueAt(selectedRow, 0);
         String sqlDelete = "DELETE FROM PhongBan WHERE MaPhongBan = ?";
+        
+        int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa phòng ban này?", 
+                                                     "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
 
-        try (Connection conn = DatabaseConnection.connect();
-             PreparedStatement psDelete = conn.prepareStatement(sqlDelete)) {
+        if(confirm == JOptionPane.YES_OPTION) {
 
-            psDelete.setInt(1, maPhongBan);
-            int rowsAffected = psDelete.executeUpdate();
-            if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Phòng ban đã được xóa thành công!");
-                displayPhongBan(); // Update table after deleting
-            } else {
-                JOptionPane.showMessageDialog(null, "Không tìm thấy phòng ban để xóa.");
+            try (Connection conn = DatabaseConnection.connect();
+                 PreparedStatement psDelete = conn.prepareStatement(sqlDelete)) {
+
+                psDelete.setInt(1, maPhongBan);
+                int rowsAffected = psDelete.executeUpdate();
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(null, "Phòng ban đã được xóa thành công!");
+                    displayPhongBan(); // Update table after deleting
+                } else {
+                    JOptionPane.showMessageDialog(null, "Không tìm thấy phòng ban để xóa.");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi xóa phòng ban.");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi xóa phòng ban.");
         }
     } else {
         JOptionPane.showMessageDialog(null, "Vui lòng chọn phòng ban để xóa.");
@@ -218,17 +247,17 @@ private void deletePhongBan() {
         txtTenPhongBan = new javax.swing.JTextField();
         txtMaPhoPhong = new javax.swing.JTextField();
         btnCanclePhongBan = new javax.swing.JButton();
-        btnUpdatePhongBan = new javax.swing.JButton();
-        btnDeletePhongBan = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtMaTruongPhong = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtMaPhongBan = new javax.swing.JTextField();
         btnSavePhongBan = new javax.swing.JButton();
-        btnAddPhongBan = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTablePhongBan = new javax.swing.JTable();
+        btnAddPhongBan = new javax.swing.JButton();
+        btnUpdatePhongBan = new javax.swing.JButton();
+        btnDeletePhongBan = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
 
         setBackground(new java.awt.Color(255, 255, 255,0));
@@ -318,26 +347,6 @@ private void deletePhongBan() {
             }
         });
 
-        btnUpdatePhongBan.setBackground(new java.awt.Color(0, 51, 153));
-        btnUpdatePhongBan.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        btnUpdatePhongBan.setForeground(new java.awt.Color(255, 255, 255));
-        btnUpdatePhongBan.setText("Sửa");
-        btnUpdatePhongBan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdatePhongBanActionPerformed(evt);
-            }
-        });
-
-        btnDeletePhongBan.setBackground(new java.awt.Color(0, 51, 153));
-        btnDeletePhongBan.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        btnDeletePhongBan.setForeground(new java.awt.Color(255, 255, 255));
-        btnDeletePhongBan.setText("Xóa");
-        btnDeletePhongBan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeletePhongBanActionPerformed(evt);
-            }
-        });
-
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Tên Phòng Ban :");
@@ -362,16 +371,6 @@ private void deletePhongBan() {
         btnSavePhongBan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSavePhongBanActionPerformed(evt);
-            }
-        });
-
-        btnAddPhongBan.setBackground(new java.awt.Color(0, 51, 153));
-        btnAddPhongBan.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        btnAddPhongBan.setForeground(new java.awt.Color(255, 255, 255));
-        btnAddPhongBan.setText("Thêm");
-        btnAddPhongBan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddPhongBanActionPerformed(evt);
             }
         });
 
@@ -404,28 +403,16 @@ private void deletePhongBan() {
                                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)))))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTenPhongBan)
+                            .addComponent(txtTenPhongBan, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
                             .addComponent(txtMaPhoPhong)
                             .addComponent(txtMaTruongPhong)
-                            .addComponent(txtMaPhongBan)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                                .addComponent(btnAddPhongBan)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnUpdatePhongBan)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnDeletePhongBan)))))
+                            .addComponent(txtMaPhongBan))))
                 .addGap(35, 35, 35))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDeletePhongBan, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUpdatePhongBan, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAddPhongBan, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtMaPhongBan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -460,7 +447,7 @@ private void deletePhongBan() {
 
             },
             new String [] {
-                "MaPhongBan", "TenPhongBan", "MaTruongPhong", "MaPhoPhong"
+                "Mã phòng ban", "Tên phòng ban", "Mã trưởng phòng", "Mã phó phòng "
             }
         ));
         jScrollPane1.setViewportView(jTablePhongBan);
@@ -482,6 +469,36 @@ private void deletePhongBan() {
                 .addContainerGap(52, Short.MAX_VALUE))
         );
 
+        btnAddPhongBan.setBackground(new java.awt.Color(0, 51, 153));
+        btnAddPhongBan.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnAddPhongBan.setForeground(new java.awt.Color(255, 255, 255));
+        btnAddPhongBan.setText("Thêm");
+        btnAddPhongBan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddPhongBanActionPerformed(evt);
+            }
+        });
+
+        btnUpdatePhongBan.setBackground(new java.awt.Color(0, 51, 153));
+        btnUpdatePhongBan.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnUpdatePhongBan.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdatePhongBan.setText("Sửa");
+        btnUpdatePhongBan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdatePhongBanActionPerformed(evt);
+            }
+        });
+
+        btnDeletePhongBan.setBackground(new java.awt.Color(0, 51, 153));
+        btnDeletePhongBan.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnDeletePhongBan.setForeground(new java.awt.Color(255, 255, 255));
+        btnDeletePhongBan.setText("Xóa");
+        btnDeletePhongBan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeletePhongBanActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -492,11 +509,24 @@ private void deletePhongBan() {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAddPhongBan)
+                .addGap(18, 18, 18)
+                .addComponent(btnUpdatePhongBan)
+                .addGap(18, 18, 18)
+                .addComponent(btnDeletePhongBan)
+                .addGap(348, 348, 348))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(48, 48, 48)
+                .addGap(9, 9, 9)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddPhongBan, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdatePhongBan, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDeletePhongBan, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -564,7 +594,27 @@ private void deletePhongBan() {
     }//GEN-LAST:event_btnCanclePhongBanActionPerformed
 
     private void btnUpdatePhongBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdatePhongBanActionPerformed
-        // TODO add your handling code here:
+        int selectedRow = jTablePhongBan.getSelectedRow();
+        
+        if(selectedRow >= 0) {
+            int maPhongBan = (int) jTablePhongBan.getValueAt(selectedRow, 0);
+            String tenPhongBan = jTablePhongBan.getValueAt(selectedRow, 1).toString();
+            int maTruongPhong = (int) jTablePhongBan.getValueAt(selectedRow, 2);
+            int maPhoPhong = (int) jTablePhongBan.getValueAt(selectedRow, 3);
+            
+            txtMaPhongBan.setText(String.valueOf(maPhongBan));
+            txtTenPhongBan.setText(tenPhongBan);
+            txtMaTruongPhong.setText(String.valueOf(maTruongPhong));
+            txtMaPhoPhong.setText(String.valueOf(maPhoPhong));
+            
+            SetEdit(true);
+            isEdit = true;
+            txtMaPhongBan.setEnabled(false);
+            txtMaPhoPhong.setEnabled(false);
+            txtMaTruongPhong.setEnabled(false);
+        } else {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn phòng ban để sửa!");
+        }
     }//GEN-LAST:event_btnUpdatePhongBanActionPerformed
 
     private void btnDeletePhongBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeletePhongBanActionPerformed
@@ -580,16 +630,18 @@ private void deletePhongBan() {
     }//GEN-LAST:event_jp9AncestorAdded
 
     private void btnSavePhongBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSavePhongBanActionPerformed
+        int maPhongBan = Integer.parseInt(txtMaPhongBan.getText());
         String tenPhongBan = txtTenPhongBan.getText();
         String maTruongPhongText = txtMaTruongPhong.getText();
-        String maPhoPhongText = txtMaPhoPhong.getText();
-
-        if (tenPhongBan.isEmpty() || maTruongPhongText.isEmpty() || maPhoPhongText.isEmpty()) {
+        String maPhoPhongText = txtMaPhongBan.getText();
+        
+        if(tenPhongBan.isEmpty() || maTruongPhongText.isEmpty() || maPhoPhongText.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
             return;
         }
-
+        
         int maTruongPhong, maPhoPhong;
+        
         try {
             maTruongPhong = Integer.parseInt(maTruongPhongText);
             maPhoPhong = Integer.parseInt(maPhoPhongText);
@@ -597,34 +649,23 @@ private void deletePhongBan() {
             JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
             return;
         }
-
-        int maPhongBanMoi = getNextMaPhongBan();
-
-        String sql = "INSERT INTO PhongBan (MaPhongBan, TenPhongBan, MaTruongPhong, MaPhoPhong) VALUES (?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, maPhongBanMoi);
-            ps.setString(2, tenPhongBan);
-            ps.setInt(3, maTruongPhong);
-            ps.setInt(4, maPhoPhong);
-
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Phòng ban đã được thêm thành công!");
-                clearPhongBanFields();
-                displayPhongBan(); // Update table after adding
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm phòng ban.");
+        
+        if (isEdit) {
+            // Nếu chế độ sửa, gọi hàm cập nhật
+            updatePhongBan(Integer.parseInt(txtMaPhongBan.getText()), tenPhongBan, maTruongPhong, maPhoPhong);
+        } else {
+            // Nếu chế độ thêm mới, gọi hàm thêm mới
+            addPhongBan(maPhongBan, tenPhongBan, maTruongPhong, maPhoPhong);
         }
     }//GEN-LAST:event_btnSavePhongBanActionPerformed
 
     private void btnAddPhongBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddPhongBanActionPerformed
+        txtMaPhongBan.setText("");
+        txtTenPhongBan.setText("");
+        txtMaTruongPhong.setText("");
+        txtMaPhoPhong.setText("");
         SetEdit(true);
         isEdit = false;
-        clearPhongBanFields();
     }//GEN-LAST:event_btnAddPhongBanActionPerformed
 
 
@@ -662,14 +703,31 @@ private void deletePhongBan() {
     }
     
     private void SetEdit(boolean edit) {
+        isEdit = edit;
+        
         txtMaPhongBan.setEditable(edit);
         txtTenPhongBan.setEditable(edit);
         txtMaTruongPhong.setEditable(edit);
         txtMaPhoPhong.setEditable(edit);
-        btnAddPhongBan.setEnabled(!edit);
-        btnUpdatePhongBan.setEnabled(!edit);
-        btnDeletePhongBan.setEnabled(!edit);
-        btnSavePhongBan.setEnabled(edit);
-        btnCanclePhongBan.setEnabled(edit);
+        
+        java.awt.Color enableColor = new java.awt.Color(0, 51, 153);
+        java.awt.Color disableColor = new java.awt.Color(128, 128, 128);
+        
+        if(edit) {
+            btnAddPhongBan.setBackground(disableColor);
+            btnUpdatePhongBan.setBackground(disableColor);
+            btnDeletePhongBan.setBackground(disableColor);
+            
+            btnSavePhongBan.setBackground(enableColor);
+            btnCanclePhongBan.setBackground(enableColor);
+        }
+        else {
+            btnAddPhongBan.setBackground(enableColor);
+            btnUpdatePhongBan.setBackground(enableColor);
+            btnDeletePhongBan.setBackground(enableColor);
+            
+            btnSavePhongBan.setBackground(disableColor);
+            btnCanclePhongBan.setBackground(disableColor);
+        }
     }
 }
