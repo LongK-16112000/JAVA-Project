@@ -88,35 +88,30 @@ displayBangLuong();
         SetEdit(false);
 }
 
-    private void addBangLuong(String mucLuong) {
-        String maLuong = txtMaLuong.getText();
-        String maChucVuText = txtMaChucVu.getText();
-        String mucLuongText = txtMucLuong.getText();
-
-        if (maChucVuText.isEmpty() || mucLuongText.isEmpty()) {
+    private void addBangLuong(String maChucVu, String mucLuong) {
+        if (maChucVu.isEmpty() || mucLuong.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
             return;
         }
 
-        String sql = "INSERT INTO Luong (MaLuong, MaChucVu, MucLuong) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Luong (MaChucVu, MucLuong) VALUES (?, ?)"; // Không truyền MaLuong nếu nó tự động tăng
         try (Connection conn = DatabaseConnection.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, maLuong);
-            ps.setString(2, maChucVuText);
-            ps.setString(3, mucLuong);
+            ps.setString(1, maChucVu);
+            ps.setString(2, mucLuong);
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 JOptionPane.showMessageDialog(null, "Bảng lương đã được thêm thành công!");
                 clearBangLuongFields();
-                displayBangLuong(); // Update table after adding
+                displayBangLuong(); // Cập nhật bảng sau khi thêm
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm bảng lương.");
+            JOptionPane.showMessageDialog(null, "Lỗi khi thêm bảng lương: " + e.getMessage());
         }
-}
+    }
+
 
 // Method to get the next MaLuong
 private int getNextMaLuong() {
@@ -591,23 +586,18 @@ private void deleteBangLuong() {
     }//GEN-LAST:event_btnCancleBangLuongActionPerformed
 
     private void btnSaveBangLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveBangLuongActionPerformed
-        // Lấy các giá trị từ các TextField
-        String maLuongtext = txtMaLuong.getText();
-        String maChucVutext = txtMaChucVu.getText();
-        String mucLuongtext = txtMucLuong.getText();
+        String maChucVuText = txtMaChucVu.getText();
+        String mucLuongText = txtMucLuong.getText();
 
-        // Kiểm tra nếu các TextField không trống
-        if (maLuongtext.isEmpty() || maChucVutext.isEmpty() || mucLuongtext.isEmpty()) {
+        if (maChucVuText.isEmpty() || mucLuongText.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
             return;
         }
 
         if (isEdit) {
-            // Nếu chế độ sửa, gọi hàm cập nhật
-            updateBangLuong(maLuongtext, maChucVutext, mucLuongtext);
+            updateBangLuong(txtMaLuong.getText(), maChucVuText, mucLuongText); // Nếu đang sửa
         } else {
-            // Nếu chế độ thêm mới, gọi hàm thêm mới
-            addBangLuong(mucLuongtext);
+            addBangLuong(maChucVuText, mucLuongText); // Nếu đang thêm mới
         }
     }//GEN-LAST:event_btnSaveBangLuongActionPerformed
 
@@ -644,8 +634,8 @@ private void deleteBangLuong() {
     private void SetEdit(boolean edit) {
         isEdit = edit;  
         
-        txtMaLuong.setEditable(edit);
-        txtMaChucVu.setEditable(edit);
+        txtMaLuong.setEditable(!edit);
+        txtMaChucVu.setEditable(!edit);
         txtMucLuong.setEditable(edit);
         
         java.awt.Color enableColor = new java.awt.Color(0, 51, 153);

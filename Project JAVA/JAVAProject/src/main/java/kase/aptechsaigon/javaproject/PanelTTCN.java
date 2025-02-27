@@ -46,7 +46,7 @@ public class PanelTTCN extends javax.swing.JPanel {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                txtMaNhanVien.setText(String.valueOf(rs.getInt("MaNhanVien")));
+                txtMaNhanVien.setText(rs.getString("MaNhanVien")); // Đổi getInt() thành getString()
                 txtHoTen.setText(rs.getString("HoTen"));
                 txtNgaySinh.setText(String.valueOf(rs.getDate("NgaySinh")));
                 txtSoCMT.setText(rs.getString("SoCMT"));
@@ -55,16 +55,17 @@ public class PanelTTCN extends javax.swing.JPanel {
                 txtDienThoai.setText(rs.getString("DienThoai"));
                 txtNgayVaoLam.setText(String.valueOf(rs.getDate("NgayVaoLam")));
                 txtMatKhau.setText(rs.getString("MatKhau"));
-                txtMaChucVu.setText(String.valueOf(rs.getInt("MaChucVu")));
-                txtMaPhongBan.setText(String.valueOf(rs.getInt("MaPhongBan")));
-            } else {
+                txtMaChucVu.setText(rs.getString("MaChucVu")); 
+                txtMaPhongBan.setText(rs.getString("MaPhongBan")); 
+            }
+             else {
                 JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin nhân viên.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi tải thông tin nhân viên.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải thông tin nhân viên: " + e.getMessage());
         }
-        SetEdit(true);
+        SetEdit(false);
     }
 
 

@@ -118,37 +118,50 @@ public class PanelPB extends javax.swing.JPanel {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm phòng ban.");
+            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm phòng ban: " + e.getMessage());
         }
     }
 
-// Method to get the next PhongBan ID
-private int getNextMaPhongBan() {
-    String sql = "SELECT MAX(MaPhongBan) FROM PhongBan";
-
+private String generateMaPhongBan() {
+    String year = String.valueOf(java.time.Year.now().getValue()); // Lấy năm hiện tại (VD: 2025)
+    String prefix = "PB" + year; // Tiền tố cho mã phòng ban (VD: PB2025)
+    String sql = "SELECT MaPhongBan FROM PhongBan WHERE MaPhongBan LIKE ? ORDER BY MaPhongBan DESC LIMIT 1";
+    
     try (Connection conn = DatabaseConnection.connect();
-         Statement stmt = conn.createStatement();
-         ResultSet rs = stmt.executeQuery(sql)) {
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, prefix + "%"); // Lọc các mã bắt đầu bằng PB2025
+        ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
-            return rs.getInt(1) + 1;
+            String lastMaPhongBan = rs.getString("MaPhongBan"); // Lấy mã phòng ban mới nhất
+            int lastNumber = Integer.parseInt(lastMaPhongBan.substring(6)); // Cắt số thứ tự (VD: "PB2025003" -> 003)
+            return prefix + String.format("%03d", lastNumber + 1); // Tăng số thứ tự lên 1 (VD: 004)
+        } else {
+            return prefix + "001"; // Nếu chưa có, bắt đầu từ 001
         }
     } catch (SQLException e) {
         e.printStackTrace();
+        return prefix + "001"; // Nếu có lỗi, trả về giá trị mặc định
     }
-
-    return 1; // If there's no data in the table, start from 1
 }
+
 
 private void updatePhongBan(String maPhongBan, String tenPhongBan, String maTruongPhong, String maPhoPhong) {
     int selectedRow = jTablePhongBan.getSelectedRow();
     if (selectedRow >= 0) {
-        String maPhongBanText = txtMaPhongBan.getText();
+        // Lấy mã phòng ban từ bảng thay vì từ ô nhập liệu
+        String maPhongBanText = (String) jTablePhongBan.getValueAt(selectedRow, 0); // Cột 0 chứa MaPhongBan
         String maTruongPhongText = txtMaTruongPhong.getText();
         String maPhoPhongText = txtMaPhoPhong.getText();
 
-        if (maPhongBan.isEmpty() ||  tenPhongBan.isEmpty() || maTruongPhongText.isEmpty() || maPhoPhongText.isEmpty()) {
+        if (tenPhongBan.isEmpty() || maTruongPhongText.isEmpty() || maPhoPhongText.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
+            return;
+        }
+
+        // Kiểm tra MaTruongPhong & MaPhoPhong có tồn tại trong bảng nhanvien không
+        if (!kiemTraNhanVienTonTai(maTruongPhongText) || !kiemTraNhanVienTonTai(maPhoPhongText)) {
+            JOptionPane.showMessageDialog(null, "Mã trưởng phòng hoặc mã phó phòng không tồn tại!");
             return;
         }
 
@@ -164,16 +177,34 @@ private void updatePhongBan(String maPhongBan, String tenPhongBan, String maTruo
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
                 JOptionPane.showMessageDialog(null, "Phòng ban đã được cập nhật thành công!");
-                displayPhongBan(); // Update table after updating
+                displayPhongBan(); // Cập nhật lại bảng sau khi sửa
+            } else {
+                JOptionPane.showMessageDialog(null, "Không tìm thấy phòng ban để cập nhật!");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật phòng ban.");
+            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật phòng ban: " + e.getMessage());
         }
     } else {
         JOptionPane.showMessageDialog(null, "Vui lòng chọn phòng ban để cập nhật.");
     }
 }
+
+private boolean kiemTraNhanVienTonTai(String maNhanVien) {
+    String sql = "SELECT COUNT(*) FROM nhanvien WHERE MaNhanVien = ?";
+    try (Connection conn = DatabaseConnection.connect();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, maNhanVien);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+
 
 private void deletePhongBan() {
     int selectedRow = jTablePhongBan.getSelectedRow();
@@ -615,23 +646,19 @@ private void deletePhongBan() {
     }//GEN-LAST:event_jp9AncestorAdded
 
     private void btnSavePhongBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSavePhongBanActionPerformed
-        String maPhongBanText = txtMaPhongBan.getText();
+        String maPhongBanText = generateMaPhongBan(); // Tạo mã phòng ban tự động
         String tenPhongBanText = txtTenPhongBan.getText();
         String maTruongPhongText = txtMaTruongPhong.getText();
-        String maPhoPhongText = txtMaPhongBan.getText();
-        
-        if(maPhongBanText.isEmpty() ||  tenPhongBanText.isEmpty() || maTruongPhongText.isEmpty() || maPhoPhongText.isEmpty()) {
+        String maPhoPhongText = txtMaPhoPhong.getText();
+
+        if (tenPhongBanText.isEmpty() || maTruongPhongText.isEmpty() || maPhoPhongText.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
             return;
         }
-        
-        
-        
+
         if (isEdit) {
-            // Nếu chế độ sửa, gọi hàm cập nhật
             updatePhongBan(maPhongBanText, tenPhongBanText, maTruongPhongText, maPhoPhongText);
         } else {
-            // Nếu chế độ thêm mới, gọi hàm thêm mới
             addPhongBan(maPhongBanText, tenPhongBanText, maTruongPhongText, maPhoPhongText);
         }
     }//GEN-LAST:event_btnSavePhongBanActionPerformed
@@ -682,10 +709,11 @@ private void deletePhongBan() {
     private void SetEdit(boolean edit) {
         isEdit = edit;
         
-        txtMaPhongBan.setEditable(edit);
         txtTenPhongBan.setEditable(edit);
         txtMaTruongPhong.setEditable(edit);
         txtMaPhoPhong.setEditable(edit);
+        txtMaPhongBan.setText(generateMaPhongBan());
+        txtMaPhongBan.setEditable(false);
         
         java.awt.Color enableColor = new java.awt.Color(0, 51, 153);
         java.awt.Color disableColor = new java.awt.Color(128, 128, 128);
