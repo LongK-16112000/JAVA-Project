@@ -11,7 +11,7 @@ import java.sql.Date;
  * @author Admin
  */
 public class NV {
-    private int maNhanVien;  
+    private String maNhanVien;  
     private String hoTen; 
     private Date ngaySinh; 
     private String soCMT;
@@ -20,11 +20,11 @@ public class NV {
     private String dienThoai;
     private Date ngayVaoLam;
     private String matKhau;
-    private int maChucVu;
-    private int maPhongBan;
+    private String maChucVu;
+    private String maPhongBan;
 
     // Constructor
-    public NV(int maNhanVien, String hoTen, Date ngaySinh, String soCMT, String diaChi, String Email, String dienThoai, Date ngayVaoLam, String matKhau, int maChucVu, int maPhongBan) {
+    public NV(String maNhanVien, String hoTen, Date ngaySinh, String soCMT, String diaChi, String Email, String dienThoai, Date ngayVaoLam, String matKhau, String maChucVu, String maPhongBan) {
         this.maNhanVien = maNhanVien;
         this.hoTen = hoTen;
         this.ngaySinh = ngaySinh;
@@ -39,11 +39,11 @@ public class NV {
     }
 
     // Getter và Setter
-    public int getMaNhanVien() {
+    public String getMaNhanVien() {
         return maNhanVien;
     }
 
-    public void setMaNhanVien(int maNhanVien) {
+    public void setMaNhanVien(String maNhanVien) {
         this.maNhanVien = maNhanVien;
     }
 
@@ -111,19 +111,19 @@ public class NV {
         this.matKhau = matKhau;
     }
     
-    public int getmaChucVu() {
+    public String getmaChucVu() {
         return maChucVu;
     }
     
-    public void setmaChucVu(int maChucVu) {
+    public void setmaChucVu(String maChucVu) {
         this.maChucVu = maChucVu;
     }
     
-    public int getmaPhongBan() {
+    public String getmaPhongBan() {
         return maChucVu;
     }
     
-    public void setmaPhongBan(int maPhongBan) {
+    public void setmaPhongBan(String maPhongBan) {
         this.maPhongBan = maPhongBan;
     }
 

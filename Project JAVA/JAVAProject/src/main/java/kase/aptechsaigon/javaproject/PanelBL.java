@@ -42,8 +42,8 @@ jTableBangLuong.getSelectionModel().addListSelectionListener(new ListSelectionLi
 
         // Nếu có dòng được chọn, điền dữ liệu vào các TextField
         if (selectedRow >= 0) {
-            int maLuong = (int) jTableBangLuong.getValueAt(selectedRow, 0);
-            int maChucVu = (int) jTableBangLuong.getValueAt(selectedRow, 1);
+            String maLuong = (String) jTableBangLuong.getValueAt(selectedRow, 0);
+            String maChucVu = (String) jTableBangLuong.getValueAt(selectedRow, 1);
             double mucLuong = (double) jTableBangLuong.getValueAt(selectedRow, 2);
 
             // Cập nhật nội dung cho các JTextField
@@ -73,8 +73,8 @@ displayBangLuong();
          ResultSet rs = ps.executeQuery()) {
 
         while (rs.next()) {
-            int maLuong = rs.getInt("MaLuong");
-            int maChucVu = rs.getInt("MaChucVu");
+            String maLuong = rs.getString("MaLuong");
+            String maChucVu = rs.getString("MaChucVu");
             double mucLuong = rs.getDouble("MucLuong");
 
             model.addRow(new Object[]{maLuong, maChucVu, mucLuong});
@@ -146,7 +146,7 @@ private int getNextMaLuong() {
     return 1; // If there's no data in the table, start from 1
 }
 
-private void updateBangLuong(int maLuong, int maChucVu, double mucLuong) {
+private void updateBangLuong(String maLuong, String maChucVu, double mucLuong) {
     int selectedRow = jTableBangLuong.getSelectedRow();
     if (selectedRow >= 0) {
         
@@ -161,7 +161,6 @@ private void updateBangLuong(int maLuong, int maChucVu, double mucLuong) {
 
 
         try {
-            maChucVu = Integer.parseInt(maChucVuText);
             mucLuong = Double.parseDouble(mucLuongText);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
@@ -172,9 +171,9 @@ private void updateBangLuong(int maLuong, int maChucVu, double mucLuong) {
         try (Connection conn = DatabaseConnection.connect();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, maChucVu);
+            ps.setString(1, maChucVu);
             ps.setDouble(2, mucLuong);
-            ps.setInt(3, maLuong);
+            ps.setString(3, maLuong);
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
@@ -620,12 +619,11 @@ private void deleteBangLuong() {
             JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
             return;
         }
-
-        int mucLuong;
+        
+        
+        int mucLuong = 0;
         int maChucVu;
         try {
-            mucLuong = Integer.parseInt(mucLuongtext); // Chuyển đổi thành số nguyên
-            maChucVu = Integer.parseInt(maChucVutext);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Thời gian hoàn thành phải là một số hợp lệ!");
             return;
@@ -633,7 +631,7 @@ private void deleteBangLuong() {
 
         if (isEdit) {
             // Nếu chế độ sửa, gọi hàm cập nhật
-            updateBangLuong(Integer.parseInt(txtMaLuong.getText()), maChucVu, mucLuong);
+            updateBangLuong(maLuongtext, maChucVutext, mucLuong);
         } else {
             // Nếu chế độ thêm mới, gọi hàm thêm mới
             addBangLuong(mucLuong);

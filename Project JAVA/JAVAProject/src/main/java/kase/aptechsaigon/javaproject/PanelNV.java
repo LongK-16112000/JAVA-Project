@@ -39,7 +39,7 @@ public class PanelNV extends javax.swing.JPanel {
 
                 // Nếu có dòng được chọn, điền dữ liệu vào các TextField
                 if (selectedRow >= 0) {
-                    int maNhanVien = (int) jTable1.getValueAt(selectedRow, 0);  
+                    String maNhanVien = (String) jTable1.getValueAt(selectedRow, 0);  
                     String hoTen = (String) jTable1.getValueAt(selectedRow, 1);  
                     Date ngaySinh = (Date) jTable1.getValueAt(selectedRow, 2);  
                     String soCMT = (String) jTable1.getValueAt(selectedRow, 3);
@@ -48,8 +48,8 @@ public class PanelNV extends javax.swing.JPanel {
                     String dienThoai = (String) jTable1.getValueAt(selectedRow, 6);
                     Date ngayVaoLam = (Date) jTable1.getValueAt(selectedRow, 7);
                     String matKhau = (String) jTable1.getValueAt(selectedRow, 8);
-                    int maChucVu = (int) jTable1.getValueAt(selectedRow, 9);
-                    int maPhongBan = (int) jTable1.getValueAt(selectedRow, 10);
+                    String maChucVu = (String) jTable1.getValueAt(selectedRow, 9);
+                    String maPhongBan = (String) jTable1.getValueAt(selectedRow, 10);
 
                     // Cập nhật nội dung cho các JTextField
                     txtMaNhanVien.setText(String.valueOf(maNhanVien));  // Hiển thị mã chương trình học
@@ -659,7 +659,7 @@ public class PanelNV extends javax.swing.JPanel {
     }//GEN-LAST:event_btnCancleNhanVienActionPerformed
 
     private void btnSaveNhanVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveNhanVienActionPerformed
-        int maNhanVienText = Integer.parseInt(txtMaNhanVien.getText());
+        String maNhanVienText = txtMaNhanVien.getText();
         String hoTenText = txtHoTen.getText();
         String ngaySinhText = txtNgaySinh.getText();
         String soCMTText = txtSoCMT.getText();
@@ -676,26 +676,22 @@ public class PanelNV extends javax.swing.JPanel {
             return;
         }
         
-        int soCMT, dienThoai, maChucVu, maPhongBan;
+        int maPhongBan;
         Date ngaySinh, ngayVaoLam;
-        try {
-            soCMT = Integer.parseInt(soCMTText);
-            dienThoai = Integer.parseInt(dienThoaiText);
-            maChucVu = Integer.parseInt(maChucVuText);
-            maPhongBan = Integer.parseInt(maPhongBanText);
-            ngaySinh = Date.valueOf(ngaySinhText);
-            ngayVaoLam = Date.valueOf(ngayVaoLamText);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
-            return;
-        }
+    try {
+        ngaySinh = Date.valueOf(ngaySinhText); 
+        ngayVaoLam = Date.valueOf(ngayVaoLamText); 
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Thời gian hoàn thành phải là một số hợp lệ!");
+        return;
+    }
         
         if (isEdit) {
             // Nếu chế độ sửa, gọi hàm cập nhật
-            updateNhanVien(Integer.parseInt(txtMaNhanVien.getText()), hoTenText, ngaySinh, soCMT, diaChiText, emailText, dienThoai, ngayVaoLam, matKhauText, maChucVu, maPhongBan);
+            updateNhanVien(maNhanVienText, hoTenText, ngaySinh, soCMTText, diaChiText, emailText, dienThoaiText, ngayVaoLam, matKhauText, maChucVuText, maPhongBanText);
         } else {
             // Nếu chế độ thêm mới, gọi hàm thêm mới
-            addNhanVien(maNhanVienText, hoTenText, ngaySinh, soCMT, diaChiText, emailText, dienThoai, ngayVaoLam, matKhauText, maChucVu, maPhongBan);
+            addNhanVien(maNhanVienText, hoTenText, ngaySinh, soCMTText, diaChiText, emailText, dienThoaiText, ngayVaoLam, matKhauText, maChucVuText, maPhongBanText);
         }
     }//GEN-LAST:event_btnSaveNhanVienActionPerformed
 
@@ -750,7 +746,7 @@ private void displayNhanVien() {
             System.out.println("No data in the result set.");
         }
         while (rs.next()) {
-            int maNhanVien = rs.getInt("MaNhanVien");
+            String maNhanVien = rs.getString("MaNhanVien");
             String hoTen = rs.getString("HoTen");
             Date ngaySinh = rs.getDate("NgaySinh");
             String soCMT = rs.getString("SoCMT");
@@ -762,8 +758,8 @@ private void displayNhanVien() {
             
             Date ngayVaoLam = rs.getDate("NgayVaoLam");
             String matKhau = rs.getString("MatKhau");
-            int maChucVu = rs.getInt("MaChucVu");
-            int maPhongBan = rs.getInt("MaPhongBan");
+            String maChucVu = rs.getString("MaChucVu");
+            String maPhongBan = rs.getString("MaPhongBan");
             
             model.addRow(new Object[]{maNhanVien, hoTen, ngaySinh, soCMT, diaChi, email, dienThoai, ngayVaoLam, matKhau, maChucVu, maPhongBan});
         }
@@ -777,9 +773,9 @@ private void displayNhanVien() {
 }
 
 
-    private void addNhanVien(int maNhanVien, String hoTen, Date ngaySinh, int soCMT, String diaChi, String email, int dienThoai, Date ngayVaoLam, String matKhau, int maChucVu, int maPhongBan) {
-        String sql = "INSERT INTO NhanVien (HoTen, NgaySinh, SoCMT, DiaChi, Email, DienThoai, NgayVaoLam, MatKhau, MaChucVu, MaPhongBan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        int maNhanVienText = Integer.parseInt(txtMaNhanVien.getText());
+    private void addNhanVien(String maNhanVien, String hoTen, Date ngaySinh, String soCMT, String diaChi, String email, String dienThoai, Date ngayVaoLam, String matKhau, String maChucVu, String maPhongBan) {
+        String sql = "INSERT INTO NhanVien (MaNhanVien, HoTen, NgaySinh, SoCMT, DiaChi, Email, DienThoai, NgayVaoLam, MatKhau, MaChucVu, MaPhongBan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String maNhanVienText = txtMaNhanVien.getText();
         String hoTenText = txtHoTen.getText();
         String ngaySinhText = txtNgaySinh.getText();
         String soCMTText = txtSoCMT.getText();
@@ -806,8 +802,8 @@ private void displayNhanVien() {
             ps.setString(6, txtDienThoai.getText());
             ps.setDate(7, Date.valueOf(txtNgayVaoLam.getText()));
             ps.setString(8, txtMatKhau.getText());
-            ps.setInt(9, Integer.parseInt(txtMaChucVu.getText()));
-            ps.setInt(10, Integer.parseInt(txtMaPhongBan.getText()));
+            ps.setString(9, txtMaChucVu.getText());
+            ps.setString(10, txtMaPhongBan.getText());
             ps.executeUpdate();
             displayNhanVien();
         } catch (SQLException e) {
@@ -817,7 +813,7 @@ private void displayNhanVien() {
 
 
     // Phương thức cập nhật NhanVien trong cơ sở dữ liệu
-private void updateNhanVien(int maNhanVien, String hoTen, Date ngaySinh, int soCMT, String diaChi, String email, int dienThoai, Date ngayVaoLam, String matKhau, int maChucVu, int maPhongBan) {
+private void updateNhanVien(String maNhanVien, String hoTen, Date ngaySinh, String soCMT, String diaChi, String email, String dienThoai, Date ngayVaoLam, String matKhau, String maChucVu, String maPhongBan) {
     String sql = "UPDATE NhanVien SET HoTen = ?, NgaySinh = ?, SoCMT = ?, DiaChi = ?, Email = ?, DienThoai = ?, NgayVaoLam = ?, MatKhau = ?, MaChucVu = ?, MaPhongBan = ? WHERE MaNhanVien = ?";
 
     try (Connection conn = DatabaseConnection.connect();
@@ -825,15 +821,15 @@ private void updateNhanVien(int maNhanVien, String hoTen, Date ngaySinh, int soC
 
         ps.setString(1, hoTen);
         ps.setDate(2, ngaySinh);
-        ps.setInt(3, soCMT);
+        ps.setString(3, soCMT);
         ps.setString(4, diaChi);
         ps.setString(5, email);
-        ps.setInt(6, dienThoai);
+        ps.setString(6, dienThoai);
         ps.setDate(7, ngayVaoLam);
         ps.setString(8, matKhau);
-        ps.setInt(9, maChucVu);
-        ps.setInt(10, maPhongBan);
-        ps.setInt(11, maNhanVien);
+        ps.setString(9, maChucVu);
+        ps.setString(10, maPhongBan);
+        ps.setString(11, maNhanVien);
 
         int rowsAffected = ps.executeUpdate();
         if (rowsAffected > 0) {

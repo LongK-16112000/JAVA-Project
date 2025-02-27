@@ -40,10 +40,10 @@ public class PanelPB extends javax.swing.JPanel {
 
                 // Nếu có dòng được chọn, điền dữ liệu vào các TextField
                 if (selectedRow >= 0) {
-                    int maPhongBan = (int) jTablePhongBan.getValueAt(selectedRow, 0);
+                    String maPhongBan = (String) jTablePhongBan.getValueAt(selectedRow, 0);
                     String tenPhongBan = (String) jTablePhongBan.getValueAt(selectedRow, 1);
-                    int maTruongPhong = (int) jTablePhongBan.getValueAt(selectedRow, 2);
-                    int maPhoPhong = (int) jTablePhongBan.getValueAt(selectedRow, 3);
+                    String maTruongPhong = (String) jTablePhongBan.getValueAt(selectedRow, 2);
+                    String maPhoPhong = (String) jTablePhongBan.getValueAt(selectedRow, 3);
 
                     // Cập nhật nội dung cho các JTextField
                     txtMaPhongBan.setText(String.valueOf(maPhongBan));
@@ -74,10 +74,10 @@ public class PanelPB extends javax.swing.JPanel {
          ResultSet rs = ps.executeQuery()) {
 
         while (rs.next()) {
-            int maPhongBan = rs.getInt("MaPhongBan");
+            String maPhongBan = rs.getString("MaPhongBan");
             String tenPhongBan = rs.getString("TenPhongBan");
-            int maTruongPhong = rs.getInt("MaTruongPhong");
-            int maPhoPhong = rs.getInt("MaPhoPhong");
+            String maTruongPhong = rs.getString("MaTruongPhong");
+            String maPhoPhong = rs.getString("MaPhoPhong");
 
             model.addRow(new Object[]{maPhongBan, tenPhongBan, maTruongPhong, maPhoPhong});
         }
@@ -90,7 +90,7 @@ public class PanelPB extends javax.swing.JPanel {
         SetEdit(false);
 }
     
-    private void addPhongBan(int maPhongBan, String tenPhongBan, int maTruongPhong, int maPhoPhong) {
+    private void addPhongBan(String maPhongBan, String tenPhongBan, String maTruongPhong, String maPhoPhong) {
         String maTruongPhongText = txtMaTruongPhong.getText();
         String maPhoPhongText = txtMaPhoPhong.getText();
 
@@ -99,14 +99,7 @@ public class PanelPB extends javax.swing.JPanel {
             return;
         }
 
-        try {
-            maTruongPhong = Integer.parseInt(maTruongPhongText);
-            maPhoPhong = Integer.parseInt(maPhoPhongText);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
-            return;
-        }
-
+        
         int maPhongBanMoi = getNextMaPhongBan();
 
         String sql = "INSERT INTO PhongBan (MaPhongBan, TenPhongBan, MaTruongPhong, MaPhoPhong) VALUES (?, ?, ?, ?)";
@@ -115,8 +108,8 @@ public class PanelPB extends javax.swing.JPanel {
 
             ps.setInt(1, maPhongBanMoi);
             ps.setString(2, tenPhongBan);
-            ps.setInt(3, maTruongPhong);
-            ps.setInt(4, maPhoPhong);
+            ps.setString(3, maTruongPhong);
+            ps.setString(4, maPhoPhong);
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
@@ -148,7 +141,7 @@ private int getNextMaPhongBan() {
     return 1; // If there's no data in the table, start from 1
 }
 
-private void updatePhongBan(int maPhongBan, String tenPhongBan, int maTruongPhong, int maPhoPhong) {
+private void updatePhongBan(String maPhongBan, String tenPhongBan, String maTruongPhong, String maPhoPhong) {
     int selectedRow = jTablePhongBan.getSelectedRow();
     if (selectedRow >= 0) {
         String maTruongPhongText = txtMaTruongPhong.getText();
@@ -159,22 +152,14 @@ private void updatePhongBan(int maPhongBan, String tenPhongBan, int maTruongPhon
             return;
         }
 
-        try {
-            maTruongPhong = Integer.parseInt(maTruongPhongText);
-            maPhoPhong = Integer.parseInt(maPhoPhongText);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
-            return;
-        }
-
         String sql = "UPDATE PhongBan SET TenPhongBan = ?, MaTruongPhong = ?, MaPhoPhong = ? WHERE MaPhongBan = ?";
         try (Connection conn = DatabaseConnection.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, tenPhongBan);
-            ps.setInt(2, maTruongPhong);
-            ps.setInt(3, maPhoPhong);
-            ps.setInt(4, maPhongBan);
+            ps.setString(2, maTruongPhong);
+            ps.setString(3, maPhoPhong);
+            ps.setString(4, maPhongBan);
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
@@ -597,10 +582,10 @@ private void deletePhongBan() {
         int selectedRow = jTablePhongBan.getSelectedRow();
         
         if(selectedRow >= 0) {
-            int maPhongBan = (int) jTablePhongBan.getValueAt(selectedRow, 0);
+            String maPhongBan = (String) jTablePhongBan.getValueAt(selectedRow, 0);
             String tenPhongBan = jTablePhongBan.getValueAt(selectedRow, 1).toString();
-            int maTruongPhong = (int) jTablePhongBan.getValueAt(selectedRow, 2);
-            int maPhoPhong = (int) jTablePhongBan.getValueAt(selectedRow, 3);
+            String maTruongPhong = (String) jTablePhongBan.getValueAt(selectedRow, 2);
+            String maPhoPhong = (String) jTablePhongBan.getValueAt(selectedRow, 3);
             
             txtMaPhongBan.setText(String.valueOf(maPhongBan));
             txtTenPhongBan.setText(tenPhongBan);
@@ -630,7 +615,7 @@ private void deletePhongBan() {
     }//GEN-LAST:event_jp9AncestorAdded
 
     private void btnSavePhongBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSavePhongBanActionPerformed
-        int maPhongBan = Integer.parseInt(txtMaPhongBan.getText());
+        String maPhongBan = txtMaPhongBan.getText();
         String tenPhongBan = txtTenPhongBan.getText();
         String maTruongPhongText = txtMaTruongPhong.getText();
         String maPhoPhongText = txtMaPhongBan.getText();
@@ -640,22 +625,14 @@ private void deletePhongBan() {
             return;
         }
         
-        int maTruongPhong, maPhoPhong;
         
-        try {
-            maTruongPhong = Integer.parseInt(maTruongPhongText);
-            maPhoPhong = Integer.parseInt(maPhoPhongText);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
-            return;
-        }
         
         if (isEdit) {
             // Nếu chế độ sửa, gọi hàm cập nhật
-            updatePhongBan(Integer.parseInt(txtMaPhongBan.getText()), tenPhongBan, maTruongPhong, maPhoPhong);
+            updatePhongBan(maPhoPhongText, tenPhongBan, maTruongPhongText, maPhoPhongText);
         } else {
             // Nếu chế độ thêm mới, gọi hàm thêm mới
-            addPhongBan(maPhongBan, tenPhongBan, maTruongPhong, maPhoPhong);
+            addPhongBan(maPhongBan, tenPhongBan, maTruongPhongText, maPhoPhongText);
         }
     }//GEN-LAST:event_btnSavePhongBanActionPerformed
 
