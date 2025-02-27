@@ -91,22 +91,21 @@ public class PanelPB extends javax.swing.JPanel {
 }
     
     private void addPhongBan(String maPhongBan, String tenPhongBan, String maTruongPhong, String maPhoPhong) {
+        String maPhongBanText = txtMaPhongBan.getText();
+        String tenPhongBanText = txtTenPhongBan.getText();
         String maTruongPhongText = txtMaTruongPhong.getText();
         String maPhoPhongText = txtMaPhoPhong.getText();
 
-        if (tenPhongBan.isEmpty() || maTruongPhongText.isEmpty() || maPhoPhongText.isEmpty()) {
+        if (maPhongBanText.isEmpty() ||  tenPhongBanText.isEmpty() || maTruongPhongText.isEmpty() || maPhoPhongText.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
             return;
         }
-
-        
-        int maPhongBanMoi = getNextMaPhongBan();
 
         String sql = "INSERT INTO PhongBan (MaPhongBan, TenPhongBan, MaTruongPhong, MaPhoPhong) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, maPhongBanMoi);
+            ps.setString(1, maPhongBan);
             ps.setString(2, tenPhongBan);
             ps.setString(3, maTruongPhong);
             ps.setString(4, maPhoPhong);
@@ -144,10 +143,11 @@ private int getNextMaPhongBan() {
 private void updatePhongBan(String maPhongBan, String tenPhongBan, String maTruongPhong, String maPhoPhong) {
     int selectedRow = jTablePhongBan.getSelectedRow();
     if (selectedRow >= 0) {
+        String maPhongBanText = txtMaPhongBan.getText();
         String maTruongPhongText = txtMaTruongPhong.getText();
         String maPhoPhongText = txtMaPhoPhong.getText();
 
-        if (tenPhongBan.isEmpty() || maTruongPhongText.isEmpty() || maPhoPhongText.isEmpty()) {
+        if (maPhongBan.isEmpty() ||  tenPhongBan.isEmpty() || maTruongPhongText.isEmpty() || maPhoPhongText.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
             return;
         }
@@ -159,7 +159,7 @@ private void updatePhongBan(String maPhongBan, String tenPhongBan, String maTruo
             ps.setString(1, tenPhongBan);
             ps.setString(2, maTruongPhong);
             ps.setString(3, maPhoPhong);
-            ps.setString(4, maPhongBan);
+            ps.setString(4, maPhongBanText);
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected > 0) {
@@ -178,7 +178,7 @@ private void updatePhongBan(String maPhongBan, String tenPhongBan, String maTruo
 private void deletePhongBan() {
     int selectedRow = jTablePhongBan.getSelectedRow();
     if (selectedRow >= 0) {
-        int maPhongBan = (int) jTablePhongBan.getValueAt(selectedRow, 0);
+        String maPhongBan = (String) jTablePhongBan.getValueAt(selectedRow, 0);
         String sqlDelete = "DELETE FROM PhongBan WHERE MaPhongBan = ?";
         
         int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa phòng ban này?", 
@@ -189,7 +189,7 @@ private void deletePhongBan() {
             try (Connection conn = DatabaseConnection.connect();
                  PreparedStatement psDelete = conn.prepareStatement(sqlDelete)) {
 
-                psDelete.setInt(1, maPhongBan);
+                psDelete.setString(1, maPhongBan);
                 int rowsAffected = psDelete.executeUpdate();
                 if (rowsAffected > 0) {
                     JOptionPane.showMessageDialog(null, "Phòng ban đã được xóa thành công!");
@@ -615,12 +615,12 @@ private void deletePhongBan() {
     }//GEN-LAST:event_jp9AncestorAdded
 
     private void btnSavePhongBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSavePhongBanActionPerformed
-        String maPhongBan = txtMaPhongBan.getText();
-        String tenPhongBan = txtTenPhongBan.getText();
+        String maPhongBanText = txtMaPhongBan.getText();
+        String tenPhongBanText = txtTenPhongBan.getText();
         String maTruongPhongText = txtMaTruongPhong.getText();
         String maPhoPhongText = txtMaPhongBan.getText();
         
-        if(tenPhongBan.isEmpty() || maTruongPhongText.isEmpty() || maPhoPhongText.isEmpty()) {
+        if(maPhongBanText.isEmpty() ||  tenPhongBanText.isEmpty() || maTruongPhongText.isEmpty() || maPhoPhongText.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
             return;
         }
@@ -629,10 +629,10 @@ private void deletePhongBan() {
         
         if (isEdit) {
             // Nếu chế độ sửa, gọi hàm cập nhật
-            updatePhongBan(maPhoPhongText, tenPhongBan, maTruongPhongText, maPhoPhongText);
+            updatePhongBan(maPhongBanText, tenPhongBanText, maTruongPhongText, maPhoPhongText);
         } else {
             // Nếu chế độ thêm mới, gọi hàm thêm mới
-            addPhongBan(maPhongBan, tenPhongBan, maTruongPhongText, maPhoPhongText);
+            addPhongBan(maPhongBanText, tenPhongBanText, maTruongPhongText, maPhoPhongText);
         }
     }//GEN-LAST:event_btnSavePhongBanActionPerformed
 

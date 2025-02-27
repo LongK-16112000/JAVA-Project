@@ -676,7 +676,6 @@ public class PanelNV extends javax.swing.JPanel {
             return;
         }
         
-        int maPhongBan;
         Date ngaySinh, ngayVaoLam;
     try {
         ngaySinh = Date.valueOf(ngaySinhText); 
@@ -787,7 +786,7 @@ private void displayNhanVien() {
         String maChucVuText = txtMaChucVu.getText();
         String maPhongBanText = txtMaPhongBan.getText();
         
-        if(hoTenText.isEmpty() || diaChiText.isEmpty() || emailText.isEmpty() || matKhauText.isEmpty() || ngaySinhText.isEmpty() || soCMTText.isEmpty() || dienThoaiText.isEmpty() || ngayVaoLamText.isEmpty() || maChucVuText.isEmpty() || maPhongBanText.isEmpty()) {
+        if(hoTen.isEmpty() || diaChi.isEmpty() || email.isEmpty() || matKhau.isEmpty() || ngaySinhText.isEmpty() || soCMT.isEmpty() || dienThoai.isEmpty() || ngayVaoLamText.isEmpty() || maChucVuText.isEmpty() || maPhongBanText.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
             return;
         }
