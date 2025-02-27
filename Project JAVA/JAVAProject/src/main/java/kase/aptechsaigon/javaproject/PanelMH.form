@@ -179,7 +179,7 @@
                           <Component id="jPanel4" max="32767" attributes="0"/>
                           <Component id="jPanel1" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="89" max="32767" attributes="0"/>
+                      <EmptySpace pref="84" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -206,7 +206,7 @@
                           <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Group type="102" attributes="0">
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <EmptySpace min="6" pref="387" max="32767" attributes="0"/>
                                   <Component id="btnSave" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="btnCancel" min="-2" max="-2" attributes="0"/>
@@ -216,11 +216,11 @@
                                       <Component id="jLabel1" min="-2" pref="207" max="-2" attributes="0"/>
                                       <Component id="jLabel4" min="-2" pref="175" max="-2" attributes="0"/>
                                       <Component id="jLabel3" alignment="0" min="-2" pref="156" max="-2" attributes="0"/>
-                                      <Component id="jLabel5" alignment="0" min="-2" pref="220" max="-2" attributes="0"/>
+                                      <Component id="jLabel5" min="-2" pref="220" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace min="31" pref="36" max="32767" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="txtTenMonHoc" alignment="0" pref="293" max="32767" attributes="0"/>
+                                      <Component id="txtTenMonHoc" alignment="0" pref="315" max="32767" attributes="0"/>
                                       <Component id="txtSoGioHocMoiBuoi" alignment="0" max="32767" attributes="0"/>
                                       <Component id="txtSoBuoiHoc" alignment="0" max="32767" attributes="0"/>
                                       <Component id="txtMaMonHoc" max="32767" attributes="0"/>
@@ -241,25 +241,25 @@
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel1" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                               <Component id="txtTenMonHoc" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel5" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
-                              <Component id="txtSoBuoiHoc" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel4" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="txtSoBuoiHoc" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel1" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="txtSoGioHocMoiBuoi" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel5" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="btnCancel" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
                               <Component id="btnSave" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="86" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -273,7 +273,7 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="S&#x1ed1; Gi&#x1edd; H&#x1ecd;c M&#x1ed7;i Bu&#x1ed5;i :"/>
+                    <Property name="text" type="java.lang.String" value="S&#x1ed1; Gi&#x1edd; H&#x1ecd;c / (ti&#x1ebf;ng) :"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel4">
@@ -315,7 +315,7 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="S&#x1ed1; Bu&#x1ed5;i H&#x1ecd;c :"/>
+                    <Property name="text" type="java.lang.String" value="S&#x1ed1; Bu&#x1ed5;i H&#x1ecd;c / (ng&#xe0;y) :"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtSoBuoiHoc">
@@ -411,7 +411,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                           <Component id="jScrollPane1" min="-2" pref="330" max="-2" attributes="0"/>
-                          <EmptySpace pref="21" max="32767" attributes="0"/>
+                          <EmptySpace pref="26" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -432,7 +432,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTable" name="jTable1">
+                    <Component class="javax.swing.JTable" name="tableData">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Segoe UI" size="14" style="0"/>

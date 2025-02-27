@@ -4,6 +4,8 @@
  */
 package kase.aptechsaigon.javaproject;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,7 +25,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PanelCTH extends JPanel {
     private boolean isEditMode = false;
-
+    int selectedRowBefore = -1;
     /**
      * Creates new form PanelCTH
      */
@@ -41,13 +43,13 @@ public class PanelCTH extends JPanel {
 
                 // Nếu có dòng được chọn, điền dữ liệu vào các TextField
                 if (selectedRow >= 0) {
-                    int maChuongTrinh = (int) tableData.getValueAt(selectedRow, 0); 
+                    String maChuongTrinh = (String) tableData.getValueAt(selectedRow, 0); 
                     String tenChuongTrinh = (String) tableData.getValueAt(selectedRow, 1);  // Cột 1 là Tên Chương Trình
                     int thoiGianHoanThanh = (int) tableData.getValueAt(selectedRow, 2);  // Cột 2 là Thời Gian Hoàn Thành
 
                     // Cập nhật nội dung cho các JTextField
                      // Hiển thị mã chương trình học
-                    txtMaChuongTrinh.setText(String.valueOf(maChuongTrinh));
+                    txtMaChuongTrinh.setText(maChuongTrinh);
                     txtTenChuongTrinh.setText(tenChuongTrinh);  // Hiển thị tên chương trình học
                     txtThoiGianHoanThanh.setText(String.valueOf(thoiGianHoanThanh));  // Hiển thị thời gian hoàn thành
                 } else {
@@ -102,6 +104,8 @@ public class PanelCTH extends JPanel {
 
         setBackground(new java.awt.Color(255, 255, 255,0
         ));
+        setOpaque(false);
+        setRequestFocusEnabled(false);
         setLayout(new java.awt.BorderLayout());
 
         jp9.setBackground(new java.awt.Color(255, 255, 255,0));
@@ -212,6 +216,9 @@ public class PanelCTH extends JPanel {
             }
         ));
         jScrollPane1.setViewportView(tableData);
+        if (tableData.getColumnModel().getColumnCount() > 0) {
+            tableData.getColumnModel().getColumn(0).setPreferredWidth(20);
+        }
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -235,7 +242,7 @@ public class PanelCTH extends JPanel {
 
         jLabel5.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Thời Gian Chương Trình :");
+        jLabel5.setText("Thời Gian / (tháng) :");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -420,7 +427,6 @@ public class PanelCTH extends JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-                                   
     // Đặt các TextField về trạng thái trống để nhập dữ liệu mới
     txtMaChuongTrinh.setText("");  // Đặt mã chương trình học trống
     txtTenChuongTrinh.setText("");  // Đặt tên chương trình học trống
@@ -431,6 +437,48 @@ public class PanelCTH extends JPanel {
 
     // Đặt cờ isEditMode là false, vì đây là chế độ thêm mới
     isEditMode = false;
+    tableData.clearSelection();
+
+    // Giới hạn nhập vào của txtThoiGianHoanThanh (từ 1 đến 60)
+    txtThoiGianHoanThanh.addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyTyped(KeyEvent e) {
+            char c = e.getKeyChar();
+
+            // Kiểm tra nếu không phải là số
+            if (!Character.isDigit(c)) {
+                e.consume(); // Nếu không phải là số thì ngừng việc nhập
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            // Sau khi nhả phím, kiểm tra giá trị
+            String currentText = txtThoiGianHoanThanh.getText();
+            if (!currentText.isEmpty()) {
+                try {
+                    int value = Integer.parseInt(currentText);
+
+                    // Giới hạn giá trị từ 1 đến 60
+                    if (value < 1) {
+                        // Hiển thị thông báo lỗi khi giá trị nhỏ hơn 1
+                        JOptionPane.showMessageDialog(null, "Thời gian hoàn thành phải từ 1 đến 60!", 
+                                                      "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        txtThoiGianHoanThanh.setText("");  // Xóa giá trị khi nhỏ hơn 1
+                    } else if (value > 60) {
+                        // Hiển thị thông báo lỗi khi giá trị lớn hơn 60
+                        JOptionPane.showMessageDialog(null, "Thời gian hoàn thành phải từ 1 đến 60!", 
+                                                      "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        txtThoiGianHoanThanh.setText("");  // Xóa giá trị khi vượt quá 60
+                    }
+                } catch (NumberFormatException ex) {
+                    // Nếu không phải số thì bỏ qua
+                    txtThoiGianHoanThanh.setText("");
+                }
+            }
+        }
+    });
+
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
@@ -449,9 +497,47 @@ public class PanelCTH extends JPanel {
         // Kích hoạt chế độ chỉnh sửa
         setEditStatus(true);
         isEditMode = true;
+
+        // Giới hạn nhập vào của txtThoiGianHoanThanh (từ 1 đến 60)
+        txtThoiGianHoanThanh.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+
+                // Kiểm tra nếu không phải là số
+                if (!Character.isDigit(c)) {
+                    e.consume(); // Nếu không phải là số thì ngừng việc nhập
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // Sau khi nhả phím, kiểm tra giá trị
+                String currentText = txtThoiGianHoanThanh.getText();
+
+                if (!currentText.isEmpty()) {
+                    try {
+                        int value = Integer.parseInt(currentText);
+
+                        // Kiểm tra giá trị và hiển thị thông báo lỗi nếu không hợp lệ
+                        if (value < 1 || value > 60) {
+                            // Hiển thị thông báo lỗi khi giá trị không nằm trong khoảng 1 đến 60
+                            JOptionPane.showMessageDialog(null, "Thời gian hoàn thành phải từ 1 đến 60!", 
+                                                          "Lỗi", JOptionPane.ERROR_MESSAGE);
+                            txtThoiGianHoanThanh.setText("");  // Xóa giá trị khi nhỏ hơn 1 hoặc lớn hơn 60
+                        }
+                    } catch (NumberFormatException ex) {
+                        // Nếu không phải là số thì bỏ qua và xóa giá trị
+                        txtThoiGianHoanThanh.setText("");
+                    }
+                }
+            }
+        });
+
     } else {
         JOptionPane.showMessageDialog(null, "Vui lòng chọn chương trình học để sửa!");
     }
+
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
@@ -461,7 +547,7 @@ public class PanelCTH extends JPanel {
     
     if (selectedRow >= 0) {
         // Lấy Mã Chương Trình Học từ cột đầu tiên của dòng đã chọn
-        int maChuongTrinhHoc = (int) tableData.getValueAt(selectedRow, 0);
+        String maChuongTrinhHoc = (String) tableData.getValueAt(selectedRow, 0);
 
         // Câu lệnh SQL để xóa chương trình học khỏi cơ sở dữ liệu
         String sqlDelete = "DELETE FROM ChuongTrinhHoc WHERE MaChuongTrinhHoc = ?";
@@ -474,7 +560,7 @@ public class PanelCTH extends JPanel {
                  PreparedStatement psDelete = conn.prepareStatement(sqlDelete)) {
 
                 // Đặt mã chương trình học vào câu lệnh SQL
-                psDelete.setInt(1, maChuongTrinhHoc);
+                psDelete.setString(1, maChuongTrinhHoc);
 
                 // Thực thi câu lệnh SQL xóa
                 int rowsAffected = psDelete.executeUpdate();
@@ -506,17 +592,67 @@ public class PanelCTH extends JPanel {
     }//GEN-LAST:event_txtTenChuongTrinhActionPerformed
 
     private void txtThoiGianHoanThanhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtThoiGianHoanThanhActionPerformed
-        // TODO add your handling code here:
+
+    
     }//GEN-LAST:event_txtThoiGianHoanThanhActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    // Kiểm tra chế độ sửa (update) hay thêm mới (add)
+    if (isEditMode) {
+        cancelUpdate();  // Gọi cancelUpdate nếu đang sửa
+    } else {
+        cancelAdd();  // Gọi cancelAdd nếu đang thêm mới
+    }
+    }//GEN-LAST:event_btnCancelActionPerformed
+    private void cancelAdd() {
+    // Trở về trạng thái không chỉnh sửa
+    setEditStatus(false);
+
+    // Chọn dòng đầu tiên trong bảng
+    if (tableData.getRowCount() > 0) {
+        tableData.setRowSelectionInterval(0, 0);  // Chọn dòng đầu tiên
+    }
+
+    // Điền lại dữ liệu vào các TextField từ dòng đầu tiên
+    String maChuongTrinh = tableData.getValueAt(0, 0).toString();
+    String tenChuongTrinh = tableData.getValueAt(0, 1).toString();
+    String thoiGianHoanThanh = tableData.getValueAt(0, 2).toString();
+
+    txtMaChuongTrinh.setText(maChuongTrinh);
+    txtTenChuongTrinh.setText(tenChuongTrinh);
+    txtThoiGianHoanThanh.setText(thoiGianHoanThanh);
+}
+
+    private void cancelUpdate() {
+
         // Trở về trạng thái không chỉnh sửa
         setEditStatus(false);
-    }//GEN-LAST:event_btnCancelActionPerformed
 
+        // Kiểm tra xem có dòng nào đã được chọn không
+        int selectedRow = tableData.getSelectedRow();
+
+        // Nếu có dòng đã chọn, giữ lại dòng đó. Nếu không, chọn dòng đầu tiên
+        if (selectedRow == -1 && tableData.getRowCount() > 0) {
+            // Nếu không có dòng nào được chọn, chọn dòng đầu tiên
+            tableData.setRowSelectionInterval(0, 0);
+            selectedRow = 0;  // Cập nhật selectedRow thành 0 sau khi chọn dòng đầu tiên
+        }
+
+        // Điền lại dữ liệu vào các TextField từ dòng đã chọn
+        if (selectedRow >= 0 && selectedRow < tableData.getRowCount()) {
+            String maChuongTrinh = tableData.getValueAt(selectedRow, 0).toString();
+            String tenChuongTrinh = tableData.getValueAt(selectedRow, 1).toString();
+            String thoiGianHoanThanh = tableData.getValueAt(selectedRow, 2).toString();
+
+            txtMaChuongTrinh.setText(maChuongTrinh);
+            txtTenChuongTrinh.setText(tenChuongTrinh);
+            txtThoiGianHoanThanh.setText(thoiGianHoanThanh);
+        }
+    }
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
                                        
     // Lấy các giá trị từ các TextField
+    String maChuongTrinh = txtMaChuongTrinh.getText();
     String tenChuongTrinh = txtTenChuongTrinh.getText();
     String thoiGianHoanThanhText = txtThoiGianHoanThanh.getText();
 
@@ -536,10 +672,10 @@ public class PanelCTH extends JPanel {
 
     if (isEditMode) {
         // Nếu chế độ sửa, gọi hàm cập nhật
-        updateChuongTrinhHoc(Integer.parseInt(txtMaChuongTrinh.getText()), tenChuongTrinh, thoiGianHoanThanh);
+        updateChuongTrinhHoc(maChuongTrinh,tenChuongTrinh, thoiGianHoanThanh);
     } else {
         // Nếu chế độ thêm mới, gọi hàm thêm mới
-        addChuongTrinhHoc(tenChuongTrinh, thoiGianHoanThanh);
+        addChuongTrinhHoc(maChuongTrinh,tenChuongTrinh, thoiGianHoanThanh);
     }
 
 
@@ -554,7 +690,7 @@ public class PanelCTH extends JPanel {
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                int maChuongTrinhHoc = rs.getInt("MaChuongTrinhHoc");
+                String maChuongTrinhHoc = rs.getString("MaChuongTrinhHoc");
                 String tenChuongTrinh = rs.getString("TenChuongTrinh");
                 int thoiGianHoanThanh = rs.getInt("ThoiGianHoanThanh");
 
@@ -568,21 +704,35 @@ public class PanelCTH extends JPanel {
         }
       setEditStatus(false);
     }
-    private void addChuongTrinhHoc(String tenChuongTrinh, int thoiGianHoanThanh) {
+   private void addChuongTrinhHoc(String maChuongTrinhHoc, String tenChuongTrinh, int thoiGianHoanThanh) {
     // Câu lệnh SQL để thêm mới chương trình học vào cơ sở dữ liệu
-    String sql = "INSERT INTO ChuongTrinhHoc (TenChuongTrinh, ThoiGianHoanThanh) VALUES (?, ?)";
+    String sql = "INSERT INTO ChuongTrinhHoc (MaChuongTrinhHoc, TenChuongTrinh, ThoiGianHoanThanh) VALUES (?, ?, ?)";
 
     try (Connection conn = DatabaseConnection.connect();
          PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        ps.setString(1, tenChuongTrinh);
-        ps.setInt(2, thoiGianHoanThanh);
+        // Set các giá trị vào PreparedStatement
+        ps.setString(1, maChuongTrinhHoc);  // Mã chương trình học được nhập vào
+        ps.setString(2, tenChuongTrinh);  // Tên chương trình học
+        ps.setInt(3, thoiGianHoanThanh);  // Thời gian hoàn thành
 
         // Thực thi câu lệnh SQL
         int rowsAffected = ps.executeUpdate();
+
         if (rowsAffected > 0) {
             JOptionPane.showMessageDialog(null, "Chương trình học đã được thêm mới!");
-            displayChuongTrinhHoc(); // Cập nhật lại bảng
+
+            // Cập nhật lại bảng dữ liệu
+            displayChuongTrinhHoc();
+
+            // Sau khi thêm xong, trỏ đến dòng mới trong bảng
+            for (int i = 0; i < tableData.getRowCount(); i++) {
+                // Kiểm tra dòng nào có MaChuongTrinhHoc trùng với giá trị vừa thêm
+                if (tableData.getValueAt(i, 0).equals(maChuongTrinhHoc)) {
+                    tableData.setRowSelectionInterval(i, i); // Chọn lại dòng đó
+                    break;
+                }
+            }
         }
     } catch (SQLException e) {
         e.printStackTrace();
@@ -590,28 +740,46 @@ public class PanelCTH extends JPanel {
     }
 }
 
-    private void updateChuongTrinhHoc(int maChuongTrinhHoc, String tenChuongTrinh, int thoiGianHoanThanh) {
+
+
+ private void updateChuongTrinhHoc(String maChuongTrinhHoc, String tenChuongTrinh, int thoiGianHoanThanh) {
     // Câu lệnh SQL để cập nhật thông tin chương trình học
     String sql = "UPDATE ChuongTrinhHoc SET TenChuongTrinh = ?, ThoiGianHoanThanh = ? WHERE MaChuongTrinhHoc = ?";
 
     try (Connection conn = DatabaseConnection.connect();
          PreparedStatement ps = conn.prepareStatement(sql)) {
 
+        // Set giá trị cho câu lệnh PreparedStatement
         ps.setString(1, tenChuongTrinh);
         ps.setInt(2, thoiGianHoanThanh);
-        ps.setInt(3, maChuongTrinhHoc);  // Mã chương trình học từ TextField
+        ps.setString(3, maChuongTrinhHoc);
 
         // Thực thi câu lệnh SQL
         int rowsAffected = ps.executeUpdate();
+        
         if (rowsAffected > 0) {
             JOptionPane.showMessageDialog(null, "Chương trình học đã được cập nhật!");
-            displayChuongTrinhHoc();
+            displayChuongTrinhHoc(); // Cập nhật lại bảng dữ liệu
+
+            // Tìm chỉ số dòng cần chọn lại trong bảng
+            for (int i = 0; i < tableData.getRowCount(); i++) {
+                // Kiểm tra dòng nào có mã chương trình học trùng với mã vừa cập nhật
+                if (tableData.getValueAt(i, 0).equals(maChuongTrinhHoc)) {
+                    tableData.setRowSelectionInterval(i, i); // Chọn lại dòng đó
+                    break;
+                }
+            }
+        } else {
+            // Nếu không có dòng nào bị ảnh hưởng, có thể là mã chương trình không tồn tại
+            JOptionPane.showMessageDialog(null, "Không có chương trình học nào cần cập nhật. Vui lòng kiểm tra lại mã chương trình.");
         }
+
     } catch (SQLException e) {
         e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật chương trình học.");
+        JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật chương trình học: " + e.getMessage());
     }
 }
+
 
    
     

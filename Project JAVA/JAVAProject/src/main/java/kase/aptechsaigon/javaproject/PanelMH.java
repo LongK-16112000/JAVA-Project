@@ -5,6 +5,8 @@
 package kase.aptechsaigon.javaproject;
 
 import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,29 +25,30 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PanelMH extends JPanel {
     private boolean isEditMode = false;
+    private int selectedRowBeforeMonHoc = -1;
     /**
      * Creates new form PanelCC
      */
     public PanelMH() {
         initComponents();  
 // Thêm ListSelectionListener để tự động điền dữ liệu khi chọn dòng trong JTable
-    jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+    tableData.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
     @Override
     public void valueChanged(ListSelectionEvent e) {
         // Kiểm tra xem có dòng nào được chọn hay không
-        int selectedRow = jTable1.getSelectedRow();
+        int selectedRow = tableData.getSelectedRow();
 
         // Nếu có dòng được chọn, điền dữ liệu vào các TextField
         if (selectedRow >= 0) {
 
             // Lấy giá trị từ các cột trong dòng được chọn
-            int maMonHoc = (int) jTable1.getValueAt(selectedRow, 0);  // Cột 2 là Số Buổi Học
-            String tenMonHoc = (String) jTable1.getValueAt(selectedRow, 1);  // Cột 1 là Tên Môn Học
-            int soBuoiHoc = (int) jTable1.getValueAt(selectedRow, 2);  // Cột 2 là Số Buổi Học
-            int soGioHocMoiBuoi = (int) jTable1.getValueAt(selectedRow, 3);  // Cột 3 là Số Giờ Học Mỗi Buổi
+            String maMonHoc = (String) tableData.getValueAt(selectedRow, 0);  // Cột 2 là Số Buổi Học
+            String tenMonHoc = (String) tableData.getValueAt(selectedRow, 1);  // Cột 1 là Tên Môn Học
+            int soBuoiHoc = (int) tableData.getValueAt(selectedRow, 2);  // Cột 2 là Số Buổi Học
+            int soGioHocMoiBuoi = (int) tableData.getValueAt(selectedRow, 3);  // Cột 3 là Số Giờ Học Mỗi Buổi
 
             // Cập nhật nội dung cho các JTextField
-            txtMaMonHoc.setText(String.valueOf(maMonHoc));
+            txtMaMonHoc.setText(maMonHoc);
             txtTenMonHoc.setText(tenMonHoc);  // Hiển thị tên môn học
             txtSoBuoiHoc.setText(String.valueOf(soBuoiHoc));  // Hiển thị số buổi học
             txtSoGioHocMoiBuoi.setText(String.valueOf(soGioHocMoiBuoi));  // Hiển thị số giờ học mỗi buổi
@@ -91,7 +94,7 @@ public class PanelMH extends JPanel {
         btnSave = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableData = new javax.swing.JTable();
         btnAdd = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
@@ -154,7 +157,7 @@ public class PanelMH extends JPanel {
 
         jLabel5.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Số Giờ Học Mỗi Buổi :");
+        jLabel5.setText("Số Giờ Học / (tiếng) :");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -176,7 +179,7 @@ public class PanelMH extends JPanel {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Số Buổi Học :");
+        jLabel1.setText("Số Buổi Học / (ngày) :");
 
         txtSoBuoiHoc.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
 
@@ -219,7 +222,7 @@ public class PanelMH extends JPanel {
                 .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(6, 387, Short.MAX_VALUE)
                         .addComponent(btnSave)
                         .addGap(18, 18, 18)
                         .addComponent(btnCancel))
@@ -229,9 +232,9 @@ public class PanelMH extends JPanel {
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(31, 36, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTenMonHoc, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
+                            .addComponent(txtTenMonHoc, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
                             .addComponent(txtSoGioHocMoiBuoi)
                             .addComponent(txtSoBuoiHoc)
                             .addComponent(txtMaMonHoc))))
@@ -246,21 +249,21 @@ public class PanelMH extends JPanel {
                     .addComponent(txtMaMonHoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTenMonHoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTenMonHoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtSoBuoiHoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSoBuoiHoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtSoGioHocMoiBuoi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSoGioHocMoiBuoi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(86, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255,40));
@@ -269,8 +272,8 @@ public class PanelMH extends JPanel {
         jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setForeground(new java.awt.Color(255, 255, 255));
 
-        jTable1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableData.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tableData.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -278,9 +281,9 @@ public class PanelMH extends JPanel {
                 "Mã Môn Học", "Tên  Môn Học", "Số Buổi Học", "Số Giờ Học Mỗi Buổi"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(10);
+        jScrollPane1.setViewportView(tableData);
+        if (tableData.getColumnModel().getColumnCount() > 0) {
+            tableData.getColumnModel().getColumn(0).setPreferredWidth(10);
         }
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -297,7 +300,7 @@ public class PanelMH extends JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         btnAdd.setBackground(new java.awt.Color(0, 51, 153));
@@ -361,7 +364,7 @@ public class PanelMH extends JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jp9Layout = new javax.swing.GroupLayout(jp9);
@@ -398,11 +401,11 @@ public class PanelMH extends JPanel {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
      // Kiểm tra xem người dùng có chọn dòng trong bảng không
-int selectedRow = jTable1.getSelectedRow();
+int selectedRow = tableData.getSelectedRow();
 
 if (selectedRow >= 0) {
     // Lấy Mã Môn Học từ cột đầu tiên của dòng đã chọn
-    int maMonHoc = (int) jTable1.getValueAt(selectedRow, 0);
+    String maMonHoc = (String) tableData.getValueAt(selectedRow, 0);
 
     // Câu lệnh SQL để xóa môn học khỏi cơ sở dữ liệu
     String sqlDelete = "DELETE FROM MonHoc WHERE MaMonHoc = ?";
@@ -415,7 +418,7 @@ if (selectedRow >= 0) {
              PreparedStatement psDelete = conn.prepareStatement(sqlDelete)) {
 
             // Đặt mã môn học vào câu lệnh SQL
-            psDelete.setInt(1, maMonHoc);
+            psDelete.setString(1, maMonHoc);
 
             // Thực thi câu lệnh SQL xóa
             int rowsAffected = psDelete.executeUpdate();
@@ -439,16 +442,16 @@ if (selectedRow >= 0) {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
 
-    int selectedRow = jTable1.getSelectedRow();  // Kiểm tra xem có dòng nào được chọn trong bảng không
+    int selectedRow = tableData.getSelectedRow();  // Kiểm tra xem có dòng nào được chọn trong bảng không
     if (selectedRow >= 0) {
         // Lấy dữ liệu từ dòng đã chọn trong bảng
-        int maMonHoc = (int) jTable1.getValueAt(selectedRow, 0);  // Mã môn học
-        String tenMonHoc = jTable1.getValueAt(selectedRow, 1).toString();  // Tên môn học
-        String soBuoiHoc = jTable1.getValueAt(selectedRow, 2).toString();  // Số buổi học
-        String soGioHocMoiBuoi = jTable1.getValueAt(selectedRow, 3).toString();  // Số giờ học mỗi buổi
+        String maMonHoc = (String) tableData.getValueAt(selectedRow, 0);  // Mã môn học
+        String tenMonHoc = tableData.getValueAt(selectedRow, 1).toString();  // Tên môn học
+        String soBuoiHoc = tableData.getValueAt(selectedRow, 2).toString();  // Số buổi học
+        String soGioHocMoiBuoi = tableData.getValueAt(selectedRow, 3).toString();  // Số giờ học mỗi buổi
 
         // Điền dữ liệu vào các TextField
-        txtMaMonHoc.setText(String.valueOf(maMonHoc));  // Điền mã môn học vào TextField
+        txtMaMonHoc.setText(maMonHoc);  // Điền mã môn học vào TextField
         txtTenMonHoc.setText(tenMonHoc);  // Điền tên môn học vào TextField
         txtSoBuoiHoc.setText(soBuoiHoc);  // Điền số buổi học vào TextField
         txtSoGioHocMoiBuoi.setText(soGioHocMoiBuoi);  // Điền số giờ học mỗi buổi vào TextField
@@ -457,6 +460,73 @@ if (selectedRow >= 0) {
         setEditStatus(true);  // Bật chế độ chỉnh sửa
 
         isEditMode = true;  // Đặt chế độ chỉnh sửa thành true
+        
+        // Giới hạn nhập vào của txtSoBuoiHoc (từ 5 đến 30)
+txtSoBuoiHoc.addKeyListener(new KeyAdapter() {
+    @Override
+    public void keyTyped(KeyEvent e) {
+        char c = e.getKeyChar();
+        
+        // Kiểm tra nếu không phải là số
+        if (!Character.isDigit(c)) {
+            e.consume(); // Nếu không phải là số thì ngừng việc nhập
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        String currentText = txtSoBuoiHoc.getText();
+        if (!currentText.isEmpty()) {
+            try {
+                int value = Integer.parseInt(currentText);
+                
+                // Giới hạn giá trị từ 5 đến 30
+                if (value < 5 || value > 30) {
+                    JOptionPane.showMessageDialog(null, "Số buổi học phải từ 5 đến 30!", 
+                                                  "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    txtSoBuoiHoc.setText("");  // Xóa giá trị khi nhỏ hơn 5 hoặc lớn hơn 30
+                }
+            } catch (NumberFormatException ex) {
+                // Nếu không phải số thì bỏ qua
+                txtSoBuoiHoc.setText("");
+            }
+        }
+    }
+});
+
+// Giới hạn nhập vào của txtSoGioHocMoiBuoi (từ 2 đến 5)
+txtSoGioHocMoiBuoi.addKeyListener(new KeyAdapter() {
+    @Override
+    public void keyTyped(KeyEvent e) {
+        char c = e.getKeyChar();
+
+        // Kiểm tra nếu không phải là số
+        if (!Character.isDigit(c)) {
+            e.consume(); // Nếu không phải là số thì ngừng việc nhập
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        String currentText = txtSoGioHocMoiBuoi.getText();
+        if (!currentText.isEmpty()) {
+            try {
+                int value = Integer.parseInt(currentText);
+
+                // Giới hạn giá trị từ 2 đến 5
+                if (value < 2 || value > 5) {
+                    JOptionPane.showMessageDialog(null, "Số giờ học mỗi buổi phải từ 2 đến 5!", 
+                                                  "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    txtSoGioHocMoiBuoi.setText("");  // Xóa giá trị khi nhỏ hơn 2 hoặc lớn hơn 5
+                }
+            } catch (NumberFormatException ex) {
+                // Nếu không phải số thì bỏ qua
+                txtSoGioHocMoiBuoi.setText("");
+            }
+        }
+    }
+});
+
     } else {
         JOptionPane.showMessageDialog(null, "Vui lòng chọn môn học để sửa!");
     }
@@ -476,6 +546,74 @@ if (selectedRow >= 0) {
 
     // Đặt cờ isEditMode là false, vì đây là chế độ thêm mới
     isEditMode = false;
+    tableData.clearSelection();
+    
+    // Giới hạn nhập vào của txtSoBuoiHoc (từ 5 đến 30)
+txtSoBuoiHoc.addKeyListener(new KeyAdapter() {
+    @Override
+    public void keyTyped(KeyEvent e) {
+        char c = e.getKeyChar();
+        
+        // Kiểm tra nếu không phải là số
+        if (!Character.isDigit(c)) {
+            e.consume(); // Nếu không phải là số thì ngừng việc nhập
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        String currentText = txtSoBuoiHoc.getText();
+        if (!currentText.isEmpty()) {
+            try {
+                int value = Integer.parseInt(currentText);
+                
+                // Giới hạn giá trị từ 5 đến 30
+                if (value < 5 || value > 30) {
+                    JOptionPane.showMessageDialog(null, "Số buổi học phải từ 5 đến 30!", 
+                                                  "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    txtSoBuoiHoc.setText("");  // Xóa giá trị khi nhỏ hơn 5 hoặc lớn hơn 30
+                }
+            } catch (NumberFormatException ex) {
+                // Nếu không phải số thì bỏ qua
+                txtSoBuoiHoc.setText("");
+            }
+        }
+    }
+});
+
+// Giới hạn nhập vào của txtSoGioHocMoiBuoi (từ 2 đến 5)
+txtSoGioHocMoiBuoi.addKeyListener(new KeyAdapter() {
+    @Override
+    public void keyTyped(KeyEvent e) {
+        char c = e.getKeyChar();
+
+        // Kiểm tra nếu không phải là số
+        if (!Character.isDigit(c)) {
+            e.consume(); // Nếu không phải là số thì ngừng việc nhập
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        String currentText = txtSoGioHocMoiBuoi.getText();
+        if (!currentText.isEmpty()) {
+            try {
+                int value = Integer.parseInt(currentText);
+
+                // Giới hạn giá trị từ 2 đến 5
+                if (value < 2 || value > 5) {
+                    JOptionPane.showMessageDialog(null, "Số giờ học mỗi buổi phải từ 2 đến 5!", 
+                                                  "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    txtSoGioHocMoiBuoi.setText("");  // Xóa giá trị khi nhỏ hơn 2 hoặc lớn hơn 5
+                }
+            } catch (NumberFormatException ex) {
+                // Nếu không phải số thì bỏ qua
+                txtSoGioHocMoiBuoi.setText("");
+            }
+        }
+    }
+});
+
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void txtSoGioHocMoiBuoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSoGioHocMoiBuoiActionPerformed
@@ -491,25 +629,81 @@ if (selectedRow >= 0) {
     }//GEN-LAST:event_txtMaMonHocActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        // Đặt các TextField về trạng thái trống để nhập dữ liệu mới
-    txtMaMonHoc.setText("");  // Đặt mã chương trình học trống
-    txtTenMonHoc.setText("");
-    txtSoBuoiHoc.setText("");  // Đặt tên chương trình học trống
-    txtSoGioHocMoiBuoi.setText("");  // Đặt thời gian hoàn thành trống
+    // Kiểm tra chế độ sửa (update) hay thêm mới (add)
+    if (isEditMode) {
+        cancelUpdate();  // Gọi cancelUpdate nếu đang sửa
+    } else {
+        cancelAdd();  // Gọi cancelAdd nếu đang thêm mới
+    }
 
-    // Kích hoạt chế độ chỉnh sửa (setEditStatus true)
-    setEditStatus(false);
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void cancelAdd() {
+    // Trở về trạng thái không chỉnh sửa
+    setEditStatus(false);
+
+    // Chọn dòng đầu tiên trong bảng
+    if (tableData.getRowCount() > 0) {
+        tableData.setRowSelectionInterval(0, 0);  // Chọn dòng đầu tiên
+    }
+
+    // Điền lại dữ liệu vào các TextField từ dòng đầu tiên
+    String maMonHoc = tableData.getValueAt(0, 0).toString();
+    String tenMonHoc = tableData.getValueAt(0, 1).toString();
+    String soBuoiHoc = tableData.getValueAt(0, 2).toString();
+    String soGioHocMoiBuoi = tableData.getValueAt(0, 3).toString();
+
+    txtMaMonHoc.setText(maMonHoc);
+    txtTenMonHoc.setText(tenMonHoc);
+    txtSoBuoiHoc.setText(soBuoiHoc);
+    txtSoGioHocMoiBuoi.setText(soGioHocMoiBuoi);
+}
+
+    private void cancelUpdate() {
+    // Trở về trạng thái không chỉnh sửa
+    setEditStatus(false);
+    
+    // Kiểm tra xem có dòng nào đã được chọn không
+    int selectedRow = tableData.getSelectedRow();
+
+    // Nếu không có dòng nào được chọn, chọn lại dòng trước đó hoặc dòng đầu tiên
+    if (selectedRow == -1 && tableData.getRowCount() > 0) {
+        // Nếu không có dòng nào được chọn, chọn lại dòng trước đó (nếu có)
+        if (selectedRowBeforeMonHoc >= 0 && selectedRowBeforeMonHoc < tableData.getRowCount()) {
+            tableData.setRowSelectionInterval(selectedRowBeforeMonHoc, selectedRowBeforeMonHoc);
+            selectedRow = selectedRowBeforeMonHoc; // Cập nhật selectedRow thành dòng trước đó
+        } else {
+            // Nếu không có dòng trước đó, chọn dòng đầu tiên
+            tableData.setRowSelectionInterval(0, 0);
+            selectedRow = 0; // Cập nhật selectedRow thành 0
+        }
+    }
+
+    // Điền lại dữ liệu vào các TextField từ dòng đã chọn (hoặc dòng trước đó)
+    if (selectedRow >= 0 && selectedRow < tableData.getRowCount()) {
+        String maMonHoc = tableData.getValueAt(selectedRow, 0).toString();
+        String tenMonHoc = tableData.getValueAt(selectedRow, 1).toString();
+        String soBuoiHoc = tableData.getValueAt(selectedRow, 2).toString();
+        String soGioHocMoiBuoi = tableData.getValueAt(selectedRow, 3).toString();
+
+        txtMaMonHoc.setText(maMonHoc);
+        txtTenMonHoc.setText(tenMonHoc);
+        txtSoBuoiHoc.setText(soBuoiHoc);
+        txtSoGioHocMoiBuoi.setText(soGioHocMoiBuoi);
+    }
+}
+
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
                                      
     // Lấy các giá trị từ các TextField
+    String maMonHoc = txtMaMonHoc.getText();
     String tenMonHoc = txtTenMonHoc.getText();
     String soBuoiHocText = txtSoBuoiHoc.getText();
     String soGioHocMoiBuoiText = txtSoGioHocMoiBuoi.getText();
 
     // Kiểm tra nếu các TextField không trống
-    if (tenMonHoc.isEmpty() || soBuoiHocText.isEmpty() || soGioHocMoiBuoiText.isEmpty()) {
+    if (maMonHoc.isEmpty() ||tenMonHoc.isEmpty() || soBuoiHocText.isEmpty() || soGioHocMoiBuoiText.isEmpty()) {
         JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
         return;
     }
@@ -526,10 +720,10 @@ if (selectedRow >= 0) {
 
     if (isEditMode) {
         // Nếu chế độ sửa, gọi hàm cập nhật
-        updateMonHoc(Integer.parseInt(txtMaMonHoc.getText()), tenMonHoc, soBuoiHoc, soGioHocMoiBuoi);
+        updateMonHoc(maMonHoc, tenMonHoc, soBuoiHoc, soGioHocMoiBuoi);
     } else {
         // Nếu chế độ thêm mới, gọi hàm thêm mới
-        addMonHoc(tenMonHoc, soBuoiHoc, soGioHocMoiBuoi);
+        addMonHoc(maMonHoc,tenMonHoc, soBuoiHoc, soGioHocMoiBuoi);
     }
 
     // Sau khi lưu (thêm hoặc sửa) thành công, quay lại chế độ xem
@@ -538,7 +732,7 @@ if (selectedRow >= 0) {
     }//GEN-LAST:event_btnSaveActionPerformed
      // Hiển thị dữ liệu môn học lên JTable
     private void displayMonHoc() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableData.getModel();
         model.setRowCount(0);  // Xóa dữ liệu cũ trong bảng
         String sql = "SELECT * FROM MonHoc";
 
@@ -547,15 +741,15 @@ if (selectedRow >= 0) {
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                int maMonHoc = rs.getInt("MaMonHoc");
+                String maMonHoc = rs.getString("MaMonHoc");
                 String tenMonHoc = rs.getString("TenMonHoc");
                 int soBuoiHoc = rs.getInt("SoBuoiHoc");
                 int soGioHocMoiBuoi = rs.getInt("SoGioHocMoiBuoi");
 
                 model.addRow(new Object[]{maMonHoc, tenMonHoc, soBuoiHoc, soGioHocMoiBuoi});
             }
-            if(jTable1.getRowCount()>0){
-                jTable1.setRowSelectionInterval(0, 0);
+            if(tableData.getRowCount()>0){
+                tableData.setRowSelectionInterval(0, 0);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -563,16 +757,15 @@ if (selectedRow >= 0) {
         setEditStatus(false);
     }
 
-    private void addMonHoc(String tenMonHoc, int soBuoiHoc, int soGioHocMoiBuoi) {
+    private void addMonHoc(String maMonHoc,String tenMonHoc, int soBuoiHoc, int soGioHocMoiBuoi) {
     // Lấy mã môn học tiếp theo
-    int maMonHocMoi = getNextMaMonHoc();
 
     // Câu lệnh SQL để thêm môn học vào cơ sở dữ liệu
     String sql = "INSERT INTO MonHoc (MaMonHoc, TenMonHoc, SoBuoiHoc, SoGioHocMoiBuoi) VALUES (?, ?, ?, ?)";
 
     try (Connection conn = DatabaseConnection.connect();
          PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setInt(1, maMonHocMoi);           // Mã môn học
+        ps.setString(1, maMonHoc);           // Mã môn học
         ps.setString(2, tenMonHoc);           // Tên môn học
         ps.setInt(3, soBuoiHoc);              // Số buổi học
         ps.setInt(4, soGioHocMoiBuoi);        // Số giờ học mỗi buổi
@@ -593,25 +786,9 @@ if (selectedRow >= 0) {
 }
 
 
-    // Hàm để lấy mã môn học tiếp theo
-    private int getNextMaMonHoc() {
-        String sql = "SELECT MAX(MaMonHoc) FROM MonHoc";
+    
 
-        try (Connection conn = DatabaseConnection.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            if (rs.next()) {
-                return rs.getInt(1) + 1;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return 1; // Nếu không có dữ liệu trong bảng, bắt đầu từ 1
-    }
-
-   private void updateMonHoc(int maMonHoc, String tenMonHoc, int soBuoiHoc, int soGioHocMoiBuoi) {
+   private void updateMonHoc(String maMonHoc, String tenMonHoc, int soBuoiHoc, int soGioHocMoiBuoi) {
     String sql = "UPDATE MonHoc SET TenMonHoc = ?, SoBuoiHoc = ?, SoGioHocMoiBuoi = ? WHERE MaMonHoc = ?";
 
     try (Connection conn = DatabaseConnection.connect();
@@ -619,7 +796,7 @@ if (selectedRow >= 0) {
         ps.setString(1, tenMonHoc);            // Tên môn học
         ps.setInt(2, soBuoiHoc);               // Số buổi học
         ps.setInt(3, soGioHocMoiBuoi);         // Số giờ học mỗi buổi
-        ps.setInt(4, maMonHoc);                // Mã môn học
+        ps.setString(4, maMonHoc);                // Mã môn học
 
         int rowsAffected = ps.executeUpdate();
         if (rowsAffected > 0) {
@@ -649,7 +826,26 @@ if (selectedRow >= 0) {
         btnUpdate.setEnabled(!editable);
         btnDelete.setEnabled(!editable);
 
-                
+        
+        java.awt.Color enableColor = new java.awt.Color(0, 51, 153);
+        java.awt.Color disableColor = new java.awt.Color(128, 128, 128);
+
+        if(editable) {
+            btnAdd.setBackground(disableColor);
+            btnUpdate.setBackground(disableColor);
+            btnDelete.setBackground(disableColor);
+            
+            btnSave.setBackground(enableColor);
+            btnCancel.setBackground(enableColor);
+        }
+        else {
+            btnAdd.setBackground(enableColor);
+            btnUpdate.setBackground(enableColor);
+            btnDelete.setBackground(enableColor);
+            
+            btnSave.setBackground(disableColor);
+            btnCancel.setBackground(disableColor);
+        }        
     }
 
 
@@ -672,8 +868,8 @@ if (selectedRow >= 0) {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JPanel jp9;
+    private javax.swing.JTable tableData;
     private javax.swing.JTextField txtMaMonHoc;
     private javax.swing.JTextField txtSoBuoiHoc;
     private javax.swing.JTextField txtSoGioHocMoiBuoi;

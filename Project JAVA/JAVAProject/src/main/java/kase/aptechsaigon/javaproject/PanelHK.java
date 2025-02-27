@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -20,42 +22,51 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PanelHK extends javax.swing.JPanel {
  private boolean isEditMode = false;
+ private int selectedRowBeforeHocKy = -1;
+    private int thoiGianHoanThanh;
+    private QLMH qLMH;
+    private boolean isComboBoxLoaded = false;
     /**
      * Creates new form PanelHk
      */
     public PanelHK() {
         initComponents();
-        // Thêm ListSelectionListener để tự động điền dữ liệu khi chọn dòng trong JTable cho Học kỳ
-        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-        @Override
-        public void valueChanged(ListSelectionEvent e) {
+         setEditStatus(false);
+         qLMH = new QLMH();
+         
+// Thêm ListSelectionListener để tự động điền dữ liệu khi chọn dòng trong JTable cho Học kỳ
+// Thêm ListSelectionListener để tự động điền dữ liệu khi chọn dòng trong JTable
+    // Sử dụng PopupMenuListener để xử lý sự kiện khi mở ComboBox
+
+
+tableData.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
         // Kiểm tra xem có dòng nào được chọn hay không
-        int selectedRow = jTable1.getSelectedRow();
+        int selectedRow = tableData.getSelectedRow();
 
         // Nếu có dòng được chọn, điền dữ liệu vào các TextField
         if (selectedRow >= 0) {
 
             // Lấy giá trị từ các cột trong dòng được chọn
-            int maChungChi = (int) jTable1.getValueAt(selectedRow, 0);  
-            int maChuongTrinhHoc = (int) jTable1.getValueAt(selectedRow, 1);  // Cột 1 là Mã Chương Trình Học
-            String tenHocKy = (String) jTable1.getValueAt(selectedRow, 2);  // Cột 2 là Tên Học Kỳ
-            int soMonHoc = (int) jTable1.getValueAt(selectedRow, 3);  // Cột 3 là Số Môn Học
-            String tenChungChi = (String) jTable1.getValueAt(selectedRow, 4);  // Cột 4 là Tên Chứng Chỉ
-            int thoiGianHoanThanh = (int) jTable1.getValueAt(selectedRow, 6);  // Cột 5 là Thời Gian Hoàn Thành
-            int soThuTuChungChi = (int) jTable1.getValueAt(selectedRow, 5);  // Cột 6 là Số Thứ Tự Chứng Chỉ
+            String maHocKy = (String) tableData.getValueAt(selectedRow, 0);  
+            String tenHocKy = (String) tableData.getValueAt(selectedRow, 1);  // Tên học kỳ
+            int soMonHoc = (int) tableData.getValueAt(selectedRow, 2);  // Số môn học
+            String tenChungChi = (String) tableData.getValueAt(selectedRow, 3);  // Tên chứng chỉ
+            int soThuTuChungChi = (int) tableData.getValueAt(selectedRow, 4);  // Số thứ tự chứng chỉ
+            int thoiGianHoanThanh = (int) tableData.getValueAt(selectedRow, 5);  // Thời gian hoàn thành
 
             // Cập nhật nội dung cho các JTextField
-            txtMaChungChi.setText(String.valueOf(maChungChi));
-            txtMaChuongtrinh.setText(String.valueOf(maChuongTrinhHoc));
+            txtMaChungChi.setText(maHocKy);
             txtTenHocKy.setText(tenHocKy);  // Hiển thị tên học kỳ
             txtSoMonHoc.setText(String.valueOf(soMonHoc));  // Hiển thị số môn học
             txtTenChungChi.setText(tenChungChi);  // Hiển thị tên chứng chỉ
             txtThoiGianHoanThanh.setText(String.valueOf(thoiGianHoanThanh));  // Hiển thị thời gian hoàn thành
             txtSoThuTuChungChi.setText(String.valueOf(soThuTuChungChi));  // Hiển thị số thứ tự chứng chỉ
+            
         } else {
             // Nếu không có dòng nào được chọn, làm trống các TextField
             txtMaChungChi.setText("");
-            txtMaChuongtrinh.setText("");
             txtTenHocKy.setText("");
             txtSoMonHoc.setText("");
             txtTenChungChi.setText("");
@@ -65,8 +76,8 @@ public class PanelHK extends javax.swing.JPanel {
     }
 });
 
-        displayHocKy();
-    }
+        
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -85,7 +96,7 @@ public class PanelHK extends javax.swing.JPanel {
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableData = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -106,6 +117,8 @@ public class PanelHK extends javax.swing.JPanel {
         btnAdd = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
+        ComboBoxcth = new javax.swing.JComboBox<>();
+        btnmh_hk = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
 
         setLayout(new java.awt.BorderLayout());
@@ -167,17 +180,17 @@ public class PanelHK extends javax.swing.JPanel {
         jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setForeground(new java.awt.Color(255, 255, 255));
 
-        jTable1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableData.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tableData.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Mã Học kì", "Mã Chương Trình", "Tên Học Kỳ", "Số Môn Học", "Tên Chứng Chỉ", "STT Chứng Chỉ", "Thời Gian Hoàn Thành"
+                "Mã Học kì", "Tên Học Kỳ", "Số Môn Học", "Tên Chứng Chỉ", "STT Chứng Chỉ", "Thời Gian Hoàn Thành"
             }
         ));
-        jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jScrollPane1.setViewportView(jTable1);
+        tableData.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jScrollPane1.setViewportView(tableData);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -238,7 +251,7 @@ public class PanelHK extends javax.swing.JPanel {
 
         jLabel6.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Thời Gian Hoàn Thành :");
+        jLabel6.setText("Thời Gian /(tháng) :");
 
         jLabel7.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -246,7 +259,7 @@ public class PanelHK extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Mã Chứng Chỉ :");
+        jLabel1.setText("Mã Học Kỳ :");
 
         jLabel8.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
@@ -383,38 +396,69 @@ public class PanelHK extends javax.swing.JPanel {
             }
         });
 
+        ComboBoxcth.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
+        ComboBoxcth.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Chọn Chương Trình" }));
+        ComboBoxcth.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboBoxcthActionPerformed(evt);
+            }
+        });
+
+        btnmh_hk.setBackground(new java.awt.Color(0, 51, 153));
+        btnmh_hk.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnmh_hk.setForeground(new java.awt.Color(255, 255, 255));
+        btnmh_hk.setText("Quản lý môn học");
+        btnmh_hk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnmh_hkActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addComponent(ComboBoxcth, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(45, 45, 45)
                         .addComponent(btnAdd)
                         .addGap(18, 18, 18)
                         .addComponent(btnUpdate)
                         .addGap(18, 18, 18)
-                        .addComponent(btnDelete)))
-                .addGap(20, 20, 20))
+                        .addComponent(btnDelete)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnmh_hk)
+                        .addGap(48, 48, 48))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(84, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ComboBoxcth, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnmh_hk, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jp9Layout = new javax.swing.GroupLayout(jp9);
@@ -456,92 +500,103 @@ public class PanelHK extends javax.swing.JPanel {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // Nếu không có dòng nào được chọn, làm trống các TextField
             txtMaChungChi.setText("");
-            txtMaChuongtrinh.setText("");
             txtTenHocKy.setText("");
             txtSoMonHoc.setText("");
             txtTenChungChi.setText("");
             txtThoiGianHoanThanh.setText("");
             txtSoThuTuChungChi.setText("");
                         // Kích hoạt chế độ chỉnh sửa (setEditStatus true)
-               setEditStatus(true);
+            setEditStatus(true);
 
-               // Đặt cờ isEditMode là false, vì đây là chế độ thêm mới
-               isEditMode = false;
+            // Đặt cờ isEditMode là false, vì đây là chế độ thêm mới
+            isEditMode = false;
+            tableData.clearSelection();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+ setEditStatus(true);
 
-    // Kiểm tra xem người dùng có chọn dòng nào trong bảng không
-    int selectedRow = jTable1.getSelectedRow();
-    
-    if (selectedRow >= 0) {
-        // Lấy dữ liệu từ dòng đã chọn trong bảng
-        int maHocKy = (int) jTable1.getValueAt(selectedRow, 0);  // Mã học kỳ
-        int maChuongTrinhHoc = (int) jTable1.getValueAt(selectedRow, 1);  // Mã chương trình học
-        String tenHocKy = jTable1.getValueAt(selectedRow, 2).toString();  // Tên học kỳ
-        String soMonHoc = jTable1.getValueAt(selectedRow, 3).toString();  // Số môn học
-        String tenChungChi = jTable1.getValueAt(selectedRow, 4).toString();  // Tên chứng chỉ
-        String thoiGianHoanThanh = jTable1.getValueAt(selectedRow, 6).toString();  // Thời gian hoàn thành
-        String soThuTuChungChi = jTable1.getValueAt(selectedRow, 5).toString();  // Số thứ tự chứng chỉ
+        // Kiểm tra xem người dùng có chọn dòng nào trong bảng không
+int selectedRow = tableData.getSelectedRow();
 
-        // Điền dữ liệu vào các TextField
-        txtMaChuongtrinh.setText(String.valueOf(maChuongTrinhHoc));
-        txtTenHocKy.setText(tenHocKy);
-        txtSoMonHoc.setText(soMonHoc);
-        txtTenChungChi.setText(tenChungChi);
-        txtThoiGianHoanThanh.setText(thoiGianHoanThanh);
-        txtSoThuTuChungChi.setText(soThuTuChungChi);
+if (selectedRow >= 0) {
+    // Lấy dữ liệu từ dòng đã chọn trong bảng
+    String maHocKy = (String) tableData.getValueAt(selectedRow, 0);  // Mã học kỳ
+    String maChuongTrinhHoc = (String) tableData.getValueAt(selectedRow, 1); 
+    String tenHocKy = tableData.getValueAt(selectedRow, 2).toString();  // Tên học kỳ
+    String soMonHoc = tableData.getValueAt(selectedRow, 3).toString();  // Số môn học
+    String tenChungChi = tableData.getValueAt(selectedRow, 4).toString();  // Tên chứng chỉ
+    String thoiGianHoanThanh = tableData.getValueAt(selectedRow, 6).toString();  // Thời gian hoàn thành
+    String soThuTuChungChi = tableData.getValueAt(selectedRow, 5).toString();  // Số thứ tự chứng chỉ
 
-        // Kích hoạt chế độ chỉnh sửa (enable các TextField và nút Save, Cancel)
-        setEditStatus(true);
+    // Điền dữ liệu vào các TextField
+    txtTenHocKy.setText(tenHocKy);
+    txtSoMonHoc.setText(soMonHoc);
+    txtTenChungChi.setText(tenChungChi);
+    txtThoiGianHoanThanh.setText(thoiGianHoanThanh);
+    txtSoThuTuChungChi.setText(soThuTuChungChi);
 
-        // Đặt cờ isEditMode là true, vì đây là chế độ sửa
-        isEditMode = true;
-    } else {
-        JOptionPane.showMessageDialog(null, "Vui lòng chọn học kỳ để sửa!");
-    }
+    // Đảm bảo txtMaChuongtrinh lấy giá trị từ ComboBoxcth, không phải từ bảng
+    String selectedChuongTrinh = (String) ComboBoxcth.getSelectedItem();
+    txtMaChuongtrinh.setText(selectedChuongTrinh);
+
+    // Đặt cờ isEditMode là true, vì đây là chế độ sửa
+    isEditMode = true;
+} else {
+    JOptionPane.showMessageDialog(null, "Vui lòng chọn học kỳ để sửa!");
+}
 
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+// Kiểm tra xem người dùng có chọn dòng nào trong bảng không
+int selectedRow = tableData.getSelectedRow();
 
-    // Kiểm tra xem người dùng có chọn dòng nào trong bảng không
-    int selectedRow = jTable1.getSelectedRow();
-    
-    if (selectedRow >= 0) {
-        // Lấy mã học kỳ từ dòng được chọn
-        int maHocKy = (int) jTable1.getValueAt(selectedRow, 0);
-        
-        // Xác nhận việc xóa
-        int confirm = JOptionPane.showConfirmDialog(null, 
-                "Bạn có chắc chắn muốn xóa học kỳ này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
-        
-        if (confirm == JOptionPane.YES_OPTION) {
-            // Câu lệnh SQL để xóa học kỳ theo MaHocKy
-            String sql = "DELETE FROM HocKy WHERE MaHocKy = ?";
-            
-            try (Connection conn = DatabaseConnection.connect();
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
-                
-                ps.setInt(1, maHocKy);  // Gán MaHocKy cho câu lệnh SQL
-                
-                // Thực thi câu lệnh DELETE
-                int rowsAffected = ps.executeUpdate();
-                
-                if (rowsAffected > 0) {
-                    JOptionPane.showMessageDialog(null, "Học kỳ đã được xóa thành công!");
-                    displayHocKy();  // Cập nhật lại bảng sau khi xóa
-                } else {
-                    JOptionPane.showMessageDialog(null, "Không thể xóa học kỳ này.");
+if (selectedRow >= 0) {
+    // Lấy mã học kỳ và mã chương trình học từ dòng được chọn
+    String maHocKy = (String) tableData.getValueAt(selectedRow, 0);  // Mã học kỳ
+    // In ra giá trị để kiểm tra
+    System.out.println("Mã học kỳ cần xóa: " + maHocKy);
+
+    // Xác nhận việc xóa
+    int confirm = JOptionPane.showConfirmDialog(null, 
+            "Bạn có chắc chắn muốn xóa học kỳ này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+
+    if (confirm == JOptionPane.YES_OPTION) {
+        // Câu lệnh SQL để xóa học kỳ theo MaHocKy
+        String sql = "DELETE FROM HocKy WHERE MaHocKy = ?";
+
+        try (Connection conn = DatabaseConnection.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, maHocKy);  // Gán MaHocKy cho câu lệnh SQL
+
+            // Thực thi câu lệnh DELETE
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Học kỳ đã được xóa thành công!");
+
+                // Cập nhật lại bảng sau khi xóa
+                DefaultTableModel model = (DefaultTableModel) tableData.getModel();
+                model.removeRow(selectedRow);  // Xóa dòng tương ứng với học kỳ đã xóa
+
+                // Nếu còn dòng trong bảng, chọn lại dòng đầu tiên
+                if (model.getRowCount() > 0) {
+                    tableData.setRowSelectionInterval(0, 0);  // Chọn dòng đầu tiên
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi xóa học kỳ.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Không thể xóa học kỳ này.");
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi xóa học kỳ.");
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "Vui lòng chọn học kỳ để xóa.");
     }
+} else {
+    JOptionPane.showMessageDialog(null, "Vui lòng chọn học kỳ để xóa.");
+}
+
 
     }//GEN-LAST:event_btnDeleteActionPerformed
 
@@ -554,110 +609,331 @@ public class PanelHK extends javax.swing.JPanel {
     }//GEN-LAST:event_txtTenChungChiActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        txtMaChungChi.setText("");
-        txtMaChuongtrinh.setText("");
-        txtTenHocKy.setText("");
-        txtSoMonHoc.setText("");
-        txtTenChungChi.setText("");
-        txtThoiGianHoanThanh.setText("");
-        txtSoThuTuChungChi.setText("");
-        setEditStatus(false);
+        // Kiểm tra chế độ sửa (update) hay thêm mới (add)
+    if (isEditMode) {
+        cancelUpdate();  // Gọi cancelUpdate nếu đang sửa
+    } else {
+        cancelAdd();  // Gọi cancelAdd nếu đang thêm mới
+    }
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    
+    private void cancelAdd() {
+    // Trở về trạng thái không chỉnh sửa
+    setEditStatus(false);
+
+     // Nếu bảng có ít nhất một dòng, chọn dòng đầu tiên
+        if (tableData.getRowCount() > 0) {
+            // Chọn dòng đầu tiên (dòng 0) trong bảng
+            tableData.setRowSelectionInterval(0, 0);  
+
+            // Lấy dữ liệu từ dòng đầu tiên trong bảng và cập nhật các TextField
+            String maChungChi = tableData.getValueAt(0, 0).toString();
+            String tenHocKy = tableData.getValueAt(0, 1).toString();
+            String soMonHoc = tableData.getValueAt(0, 2).toString();
+            String tenChungChi = tableData.getValueAt(0, 3).toString();
+            String soThuTuChungChi = tableData.getValueAt(0, 4).toString();
+            String thoiGianHoanThanh = tableData.getValueAt(0, 5).toString();
+
+            // Điền dữ liệu vào các TextField
+            txtMaChungChi.setText(maChungChi);
+            txtTenHocKy.setText(tenHocKy);
+            txtSoMonHoc.setText(soMonHoc);
+            txtTenChungChi.setText(tenChungChi);
+            txtSoThuTuChungChi.setText(soThuTuChungChi);
+            txtThoiGianHoanThanh.setText(thoiGianHoanThanh);
+        }
+}
+
+    private void cancelUpdate() {
+    // Trở về trạng thái không chỉnh sửa
+    setEditStatus(false);
+
+    // Kiểm tra xem có dòng nào đã được chọn không
+    int selectedRow = tableData.getSelectedRow();
+
+    // Nếu không có dòng nào được chọn, chọn lại dòng trước đó hoặc dòng đầu tiên
+    if (selectedRow == -1 && tableData.getRowCount() > 0) {
+        // Nếu không có dòng nào được chọn, chọn lại dòng trước đó (nếu có)
+        if (selectedRowBeforeHocKy >= 0 && selectedRowBeforeHocKy < tableData.getRowCount()) {
+            tableData.setRowSelectionInterval(selectedRowBeforeHocKy, selectedRowBeforeHocKy);
+            selectedRow = selectedRowBeforeHocKy; // Cập nhật selectedRow thành dòng trước đó
+        } else {
+            // Nếu không có dòng trước đó, chọn dòng đầu tiên
+            tableData.setRowSelectionInterval(0, 0);
+            selectedRow = 0; // Cập nhật selectedRow thành 0
+        }
+    }
+
+    // Điền lại dữ liệu vào các TextField từ dòng đã chọn (hoặc dòng trước đó)
+    if (selectedRow >= 0 && selectedRow < tableData.getRowCount()) {
+       // Lấy dữ liệu từ dòng đầu tiên trong bảng và cập nhật các TextField
+            String maChungChi = tableData.getValueAt(0, 0).toString();
+            String tenHocKy = tableData.getValueAt(0, 1).toString();
+            String soMonHoc = tableData.getValueAt(0, 2).toString();
+            String tenChungChi = tableData.getValueAt(0, 3).toString();
+            String soThuTuChungChi = tableData.getValueAt(0, 4).toString();
+            String thoiGianHoanThanh = tableData.getValueAt(0, 5).toString();
+
+            // Điền dữ liệu vào các TextField
+            txtMaChungChi.setText(maChungChi);
+            txtTenHocKy.setText(tenHocKy);
+            txtSoMonHoc.setText(soMonHoc);
+            txtTenChungChi.setText(tenChungChi);
+            txtSoThuTuChungChi.setText(soThuTuChungChi);
+            txtThoiGianHoanThanh.setText(thoiGianHoanThanh);
+    }
+}
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
  
-    // Lấy dữ liệu từ các TextField
-    int maHocKy = Integer.parseInt(txtMaChungChi.getText());
-    int maChuongTrinhHoc = Integer.parseInt(txtMaChuongtrinh.getText());
-    String tenHocKy = txtTenHocKy.getText();
-    String soMonHocText = txtSoMonHoc.getText();
-    String tenChungChi = txtTenChungChi.getText();
-    String soThuTuChungChiText = txtSoThuTuChungChi.getText();
-    String thoiGianHoanThanhText = txtThoiGianHoanThanh.getText();
+// Lấy dữ liệu từ các TextField
+String maHocKy = txtMaChungChi.getText();
+String tenHocKy = txtTenHocKy.getText();
+String soMonHocText = txtSoMonHoc.getText();
+String tenChungChi = txtTenChungChi.getText();
+String soThuTuChungChiText = txtSoThuTuChungChi.getText();
+String thoiGianHoanThanhText = txtThoiGianHoanThanh.getText();
 
-    // Kiểm tra nếu các TextField không trống
-    if (tenHocKy.isEmpty() || soMonHocText.isEmpty() || tenChungChi.isEmpty()|| soThuTuChungChiText.isEmpty() || 
-        thoiGianHoanThanhText.isEmpty()) {
-        JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
-        return;
-    }
+// Kiểm tra nếu các TextField không trống
+if (maHocKy.isEmpty() || tenHocKy.isEmpty() || soMonHocText.isEmpty() || tenChungChi.isEmpty() || soThuTuChungChiText.isEmpty() || thoiGianHoanThanhText.isEmpty()) {
+    JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
+    return;
+}
 
-    int soMonHoc, thoiGianHoanThanh, soThuTuChungChi;
-    try {
-        soMonHoc = Integer.parseInt(soMonHocText);
-        
-        soThuTuChungChi = Integer.parseInt(soThuTuChungChiText);
-        thoiGianHoanThanh = Integer.parseInt(thoiGianHoanThanhText);
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
-        return;
-    }
+// Kiểm tra kiểu dữ liệu của các trường cần là số nguyên
+int soMonHoc, thoiGianHoanThanh, soThuTuChungChi;
+try {
+    // Kiểm tra và chuyển đổi dữ liệu nhập vào
+    soMonHoc = Integer.parseInt(soMonHocText);
+    soThuTuChungChi = Integer.parseInt(soThuTuChungChiText);
+    thoiGianHoanThanh = Integer.parseInt(thoiGianHoanThanhText);
+} catch (NumberFormatException e) {
+    JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
+    return;
+}
 
-    // Kiểm tra xem là chế độ sửa hay thêm mới
-    if (isEditMode) {
-        // Nếu là chế độ sửa, gọi hàm cập nhật
-        updateHocKy(maHocKy, maChuongTrinhHoc, tenHocKy, soMonHoc, tenChungChi, soThuTuChungChi, thoiGianHoanThanh);
-    } else {
-        // Nếu là chế độ thêm mới, gọi hàm thêm mới
-        addHocKy(maHocKy, maChuongTrinhHoc, tenHocKy, soMonHoc, tenChungChi, soThuTuChungChi, thoiGianHoanThanh);
-    }
+
+// Kiểm tra xem là chế độ sửa hay thêm mới
+if (isEditMode) {
+    // Nếu là chế độ sửa, gọi hàm cập nhật
+    updateHocKy(maHocKy, tenHocKy, soMonHoc, tenChungChi, soThuTuChungChi, thoiGianHoanThanh);
+} else {
+    // Nếu là chế độ thêm mới, gọi hàm thêm mới
+    addHocKy(maHocKy,tenHocKy, soMonHoc, tenChungChi, soThuTuChungChi, thoiGianHoanThanh);
+}
+setEditStatus(false);  
 
 
 
     }//GEN-LAST:event_btnSaveActionPerformed
-// Hiển thị dữ liệu học kỳ lên JTable
-private void displayHocKy() {
-    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-    model.setRowCount(0);  // Xóa dữ liệu cũ trong bảng
-    String sql = "SELECT * FROM HocKy";
+
+
+    private void btnmh_hkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmh_hkActionPerformed
+//     qLMH.setVisible(true);
+//        this.add(qLMH);
+//        this.revalidate();  // Cập nhật lại giao diện
+//            this.repaint();  // Vẽ lại giao diện
+//    
+    }//GEN-LAST:event_btnmh_hkActionPerformed
+
+    private void ComboBoxcthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxcthActionPerformed
+        // Hiển thị ComboBox khi người dùng tương tác
+        ComboBoxcth.showPopup();
+
+        // Tải dữ liệu chỉ khi ComboBox chưa được load
+        if (!isComboBoxLoaded) {
+             // Xóa tất cả các item trong ComboBox trước khi thêm mới
+//            ComboBoxcth.removeAllItems();
+
+            // Thêm item mặc định "Chọn Chương Trình"
+//            ComboBoxcth.addItem("Chọn Chương Trình");
+
+            // Tải dữ liệu chương trình học từ cơ sở dữ liệu và thêm vào ComboBox
+            loadComboBoxData();
+
+            // Đánh dấu là ComboBox đã được load
+            isComboBoxLoaded = true;
+            }
+
+        // Lấy chương trình học đã chọn từ ComboBox
+        String selectedChuongTrinh = (String) ComboBoxcth.getSelectedItem();
+
+        // Kiểm tra nếu người dùng có chọn chương trình học và không chọn mục "Chọn Chương Trình"
+        if (selectedChuongTrinh != null && !selectedChuongTrinh.equals("Chọn Chương Trình")) {
+            // Lấy mã chương trình học từ tên chương trình học
+            String maChuongTrinhHoc = getMaChuongTrinhHocByTenChuongTrinh(selectedChuongTrinh);
+
+            // Kiểm tra nếu mã chương trình học hợp lệ
+            if (maChuongTrinhHoc != null) {
+                // Hiển thị học kỳ tương ứng với mã chương trình học
+                displayHocKy(maChuongTrinhHoc);
+
+                // Hiển thị tên chương trình học vào TextField
+                String tenChuongTrinh = getTenChuongTrinhHoc(maChuongTrinhHoc);
+                txtMaChuongtrinh.setText(tenChuongTrinh);
+            } else {
+                System.out.println("Không tìm thấy chương trình học với tên: " + selectedChuongTrinh);
+            }
+        } else {
+            System.out.println("Vui lòng chọn chương trình học.");
+        }
+    }//GEN-LAST:event_ComboBoxcthActionPerformed
+    private String getTenChuongTrinhHoc(String maChuongTrinhHoc) {
+    String tenChuongTrinh = null;  // Mặc định là null nếu không tìm thấy tên chương trình học
+    String sql = "SELECT TenChuongTrinh FROM ChuongTrinhHoc WHERE MaChuongTrinhHoc = ?";
+
+    try (Connection conn = DatabaseConnection.connect();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, maChuongTrinhHoc);  // Gán mã chương trình học vào câu truy vấn
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            tenChuongTrinh = rs.getString("TenChuongTrinh");  // Lấy tên chương trình học
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return tenChuongTrinh;  // Trả về tên chương trình học
+}
+
+
+    
+// Lấy dữ liệu và hiển thị ComboBox với danh sách các chương trình học
+private void loadComboBoxData() {
+    
+    // Giả sử bạn có phương thức này để lấy danh sách các chương trình học từ cơ sở dữ liệu
+    List<String> chuongTrinhHocList = getChuongTrinhHocList();
+    // Thêm các chương trình học vào ComboBox
+    for (String chuongTrinhHoc : chuongTrinhHocList) {
+        ComboBoxcth.addItem(chuongTrinhHoc);
+    }
+     
+}
+
+
+private List<String> getChuongTrinhHocList() {
+    List<String> chuongTrinhHocList = new ArrayList<>();
+    String sql = "SELECT TenChuongTrinh FROM ChuongTrinhHoc";  // Lấy tên các chương trình học
 
     try (Connection conn = DatabaseConnection.connect();
          PreparedStatement ps = conn.prepareStatement(sql);
          ResultSet rs = ps.executeQuery()) {
 
         while (rs.next()) {
-            int maHocKy = rs.getInt("MaHocKy");
-            int maChuongTrinhHoc = rs.getInt("MaChuongTrinhHoc");
+            chuongTrinhHocList.add(rs.getString("TenChuongTrinh"));
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return chuongTrinhHocList;
+}
+
+    private void displayHocKy(String maChuongTrinhHoc) {
+    DefaultTableModel model = (DefaultTableModel) tableData.getModel();
+    model.setRowCount(0);  // Xóa dữ liệu cũ trong bảng
+
+    // SQL query để lấy dữ liệu học kỳ dựa trên MaChuongTrinhHoc
+    String sql = "SELECT * FROM HocKy WHERE MaChuongTrinhHoc = ?";
+
+    try (Connection conn = DatabaseConnection.connect();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, maChuongTrinhHoc);  // Set giá trị maChuongTrinhHoc vào câu truy vấn
+        ResultSet rs = ps.executeQuery();
+
+        // Lặp qua từng dòng dữ liệu trong ResultSet và thêm vào bảng
+        while (rs.next()) {
+            String maHocKy = rs.getString("MaHocKy");
             String tenHocKy = rs.getString("TenHocKy");
             int soMonHoc = rs.getInt("SoMonHoc");
             String tenChungChi = rs.getString("TenChungChi");
             int soThuTuChungChi = rs.getInt("SoThuTuChungChi");
             int thoiGianHoanThanh = rs.getInt("ThoiGianHoanThanh");
 
-            model.addRow(new Object[]{maHocKy, maChuongTrinhHoc, tenHocKy, soMonHoc, tenChungChi, soThuTuChungChi, thoiGianHoanThanh});
+            // Thêm dữ liệu vào bảng
+            model.addRow(new Object[]{maHocKy, tenHocKy, soMonHoc, tenChungChi, soThuTuChungChi, thoiGianHoanThanh});
         }
-        if(jTable1.getRowCount()>0){
-                jTable1.setRowSelectionInterval(0, 0);
-            }
-       
+
+        // Nếu có dữ liệu, tự động chọn dòng đầu tiên
+        if (tableData.getRowCount() > 0) {
+            tableData.setRowSelectionInterval(0, 0);
+        }
+
     } catch (SQLException e) {
         e.printStackTrace();
     }
-    setEditStatus(false);
+     
+        setEditStatus(false);
 }
 
 
-private void updateHocKy(int maHocKy, int maChuongTrinhHoc, String tenHocKy, int soMonHoc, String tenChungChi
-        , int soThuTuChungChi,  int thoiGianHoanThanh) {
-    String sql = "UPDATE HocKy SET TenHocKy = ?, MaChuongTrinhHoc = ?, SoMonHoc = ?, TenChungChi = ?, " +
-                 "SoThuTuChungChi = ?, ThoiGianHoanThanh = ? WHERE MaHocKy = ?";
+private String getMaChuongTrinhHocByTenChuongTrinh(String tenChuongTrinh) {
+    String maChuongTrinhHoc = null;  // Sử dụng String thay vì int
+    String sql = "SELECT MaChuongTrinhHoc FROM ChuongTrinhHoc WHERE TenChuongTrinh = ?";
+
     try (Connection conn = DatabaseConnection.connect();
          PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        ps.setString(1, tenHocKy);
-        ps.setInt(2, maChuongTrinhHoc);  // Mã chương trình học
-        ps.setInt(3, soMonHoc);
-        ps.setString(4, tenChungChi);
-        ps.setInt(5, soThuTuChungChi);
-        ps.setInt(6, thoiGianHoanThanh);
-        ps.setInt(7, maHocKy);  // Mã học kỳ
+        ps.setString(1, tenChuongTrinh);  // Gán tên chương trình học vào câu truy vấn
+        ResultSet rs = ps.executeQuery();
 
+        if (rs.next()) {
+            maChuongTrinhHoc = rs.getString("MaChuongTrinhHoc");  // Lấy mã chương trình học dưới dạng String
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return maChuongTrinhHoc;  // Trả về mã chương trình học dưới dạng String
+}
+
+private void updateHocKy(String maHocKy, String tenHocKy, int soMonHoc, String tenChungChi, int soThuTuChungChi, int thoiGianHoanThanh) {
+    // Câu lệnh SQL để cập nhật học kỳ trong cơ sở dữ liệu
+    String sql = "UPDATE HocKy SET TenHocKy = ?, SoMonHoc = ?, TenChungChi = ?, SoThuTuChungChi = ?, ThoiGianHoanThanh = ? " +
+                 "WHERE MaHocKy = ?";
+
+    try (Connection conn = DatabaseConnection.connect();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        // Gán giá trị cho các tham số trong câu lệnh SQL
+        ps.setString(1, tenHocKy);  // Tên học kỳ
+        ps.setInt(2, soMonHoc);  // Số môn học
+        ps.setString(3, tenChungChi);  // Tên chứng chỉ
+        ps.setInt(4, soThuTuChungChi);  // Số thứ tự chứng chỉ
+        ps.setInt(5, thoiGianHoanThanh);  // Thời gian hoàn thành
+        ps.setString(6, maHocKy);  // Mã học kỳ (dùng để xác định bản ghi cần cập nhật)
+
+        // Thực thi câu lệnh UPDATE
         int rowsAffected = ps.executeUpdate();
+
         if (rowsAffected > 0) {
+            // Thông báo cho người dùng và cập nhật lại bảng
             JOptionPane.showMessageDialog(null, "Học kỳ đã được cập nhật thành công!");
-            displayHocKy();  // Cập nhật lại bảng sau khi sửa
+
+            // Cập nhật trực tiếp dòng đã sửa trong bảng
+            DefaultTableModel model = (DefaultTableModel) tableData.getModel();
+            int selectedRow = tableData.getSelectedRow();  // Lấy dòng đã chọn
+
+            if (selectedRow >= 0) {
+                // Cập nhật các giá trị cho dòng đã chọn
+                model.setValueAt(tenHocKy, selectedRow, 1);  // Cập nhật tên học kỳ
+                model.setValueAt(soMonHoc, selectedRow, 2);  // Cập nhật số môn học
+                model.setValueAt(tenChungChi, selectedRow, 3);  // Cập nhật tên chứng chỉ
+                model.setValueAt(soThuTuChungChi, selectedRow, 4);  // Cập nhật số thứ tự chứng chỉ
+                model.setValueAt(thoiGianHoanThanh, selectedRow, 5);  // Cập nhật thời gian hoàn thành
+
+                // Làm mới lại bảng để hiển thị các thay đổi
+                model.fireTableDataChanged(); // Cập nhật bảng dữ liệu
+            }
         } else {
-            JOptionPane.showMessageDialog(null, "Cập nhật không thành công!");
+            JOptionPane.showMessageDialog(null, "Không thể cập nhật học kỳ này.");
         }
     } catch (SQLException e) {
         e.printStackTrace();
@@ -665,40 +941,65 @@ private void updateHocKy(int maHocKy, int maChuongTrinhHoc, String tenHocKy, int
     }
 }
 
-private void addHocKy(int maHocKy, int maChuongTrinhHoc, String tenHocKy, int soMonHoc, String tenChungChi, 
-                     int soThuTuChungChi, int thoiGianHoanThanh ) {
-    // Hàm thêm mới học kỳ
-    String sql = "INSERT INTO HocKy (MaHocKy, MaChuongTrinhHoc, TenHocKy, SoMonHoc, TenChungChi, SoThuTuChungChi, ThoiGianHoanThanh) " +
-                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+
+
+
+// Phương thức thêm học kỳ vào cơ sở dữ liệu
+private void addHocKy(String maHocKy, String tenHocKy, int soMonHoc, String tenChungChi, int soThuTuChungChi, int thoiGianHoanThanh) {
+    
+
+    // Câu lệnh SQL để thêm học kỳ mới vào cơ sở dữ liệu
+    String sql = "INSERT INTO HocKy (MaHocKy, TenHocKy, SoMonHoc, TenChungChi, SoThuTuChungChi, ThoiGianHoanThanh) " +
+                 "VALUES (?, ?, ?, ?, ?, ?)";
+
     try (Connection conn = DatabaseConnection.connect();
          PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        ps.setInt(1, maHocKy);
-        ps.setInt(2, maChuongTrinhHoc);  // Mã chương trình học
-        ps.setString(3, tenHocKy);
-        ps.setInt(4, soMonHoc);
-        ps.setString(5, tenChungChi);
-        ps.setInt(6, soThuTuChungChi);
-        ps.setInt(7, thoiGianHoanThanh);
+        // Gán giá trị cho các tham số trong câu lệnh SQL
+        ps.setString(1, maHocKy);  // Mã học kỳ
+        ps.setString(2, tenHocKy);  // Tên học kỳ
+        ps.setInt(3, soMonHoc);  // Số môn học
+        ps.setString(4, tenChungChi);  // Tên chứng chỉ
+        ps.setInt(5, soThuTuChungChi);  // Số thứ tự chứng chỉ
+        ps.setInt(6, thoiGianHoanThanh);  // Thời gian hoàn thành
 
+        // Thực thi câu lệnh INSERT
         int rowsAffected = ps.executeUpdate();
+
         if (rowsAffected > 0) {
-            JOptionPane.showMessageDialog(null, "Học kỳ đã được thêm mới thành công!");
-            displayHocKy();  // Cập nhật lại bảng sau khi thêm mới
+            // Thông báo cho người dùng khi thêm thành công
+            JOptionPane.showMessageDialog(null, "Học kỳ đã được thêm thành công!");
+
+            // Cập nhật lại bảng sau khi thêm
+            DefaultTableModel model = (DefaultTableModel) tableData.getModel();
+            // Thêm một dòng mới vào bảng với các giá trị đã nhập
+            model.addRow(new Object[]{
+                maHocKy, 
+                tenHocKy, 
+                soMonHoc, 
+                tenChungChi, 
+                soThuTuChungChi, 
+                thoiGianHoanThanh
+            });
         } else {
-            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm học kỳ.");
+            JOptionPane.showMessageDialog(null, "Không thể thêm học kỳ này.");
         }
     } catch (SQLException e) {
         e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm học kỳ.");
+        JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm học kỳ: " + e.getMessage());
     }
 }
+
+
+
+
 
 public void setEditStatus(boolean editable) {
          isEditMode = editable;
         
         txtMaChungChi.setEnabled(editable);
-        txtMaChuongtrinh.setEnabled(editable);
+        txtMaChuongtrinh.setEditable(false);
         txtSoMonHoc.setEnabled(editable);
         txtSoThuTuChungChi.setEnabled(editable);
         txtTenChungChi.setEnabled(editable);
@@ -711,17 +1012,39 @@ public void setEditStatus(boolean editable) {
         btnAdd.setEnabled(!editable);
         btnUpdate.setEnabled(!editable);
         btnDelete.setEnabled(!editable);
+        ComboBoxcth.setEditable(!editable);
+        
+        java.awt.Color enableColor = new java.awt.Color(0, 51, 153);
+        java.awt.Color disableColor = new java.awt.Color(128, 128, 128);
 
-                
+        if(editable) {
+            btnAdd.setBackground(disableColor);
+            btnUpdate.setBackground(disableColor);
+            btnDelete.setBackground(disableColor);
+            
+            
+            btnSave.setBackground(enableColor);
+            btnCancel.setBackground(enableColor);
+        }
+        else {
+            btnAdd.setBackground(enableColor);
+            btnUpdate.setBackground(enableColor);
+            btnDelete.setBackground(enableColor);
+            
+            btnSave.setBackground(disableColor);
+            btnCancel.setBackground(disableColor);
+        }        
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> ComboBoxcth;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JButton btnmh_hk;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -738,8 +1061,8 @@ public void setEditStatus(boolean editable) {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JPanel jp9;
+    private javax.swing.JTable tableData;
     private javax.swing.JTextField txtMaChungChi;
     private javax.swing.JTextField txtMaChuongtrinh;
     private javax.swing.JTextField txtSoMonHoc;
