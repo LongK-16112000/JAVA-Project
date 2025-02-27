@@ -29,8 +29,8 @@ public class PanelBL extends javax.swing.JPanel {
     public PanelBL() {
         initComponents();
 //        BẢNG LƯƠNG  
-btnAddBangLuong.addActionListener(e -> addBangLuong());
-btnUpdateBangLuong.addActionListener(e -> updateBangLuong());
+//btnAddBangLuong.addActionListener(e -> addBangLuong());
+//btnUpdateBangLuong.addActionListener(e -> updateBangLuong());
 btnDeleteBangLuong.addActionListener(e -> deleteBangLuong());
 
 // Thêm ListSelectionListener để tự động điền dữ liệu khi chọn dòng trong JTable
@@ -88,12 +88,44 @@ displayBangLuong();
         SetEdit(false);
 }
 
-    private void addBangLuong() {
-        txtMaLuong.setText("");
-        txtMaChucVu.setText("");
-        txtMucLuong.setText("");
-        SetEdit(true);
-        isEdit = false;
+    private void addBangLuong(double mucLuong) {
+        String maChucVuText = txtMaChucVu.getText();
+        String mucLuongText = txtMucLuong.getText();
+
+        if (maChucVuText.isEmpty() || mucLuongText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
+            return;
+        }
+
+        int maChucVu;
+        try {
+            maChucVu = Integer.parseInt(maChucVuText);
+            mucLuong = Double.parseDouble(mucLuongText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
+            return;
+        }
+
+        int maLuongMoi = getNextMaLuong();
+
+        String sql = "INSERT INTO Luong (MaLuong, MaChucVu, MucLuong) VALUES (?, ?, ?)";
+        try (Connection conn = DatabaseConnection.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, maLuongMoi);
+            ps.setInt(2, maChucVu);
+            ps.setDouble(3, mucLuong);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Bảng lương đã được thêm thành công!");
+                clearBangLuongFields();
+                displayBangLuong(); // Update table after adding
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm bảng lương.");
+        }
 }
 
 // Method to get the next MaLuong
@@ -114,78 +146,78 @@ private int getNextMaLuong() {
     return 1; // If there's no data in the table, start from 1
 }
 
-private void updateBangLuong() {
-//    int selectedRow = jTableBangLuong.getSelectedRow();
-//    if (selectedRow >= 0) {
-//        int maLuong = (int) jTableBangLuong.getValueAt(selectedRow, 0);
-//        String maChucVuText = txtMaChucVu.getText();
-//        String mucLuongText = txtMucLuong.getText();
-//
-//
-//        if (maChucVuText.isEmpty() || mucLuongText.isEmpty()) {
-//            JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
-//            return;
-//        }
-//
-//        int maChucVu;
-//        double mucLuong;
-//        try {
-//            maChucVu = Integer.parseInt(maChucVuText);
-//            mucLuong = Double.parseDouble(mucLuongText);
-//        } catch (NumberFormatException e) {
-//            JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
-//            return;
-//        }
-//
-//        String sql = "UPDATE Luong SET MaChucVu = ?, MucLuong = ? WHERE MaLuong = ?";
-//        try (Connection conn = DatabaseConnection.connect();
-//            PreparedStatement ps = conn.prepareStatement(sql)) {
-//
-//            ps.setInt(1, maChucVu);
-//            ps.setDouble(2, mucLuong);
-//            ps.setInt(3, maLuong);
-//
-//            int rowsAffected = ps.executeUpdate();
-//            if (rowsAffected > 0) {
-//                JOptionPane.showMessageDialog(null, "Bảng lương đã được cập nhật thành công!");
-//                displayBangLuong(); // Update table after updating
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật bảng lương.");
-//        }
-//    } else {
-//        JOptionPane.showMessageDialog(null, "Vui lòng chọn bảng lương để cập nhật.");
-//    }
-    SetEdit(true);
-    isEdit = true;
-    txtMaChucVu.setEnabled(false);
-    txtMaLuong.setEnabled(false);
+private void updateBangLuong(int maLuong, int maChucVu, double mucLuong) {
+    int selectedRow = jTableBangLuong.getSelectedRow();
+    if (selectedRow >= 0) {
+        
+        String maChucVuText = txtMaChucVu.getText();
+        String mucLuongText = txtMucLuong.getText();
+
+
+        if (maChucVuText.isEmpty() || mucLuongText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
+            return;
+        }
+
+
+        try {
+            maChucVu = Integer.parseInt(maChucVuText);
+            mucLuong = Double.parseDouble(mucLuongText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
+            return;
+        }
+
+        String sql = "UPDATE Luong SET MaChucVu = ?, MucLuong = ? WHERE MaLuong = ?";
+        try (Connection conn = DatabaseConnection.connect();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, maChucVu);
+            ps.setDouble(2, mucLuong);
+            ps.setInt(3, maLuong);
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Bảng lương đã được cập nhật thành công!");
+                displayBangLuong(); // Update table after updating
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật bảng lương.");
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Vui lòng chọn bảng lương để cập nhật.");
+    }
 }
 
 private void deleteBangLuong() {
     int selectedRow = jTableBangLuong.getSelectedRow();
-    if (selectedRow >= 0) {
-        int maLuong = (int) jTableBangLuong.getValueAt(selectedRow, 0);
-        String sqlDelete = "DELETE FROM Luong WHERE MaLuong = ?";
+        if (selectedRow >= 0) {
+            int maLuong = (int) jTableBangLuong.getValueAt(selectedRow, 0);
+            String sqlDelete = "DELETE FROM Luong WHERE MaLuong = ?";
 
-        try (Connection conn = DatabaseConnection.connect();
-             PreparedStatement psDelete = conn.prepareStatement(sqlDelete)) {
+            int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa bảng lương này?", 
+                                                     "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
 
-            psDelete.setInt(1, maLuong);
-            int rowsAffected = psDelete.executeUpdate();
-            if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Bảng lương đã được xóa thành công!");
-                displayBangLuong(); // Update table after deleting
-            } else {
-                JOptionPane.showMessageDialog(null, "Không tìm thấy bảng lương để xóa.");
+            if(confirm == JOptionPane.YES_OPTION) {
+            try (Connection conn = DatabaseConnection.connect();
+                 PreparedStatement psDelete = conn.prepareStatement(sqlDelete)) {
+
+                psDelete.setInt(1, maLuong);
+                int rowsAffected = psDelete.executeUpdate();
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(null, "Bảng lương đã được xóa thành công!");
+                    displayBangLuong(); // Update table after deleting
+                } else {
+                    JOptionPane.showMessageDialog(null, "Không tìm thấy bảng lương để xóa.");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi xóa bảng lương.");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi xóa bảng lương.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn bảng lương để xóa.");
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "Vui lòng chọn bảng lương để xóa.");
     }
 }
 
@@ -210,18 +242,18 @@ private void deleteBangLuong() {
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         txtMaChucVu = new javax.swing.JTextField();
-        btnUpdateBangLuong = new javax.swing.JButton();
-        btnDeleteBangLuong = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtMucLuong = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtMaLuong = new javax.swing.JTextField();
-        btnAddBangLuong = new javax.swing.JButton();
         btnCancleBangLuong = new javax.swing.JButton();
         btnSaveBangLuong = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableBangLuong = new javax.swing.JTable();
+        btnAddBangLuong = new javax.swing.JButton();
+        btnUpdateBangLuong = new javax.swing.JButton();
+        btnDeleteBangLuong = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
 
         setBackground(new java.awt.Color(255, 255, 255,0));
@@ -290,26 +322,6 @@ private void deleteBangLuong() {
             }
         });
 
-        btnUpdateBangLuong.setBackground(new java.awt.Color(0, 51, 153));
-        btnUpdateBangLuong.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        btnUpdateBangLuong.setForeground(new java.awt.Color(255, 255, 255));
-        btnUpdateBangLuong.setText("Sửa");
-        btnUpdateBangLuong.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateBangLuongActionPerformed(evt);
-            }
-        });
-
-        btnDeleteBangLuong.setBackground(new java.awt.Color(0, 51, 153));
-        btnDeleteBangLuong.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        btnDeleteBangLuong.setForeground(new java.awt.Color(255, 255, 255));
-        btnDeleteBangLuong.setText("Xóa");
-        btnDeleteBangLuong.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteBangLuongActionPerformed(evt);
-            }
-        });
-
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Mã Chức Vụ :");
@@ -324,16 +336,6 @@ private void deleteBangLuong() {
         txtMaLuong.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMaLuongActionPerformed(evt);
-            }
-        });
-
-        btnAddBangLuong.setBackground(new java.awt.Color(0, 51, 153));
-        btnAddBangLuong.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        btnAddBangLuong.setForeground(new java.awt.Color(255, 255, 255));
-        btnAddBangLuong.setText("Thêm");
-        btnAddBangLuong.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddBangLuongActionPerformed(evt);
             }
         });
 
@@ -383,29 +385,16 @@ private void deleteBangLuong() {
                             .addComponent(txtMucLuong)
                             .addComponent(txtMaLuong)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 319, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnSaveBangLuong)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnCancleBangLuong))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnAddBangLuong)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnUpdateBangLuong)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnDeleteBangLuong)))))
+                        .addGap(0, 409, Short.MAX_VALUE)
+                        .addComponent(btnSaveBangLuong)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCancleBangLuong)))
                 .addGap(40, 40, 40))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(44, 44, 44)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnUpdateBangLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDeleteBangLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAddBangLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(95, 95, 95)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtMaLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -436,7 +425,7 @@ private void deleteBangLuong() {
 
             },
             new String [] {
-                "MaLuong", "MaChucVu", "MucLuong"
+                "Mã lương", "Mã chức vụ", "Mức lương"
             }
         ));
         jScrollPane1.setViewportView(jTableBangLuong);
@@ -458,6 +447,36 @@ private void deleteBangLuong() {
                 .addContainerGap(52, Short.MAX_VALUE))
         );
 
+        btnAddBangLuong.setBackground(new java.awt.Color(0, 51, 153));
+        btnAddBangLuong.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnAddBangLuong.setForeground(new java.awt.Color(255, 255, 255));
+        btnAddBangLuong.setText("Thêm");
+        btnAddBangLuong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddBangLuongActionPerformed(evt);
+            }
+        });
+
+        btnUpdateBangLuong.setBackground(new java.awt.Color(0, 51, 153));
+        btnUpdateBangLuong.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnUpdateBangLuong.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdateBangLuong.setText("Sửa");
+        btnUpdateBangLuong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateBangLuongActionPerformed(evt);
+            }
+        });
+
+        btnDeleteBangLuong.setBackground(new java.awt.Color(0, 51, 153));
+        btnDeleteBangLuong.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnDeleteBangLuong.setForeground(new java.awt.Color(255, 255, 255));
+        btnDeleteBangLuong.setText("Xóa");
+        btnDeleteBangLuong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteBangLuongActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -468,11 +487,24 @@ private void deleteBangLuong() {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAddBangLuong)
+                .addGap(18, 18, 18)
+                .addComponent(btnUpdateBangLuong)
+                .addGap(18, 18, 18)
+                .addComponent(btnDeleteBangLuong)
+                .addGap(352, 352, 352))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(48, 48, 48)
+                .addGap(9, 9, 9)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddBangLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdateBangLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDeleteBangLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -531,7 +563,25 @@ private void deleteBangLuong() {
     }//GEN-LAST:event_txtMaChucVuActionPerformed
 
     private void btnUpdateBangLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateBangLuongActionPerformed
-        
+        int selectedRow = jTableBangLuong.getSelectedRow();
+        if(selectedRow >= 0) {
+            String maLuong = jTableBangLuong.getValueAt(selectedRow, 0).toString();  // Mã chương trình học
+            String maChucVu = jTableBangLuong.getValueAt(selectedRow, 1).toString();     // Tên chương trình học
+            String mucLuong = jTableBangLuong.getValueAt(selectedRow, 2).toString();  // Thời gian hoàn thành
+
+            // Điền dữ liệu vào các TextField
+            txtMaLuong.setText(maLuong);  // Điền mã chương trình học vào TextField
+            txtMaChucVu.setText(maChucVu);   // Điền tên chương trình học vào TextField
+            txtMucLuong.setText(mucLuong);  // Điền thời gian hoàn thành vào TextField
+            
+            SetEdit(true);
+            isEdit = true;
+            txtMaChucVu.setEnabled(false);
+            txtMaLuong.setEnabled(false);
+        }
+        else {
+        JOptionPane.showMessageDialog(null, "Vui lòng chọn chương trình học để sửa!");
+        }
     }//GEN-LAST:event_btnUpdateBangLuongActionPerformed
 
     private void btnDeleteBangLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteBangLuongActionPerformed
@@ -547,7 +597,11 @@ private void deleteBangLuong() {
     }//GEN-LAST:event_jp9AncestorAdded
 
     private void btnAddBangLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddBangLuongActionPerformed
-        
+        txtMaLuong.setText("");
+        txtMaChucVu.setText("");
+        txtMucLuong.setText("");
+        SetEdit(true);
+        isEdit = false;
     }//GEN-LAST:event_btnAddBangLuongActionPerformed
 
     private void btnCancleBangLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancleBangLuongActionPerformed
@@ -556,43 +610,33 @@ private void deleteBangLuong() {
     }//GEN-LAST:event_btnCancleBangLuongActionPerformed
 
     private void btnSaveBangLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveBangLuongActionPerformed
-        String maChucVuText = txtMaChucVu.getText();
-        String mucLuongText = txtMucLuong.getText();
+        // Lấy các giá trị từ các TextField
+        String maLuongtext = txtMaLuong.getText();
+        String maChucVutext = txtMaChucVu.getText();
+        String mucLuongtext = txtMucLuong.getText();
 
-        if (maChucVuText.isEmpty() || mucLuongText.isEmpty()) {
+        // Kiểm tra nếu các TextField không trống
+        if (maLuongtext.isEmpty() || maChucVutext.isEmpty() || mucLuongtext.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
             return;
         }
 
+        int mucLuong;
         int maChucVu;
-        double mucLuong;
         try {
-            maChucVu = Integer.parseInt(maChucVuText);
-            mucLuong = Double.parseDouble(mucLuongText);
+            mucLuong = Integer.parseInt(mucLuongtext); // Chuyển đổi thành số nguyên
+            maChucVu = Integer.parseInt(maChucVutext);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
+            JOptionPane.showMessageDialog(null, "Thời gian hoàn thành phải là một số hợp lệ!");
             return;
         }
 
-        int maLuongMoi = getNextMaLuong();
-
-        String sql = "INSERT INTO Luong (MaLuong, MaChucVu, MucLuong) VALUES (?, ?, ?)";
-        try (Connection conn = DatabaseConnection.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, maLuongMoi);
-            ps.setInt(2, maChucVu);
-            ps.setDouble(3, mucLuong);
-
-            int rowsAffected = ps.executeUpdate();
-            if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Bảng lương đã được thêm thành công!");
-                clearBangLuongFields();
-                displayBangLuong(); // Update table after adding
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm bảng lương.");
+        if (isEdit) {
+            // Nếu chế độ sửa, gọi hàm cập nhật
+            updateBangLuong(Integer.parseInt(txtMaLuong.getText()), maChucVu, mucLuong);
+        } else {
+            // Nếu chế độ thêm mới, gọi hàm thêm mới
+            addBangLuong(mucLuong);
         }
     }//GEN-LAST:event_btnSaveBangLuongActionPerformed
 
@@ -623,9 +667,7 @@ private void deleteBangLuong() {
     // End of variables declaration//GEN-END:variables
 
     private void clearBangLuongFields() {
-        if (jTableBangLuong.getRowCount() > 0) {
             jTableBangLuong.setRowSelectionInterval(0, 0);
-        }
     }
 
     private void SetEdit(boolean edit) {
@@ -634,10 +676,25 @@ private void deleteBangLuong() {
         txtMaLuong.setEditable(edit);
         txtMaChucVu.setEditable(edit);
         txtMucLuong.setEditable(edit);
-        btnAddBangLuong.setEnabled(!edit);
-        btnUpdateBangLuong.setEnabled(!edit);
-        btnDeleteBangLuong.setEnabled(!edit);
-        btnSaveBangLuong.setEnabled(edit);
-        btnCancleBangLuong.setEnabled(edit);
+        
+        java.awt.Color enableColor = new java.awt.Color(0, 51, 153);
+        java.awt.Color disableColor = new java.awt.Color(128, 128, 128);
+        
+        if(edit) {
+            btnAddBangLuong.setBackground(disableColor);
+            btnUpdateBangLuong.setBackground(disableColor);
+            btnDeleteBangLuong.setBackground(disableColor);
+            
+            btnSaveBangLuong.setBackground(enableColor);
+            btnCancleBangLuong.setBackground(enableColor);
+        }
+        else {
+            btnAddBangLuong.setBackground(enableColor);
+            btnUpdateBangLuong.setBackground(enableColor);
+            btnDeleteBangLuong.setBackground(enableColor);
+            
+            btnSaveBangLuong.setBackground(disableColor);
+            btnCancleBangLuong.setBackground(disableColor);
+        }
     }
 }

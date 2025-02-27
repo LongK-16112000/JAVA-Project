@@ -9,6 +9,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -26,8 +27,8 @@ public class PanelNV extends javax.swing.JPanel {
     public PanelNV() {
         initComponents();
         //        NHÂN VIÊN  
-        btnAdd.addActionListener(e -> addNhanVien());
-        btnUpdate.addActionListener(e -> updateNhanVien());
+//        btnAdd.addActionListener(e -> addNhanVien());
+//        btnUpdate.addActionListener(e -> updateNhanVien());
         btnDelete.addActionListener(e -> deleteNhanVien());
         // Thêm ListSelectionListener để tự động điền dữ liệu khi chọn dòng trong JTable
         jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -111,9 +112,6 @@ public class PanelNV extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         txtDienThoai = new javax.swing.JTextField();
         txtMaPhongBan = new javax.swing.JTextField();
-        btnAdd = new javax.swing.JButton();
-        btnUpdate = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -134,6 +132,9 @@ public class PanelNV extends javax.swing.JPanel {
         txtMaChucVu = new javax.swing.JTextField();
         btnCancleNhanVien = new javax.swing.JButton();
         btnSaveNhanVien = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255,0
         ));
@@ -228,7 +229,7 @@ public class PanelNV extends javax.swing.JPanel {
                 {null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "MaNhanVien", "HoTen", "NgaySinh", "SoCMT", "DiaChi", "Email", "DienThoai", "NgayVaoLam", "MatKhau", "MaChucVu", "MaPhongBan"
+                "Mã nhân viên", "Họ tên", "Ngày sinh", "Số CMT", "Địa chỉ", "Email", "Số điên thoại", "Ngày vào làm", "Mật khẩu", "Mã chức vụ", "Mã phòng ban"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -246,7 +247,7 @@ public class PanelNV extends javax.swing.JPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -269,36 +270,6 @@ public class PanelNV extends javax.swing.JPanel {
         });
 
         txtMaPhongBan.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-
-        btnAdd.setBackground(new java.awt.Color(0, 51, 153));
-        btnAdd.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
-        btnAdd.setText("Thêm");
-        btnAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddActionPerformed(evt);
-            }
-        });
-
-        btnUpdate.setBackground(new java.awt.Color(0, 51, 153));
-        btnUpdate.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
-        btnUpdate.setText("Sửa");
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
-            }
-        });
-
-        btnDelete.setBackground(new java.awt.Color(0, 51, 153));
-        btnDelete.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
-        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
-        btnDelete.setText("Xóa");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
 
         jLabel6.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
@@ -445,28 +416,15 @@ public class PanelNV extends javax.swing.JPanel {
                                     .addComponent(txtMatKhau)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnSaveNhanVien)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnCancleNhanVien))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnAdd)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnUpdate)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnDelete)))))
+                        .addComponent(btnSaveNhanVien)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCancleNhanVien)))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(28, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAdd)
-                    .addComponent(btnDelete)
-                    .addComponent(btnUpdate))
-                .addGap(18, 18, 18)
+                .addContainerGap(31, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtMaNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -517,6 +475,36 @@ public class PanelNV extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
+        btnAdd.setBackground(new java.awt.Color(0, 51, 153));
+        btnAdd.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
+        btnAdd.setText("Thêm");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setBackground(new java.awt.Color(0, 51, 153));
+        btnUpdate.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdate.setText("Sửa");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(0, 51, 153));
+        btnDelete.setFont(new java.awt.Font("Segoe UI Black", 0, 12)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("Xóa");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -524,18 +512,32 @@ public class PanelNV extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(37, 37, 37)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
+                .addGap(90, 90, 90)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAdd)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnUpdate)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDelete)
+                        .addGap(254, 254, 254)))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(36, 36, 36)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAdd)
+                    .addComponent(btnUpdate)
+                    .addComponent(btnDelete))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jp9Layout = new javax.swing.GroupLayout(jp9);
@@ -544,9 +546,9 @@ public class PanelNV extends javax.swing.JPanel {
             jp9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jp9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jp9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jp9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jp9Layout.setVerticalGroup(
@@ -555,7 +557,7 @@ public class PanelNV extends javax.swing.JPanel {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         add(jp9, java.awt.BorderLayout.CENTER);
@@ -566,11 +568,57 @@ public class PanelNV extends javax.swing.JPanel {
     }//GEN-LAST:event_txtDienThoaiActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-
+        txtMaNhanVien.setText("");
+        txtHoTen.setText("");
+        txtNgaySinh.setText("");
+        txtSoCMT.setText("");
+        txtDiaChi.setText("");
+        txtEmail.setText("");
+        txtDienThoai.setText("");
+        txtNgayVaoLam.setText("");
+        txtMatKhau.setText("");
+        txtMaChucVu.setText("");    
+        txtMaPhongBan.setText("");
+        SetEdit(true);
+        isEdit = false;
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
+        int selectedRow = jTable1.getSelectedRow();
+        
+        if(selectedRow >= 0) {
+            String maNhanVien = jTable1.getValueAt(selectedRow, 0).toString();
+            String hoTen = jTable1.getValueAt(selectedRow, 1).toString();
+            String ngaySinh = jTable1.getValueAt(selectedRow, 2).toString();
+            String soCMT = jTable1.getValueAt(selectedRow, 3).toString();
+            String diaChi = jTable1.getValueAt(selectedRow, 4).toString();
+            String email = jTable1.getValueAt(selectedRow, 5).toString();
+            String dienThoai = jTable1.getValueAt(selectedRow, 6).toString();
+            String ngayVaoLam = jTable1.getValueAt(selectedRow, 7).toString();
+            String matKhau = jTable1.getValueAt(selectedRow, 8).toString();
+            String maChucVu = jTable1.getValueAt(selectedRow, 9).toString();
+            String maPhongBan = jTable1.getValueAt(selectedRow, 10).toString();
+            
+            txtMaNhanVien.setText(String.valueOf(maNhanVien));
+            txtHoTen.setText(hoTen);
+            txtNgaySinh.setText(String.valueOf(ngaySinh));
+            txtSoCMT.setText(String.valueOf(soCMT));
+            txtDiaChi.setText(diaChi);
+            txtEmail.setText(email);
+            txtDienThoai.setText(String.valueOf(dienThoai));
+            txtNgayVaoLam.setText(String.valueOf(ngayVaoLam));
+            txtMatKhau.setText(matKhau);
+            txtMaChucVu.setText(String.valueOf(maChucVu));
+            txtMaPhongBan.setText(String.valueOf(maPhongBan));
+            
+            SetEdit(true);
+            isEdit = true;
+            txtMaNhanVien.setEnabled(false);
+            txtMaChucVu.setEnabled(false);
+            txtMaPhongBan.setEnabled(false);
+        } else {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn nhân viên để sửa!");
+        }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
@@ -611,23 +659,43 @@ public class PanelNV extends javax.swing.JPanel {
     }//GEN-LAST:event_btnCancleNhanVienActionPerformed
 
     private void btnSaveNhanVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveNhanVienActionPerformed
-        String sql = "INSERT INTO NhanVien (HoTen, NgaySinh, SoCMT, DiaChi, Email, DienThoai, NgayVaoLam, MatKhau, MaChucVu, MaPhongBan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, txtHoTen.getText());
-            ps.setDate(2, Date.valueOf(txtNgaySinh.getText()));
-            ps.setString(3, txtSoCMT.getText());
-            ps.setString(4, txtDiaChi.getText());
-            ps.setString(5, txtEmail.getText());
-            ps.setString(6, txtDienThoai.getText());
-            ps.setDate(7, Date.valueOf(txtNgayVaoLam.getText()));
-            ps.setString(8, txtMatKhau.getText());
-            ps.setInt(9, Integer.parseInt(txtMaChucVu.getText()));
-            ps.setInt(10, Integer.parseInt(txtMaPhongBan.getText()));
-            ps.executeUpdate();
-            displayNhanVien();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        int maNhanVienText = Integer.parseInt(txtMaNhanVien.getText());
+        String hoTenText = txtHoTen.getText();
+        String ngaySinhText = txtNgaySinh.getText();
+        String soCMTText = txtSoCMT.getText();
+        String diaChiText = txtDiaChi.getText();
+        String emailText = txtEmail.getText();
+        String dienThoaiText = txtDienThoai.getText();
+        String ngayVaoLamText = txtNgayVaoLam.getText();
+        String matKhauText = txtMatKhau.getText();
+        String maChucVuText = txtMaChucVu.getText();
+        String maPhongBanText = txtMaPhongBan.getText();
+        
+        if(hoTenText.isEmpty() || diaChiText.isEmpty() || emailText.isEmpty() || matKhauText.isEmpty() || ngaySinhText.isEmpty() || soCMTText.isEmpty() || dienThoaiText.isEmpty() || ngayVaoLamText.isEmpty() || maChucVuText.isEmpty() || maPhongBanText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
+            return;
+        }
+        
+        int soCMT, dienThoai, maChucVu, maPhongBan;
+        Date ngaySinh, ngayVaoLam;
+        try {
+            soCMT = Integer.parseInt(soCMTText);
+            dienThoai = Integer.parseInt(dienThoaiText);
+            maChucVu = Integer.parseInt(maChucVuText);
+            maPhongBan = Integer.parseInt(maPhongBanText);
+            ngaySinh = Date.valueOf(ngaySinhText);
+            ngayVaoLam = Date.valueOf(ngayVaoLamText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Các trường nhập phải là các số hợp lệ!");
+            return;
+        }
+        
+        if (isEdit) {
+            // Nếu chế độ sửa, gọi hàm cập nhật
+            updateNhanVien(Integer.parseInt(txtMaNhanVien.getText()), hoTenText, ngaySinh, soCMT, diaChiText, emailText, dienThoai, ngayVaoLam, matKhauText, maChucVu, maPhongBan);
+        } else {
+            // Nếu chế độ thêm mới, gọi hàm thêm mới
+            addNhanVien(maNhanVienText, hoTenText, ngaySinh, soCMT, diaChiText, emailText, dienThoai, ngayVaoLam, matKhauText, maChucVu, maPhongBan);
         }
     }//GEN-LAST:event_btnSaveNhanVienActionPerformed
 
@@ -709,60 +777,92 @@ private void displayNhanVien() {
 }
 
 
-    private void addNhanVien() {
-        txtMaNhanVien.setText("");
-        txtHoTen.setText("");
-        txtNgaySinh.setText("");
-        txtSoCMT.setText("");
-        txtDiaChi.setText("");
-        txtEmail.setText("");
-        txtDienThoai.setText("");
-        txtNgayVaoLam.setText("");
-        txtMatKhau.setText("");
-        txtMaChucVu.setText("");    
-        txtMaPhongBan.setText("");
-        SetEdit(true);
-        isEdit = false;
-    }
-
-
-    private void updateNhanVien() {
-//        String sql = "UPDATE NhanVien SET HoTen = ?, NgaySinh = ?, SoCMT = ?, DiaChi = ?, Email = ?, DienThoai = ?, NgayVaoLam = ?, MatKhau = ?, MaChucVu = ?, MaPhongBan = ? WHERE MaNhanVien = ?";
-//        try (Connection conn = DatabaseConnection.connect();
-//             PreparedStatement ps = conn.prepareStatement(sql)) {
-//            ps.setString(1, txtHoTen.getText());
-//            ps.setDate(2, Date.valueOf(txtNgaySinh.getText()));
-//            ps.setString(3, txtSoCMT.getText());
-//            ps.setString(4, txtDiaChi.getText());
-//            ps.setString(5, txtEmail.getText());
-//            ps.setString(6, txtDienThoai.getText());
-//            ps.setDate(7, Date.valueOf(txtNgayVaoLam.getText()));
-//            ps.setString(8, txtMatKhau.getText());
-//            ps.setInt(9, Integer.parseInt(txtMaChucVu.getText()));
-//            ps.setInt(10, Integer.parseInt(txtMaPhongBan.getText()));
-//            ps.setInt(11, Integer.parseInt(txtMaNhanVien.getText()));
-//            ps.executeUpdate();
-//            displayNhanVien();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-        SetEdit(true);
-        isEdit = true;
-        txtMaNhanVien.setEnabled(false);
-        txtMaChucVu.setEnabled(false);
-        txtMaPhongBan.setEnabled(false);
-    }
-
-
-    private void deleteNhanVien() {
-        String sql = "DELETE FROM NhanVien WHERE MaNhanVien = ?";
+    private void addNhanVien(int maNhanVien, String hoTen, Date ngaySinh, int soCMT, String diaChi, String email, int dienThoai, Date ngayVaoLam, String matKhau, int maChucVu, int maPhongBan) {
+        String sql = "INSERT INTO NhanVien (HoTen, NgaySinh, SoCMT, DiaChi, Email, DienThoai, NgayVaoLam, MatKhau, MaChucVu, MaPhongBan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        int maNhanVienText = Integer.parseInt(txtMaNhanVien.getText());
+        String hoTenText = txtHoTen.getText();
+        String ngaySinhText = txtNgaySinh.getText();
+        String soCMTText = txtSoCMT.getText();
+        String diaChiText = txtDiaChi.getText();
+        String emailText = txtEmail.getText();
+        String dienThoaiText = txtDienThoai.getText();
+        String ngayVaoLamText = txtNgayVaoLam.getText();
+        String matKhauText = txtMatKhau.getText();
+        String maChucVuText = txtMaChucVu.getText();
+        String maPhongBanText = txtMaPhongBan.getText();
+        
+        if(hoTenText.isEmpty() || diaChiText.isEmpty() || emailText.isEmpty() || matKhauText.isEmpty() || ngaySinhText.isEmpty() || soCMTText.isEmpty() || dienThoaiText.isEmpty() || ngayVaoLamText.isEmpty() || maChucVuText.isEmpty() || maPhongBanText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin!");
+            return;
+        }
+        
         try (Connection conn = DatabaseConnection.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, Integer.parseInt(txtMaNhanVien.getText()));
+            ps.setString(1, txtHoTen.getText());
+            ps.setDate(2, Date.valueOf(txtNgaySinh.getText()));
+            ps.setString(3, txtSoCMT.getText());
+            ps.setString(4, txtDiaChi.getText());
+            ps.setString(5, txtEmail.getText());
+            ps.setString(6, txtDienThoai.getText());
+            ps.setDate(7, Date.valueOf(txtNgayVaoLam.getText()));
+            ps.setString(8, txtMatKhau.getText());
+            ps.setInt(9, Integer.parseInt(txtMaChucVu.getText()));
+            ps.setInt(10, Integer.parseInt(txtMaPhongBan.getText()));
             ps.executeUpdate();
             displayNhanVien();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+
+    // Phương thức cập nhật NhanVien trong cơ sở dữ liệu
+private void updateNhanVien(int maNhanVien, String hoTen, Date ngaySinh, int soCMT, String diaChi, String email, int dienThoai, Date ngayVaoLam, String matKhau, int maChucVu, int maPhongBan) {
+    String sql = "UPDATE NhanVien SET HoTen = ?, NgaySinh = ?, SoCMT = ?, DiaChi = ?, Email = ?, DienThoai = ?, NgayVaoLam = ?, MatKhau = ?, MaChucVu = ?, MaPhongBan = ? WHERE MaNhanVien = ?";
+
+    try (Connection conn = DatabaseConnection.connect();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, hoTen);
+        ps.setDate(2, ngaySinh);
+        ps.setInt(3, soCMT);
+        ps.setString(4, diaChi);
+        ps.setString(5, email);
+        ps.setInt(6, dienThoai);
+        ps.setDate(7, ngayVaoLam);
+        ps.setString(8, matKhau);
+        ps.setInt(9, maChucVu);
+        ps.setInt(10, maPhongBan);
+        ps.setInt(11, maNhanVien);
+
+        int rowsAffected = ps.executeUpdate();
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(null, "Cập nhật nhân viên thành công!");
+            displayNhanVien(); // Cập nhật bảng để phản ánh các thay đổi
+            SetEdit(false);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật nhân viên.");
+    }
+}
+
+
+
+    private void deleteNhanVien() {
+        String sql = "DELETE FROM NhanVien WHERE MaNhanVien = ?";
+        int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa nhân viên này?", 
+                                                     "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+
+        if(confirm == JOptionPane.YES_OPTION) {
+            try (Connection conn = DatabaseConnection.connect();
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, Integer.parseInt(txtMaNhanVien.getText()));
+                ps.executeUpdate();
+                displayNhanVien();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
     
@@ -773,6 +873,8 @@ private void displayNhanVien() {
     }
     
     private void SetEdit(boolean edit) {
+        isEdit = edit;
+        
         txtMaNhanVien.setEditable(edit);
         txtHoTen.setEditable(edit);
         txtNgaySinh.setEditable(edit);
@@ -784,10 +886,25 @@ private void displayNhanVien() {
         txtMatKhau.setEditable(edit);
         txtMaChucVu.setEditable(edit);
         txtMaPhongBan.setEditable(edit);
-        btnAdd.setEnabled(!edit);
-        btnUpdate.setEnabled(!edit);
-        btnDelete.setEnabled(!edit);
-        btnSaveNhanVien.setEnabled(edit);
-        btnCancleNhanVien.setEnabled(edit);
+        
+        java.awt.Color enableColor = new java.awt.Color(0, 51, 153);
+        java.awt.Color disableColor = new java.awt.Color(128, 128, 128);
+        
+        if(edit) {
+            btnAdd.setBackground(disableColor);
+            btnUpdate.setBackground(disableColor);
+            btnDelete.setBackground(disableColor);
+            
+            btnSaveNhanVien.setBackground(enableColor);
+            btnCancleNhanVien.setBackground(enableColor);
+        }
+        else {
+            btnAdd.setBackground(enableColor);
+            btnUpdate.setBackground(enableColor);
+            btnDelete.setBackground(enableColor);
+            
+            btnSaveNhanVien.setBackground(disableColor);
+            btnCancleNhanVien.setBackground(disableColor);
+        }
     }
 }

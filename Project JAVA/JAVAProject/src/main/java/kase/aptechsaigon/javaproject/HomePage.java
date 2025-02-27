@@ -4,6 +4,7 @@
  */
 package kase.aptechsaigon.javaproject;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -17,8 +18,10 @@ import javax.swing.table.DefaultTableModel;
  * @author Truc
  */
 public class HomePage extends javax.swing.JFrame {
+    private Login loginPanel;
+    private PanelTTCN panelTTCN;
     private static boolean isLogin; // Biến này dùng để kiểm tra đăng nhập = false
-    private static final Login lg = new Login();  // Cửa sổ đăng nhập
+    private final Login lg = new Login();  // Cửa sổ đăng nhập
     public static final HomePage hp = new HomePage();  // Đối tượng của HomePage
     private boolean isLoggedIn;
     /*private PanelCTH panelCth;
@@ -46,9 +49,7 @@ public class HomePage extends javax.swing.JFrame {
     public HomePage() {
         initComponents();
 //         Ẩn menu mặc định khi chưa đăng nhập
-        jMenuBar1.setVisible(false);
-          // Lắng nghe sự kiện cửa sổ đăng nhập
-        lg.addWindowListener(getWindowAdapter());
+        jMenuBar1.setVisible(false); 
     }
     
     private void showPanel(JPanel panel) {
@@ -240,7 +241,7 @@ public class HomePage extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-      
+        showPanel(new PanelTTCN());
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -273,6 +274,7 @@ public class HomePage extends javax.swing.JFrame {
 
         // Hiển thị lại màn hình login
         SetPermission(false);
+        currentUser = null; // Xóa thông tin người dùng
         lg.setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
@@ -433,6 +435,7 @@ public class HomePage extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        new HomePage();
         // Tạo JMenuBar và thiết lập màu nền
         UIManager.put("MenuBar.background", Color.DARK_GRAY);
         hp.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -441,8 +444,8 @@ public class HomePage extends javax.swing.JFrame {
             public void run() {
                 hp.setVisible(true);
                 
-                if (!isLogin) {
-                    lg.setVisible(true); // Hiển thị cửa sổ đăng nhập nếu chưa đăng nhập
+                if (!hp.isLoggedIn) {
+                    hp.lg.setVisible(true); // Hiển thị cửa sổ đăng nhập nếu chưa đăng nhập
                 }
             }
         });
@@ -489,7 +492,17 @@ public class HomePage extends javax.swing.JFrame {
     void setPermission(boolean b) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }  
+    
+    private String currentUser; // Biến lưu username
 
+    void setCurrentUser(String username) {
+        this.currentUser = username;
+        if (panelTTCN != null) {
+            panelTTCN.displayNhanVien(); // Hiển thị thông tin nhân viên
+        }
+    }
     
-    
+    public String getCurrentUser() {
+        return currentUser;
+    }  
 }
